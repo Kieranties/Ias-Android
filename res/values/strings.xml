@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IAS</string>
+    <string name="select_taxa">Select taxa</string>
+    <string name="txt_loc_set">Set location</string>
+    <string name="txt_img_set">Set picture</string>
+    <string name="def_map_location">"geo:0,0"</string> 
+</resources>

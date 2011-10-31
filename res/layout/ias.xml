@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/relativeLayout1" android:background="@drawable/ias_bg" 
+     android:layout_height="fill_parent" 
+     android:layout_width="fill_parent">
+        <ImageView android:src="@drawable/ias_banner" android:id="@+id/imageView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentTop="true" android:layout_centerHorizontal="true" android:layout_marginTop="18dp" android:layout_marginBottom="18dp"></ImageView>
+        <RelativeLayout android:padding="5dp" android:id="@+id/relativeLayout2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/imageView1" android:layout_alignParentRight="true" android:layout_alignParentBottom="true" android:layout_alignParentLeft="true">
+            <ImageView android:layout_marginTop="57dp" android:src="@drawable/icon_and" android:id="@+id/imageView2" 
+            	android:layout_height="150dp" android:layout_width="150dp"
+            	android:clickable="true" android:onClick="onLocationClick"></ImageView>
+             <TextView android:layout_width="wrap_content" android:text="@string/txt_loc_set" 
+	            android:layout_height="wrap_content" android:id="@+id/textView2"
+	            android:textAppearance="@android:style/TextAppearance.Large"
+	            android:layout_below="@+id/imageView2"
+	            android:gravity="center_horizontal" android:padding="10dp" 
+	            android:clickable="true" android:onClick="onLocationClick" android:layout_alignRight="@+id/imageView2">
+	        </TextView>            
+            <ImageView android:layout_height="150dp" android:id="@+id/selectedImageView" android:src="@drawable/icon_and" 
+            	android:layout_width="150dp" android:layout_alignTop="@+id/imageView2" android:layout_alignParentRight="true"
+            	android:onClick="onImageClick" android:clickable="true"></ImageView>
+	    	<TextView android:gravity="center_horizontal" android:layout_height="wrap_content" android:text="@string/txt_img_set" 
+		    	android:id="@+id/textView1" android:padding="10dp" android:textAppearance="@android:style/TextAppearance.Large" 
+		    	android:onClick="onImageClick" android:clickable="true" android:layout_width="wrap_content" 
+		    	android:layout_alignBaseline="@+id/textView2" android:layout_alignBottom="@+id/textView2" 
+		    	android:layout_alignLeft="@+id/selectedImageView" android:layout_alignRight="@+id/selectedImageView"></TextView>
+	    	<Spinner android:id="@+id/spinner1" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_below="@+id/textView2" android:layout_alignRight="@+id/textView1" android:layout_alignLeft="@+id/imageView2"></Spinner>
+	    	<Button android:layout_height="wrap_content" android:id="@+id/button1" android:text="Send" android:layout_width="wrap_content" android:layout_below="@+id/spinner1" android:layout_alignRight="@+id/spinner1"></Button>
+	    </RelativeLayout>        
+    </RelativeLayout>

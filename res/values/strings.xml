@@ -24,8 +24,8 @@
     <string name="your_selected_image">Your selected image</string>
     <string name="settings_blurb">If you have a user on <a href="http://ias-ess.org">http://ias-ess.org</a> you can enter you username below to allow your sightings to be attributed to you.  You can also put your email address in - and if you don\'t have a user, you can make one later with the same email address and keep your old sightings.</string>
     <string name="username">Username or email address:</string>
-    <string name="register">Not got a username yet?  Register here:
-        <a href="http://ias-ess.org/accounts/register">http://ias-ess.org/accounts/register</a></string>
+    <string name="register">Not got a username yet?  Register here:\n<a href="http://ias-ess.org/accounts/register">http://ias-ess.org/accounts/register</a></string>
+    <string name="username_hint">ias-ess.org username or an email</string>
     <color name="ias_main">#D36165</color>
     <color name="ias_background">#F9FAF1</color>
     <color name="white">#FFFFFF</color>

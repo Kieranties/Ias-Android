@@ -4,6 +4,17 @@
     android:layout_height="match_parent"
     android:background="@color/ias_background"
     android:orientation="vertical" >
+    
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:height="35dp"
+        android:text="@string/add_photo"
+        android:textAppearance="?android:attr/textAppearanceLarge"	        
+        android:textColor="@color/white"
+        android:background="@color/ias_main" />
 
     <TextView
         android:id="@+id/textCheckPhoto"
@@ -11,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="@string/check_photo"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="25dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -33,12 +44,12 @@
         android:contentDescription="@string/your_selected_image" />
     
     <Button
-        android:id="@+id/buttonAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:width="120dp"
-        android:text="@string/next" />
+       android:id="@+id/buttonAbout"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center"
+       android:layout_marginTop="15dp"
+       android:width="120dp"
+       android:text="@string/next" />
 
 </LinearLayout>

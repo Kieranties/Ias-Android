@@ -21,4 +21,5 @@
     <string name="done">Done</string>
     <string name="hello">Hello World, InvadrActivity!</string>
     <color name="ias_main">#D36165</color>
+    <color name="ias_background">#F9FAF1</color>
 </resources>

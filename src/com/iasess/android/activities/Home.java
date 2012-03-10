@@ -1,9 +1,10 @@
-package org.iasess.android;
+package com.iasess.android.activities;
 
+import org.iasess.android.R;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class InvadrActivity extends Activity {
+public class Home extends Activity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -11,3 +12,4 @@ public class InvadrActivity extends Activity {
         setContentView(R.layout.main);
     }
 }
+

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:height="35dp"
-        android:text="@string/select_taxa"
+        android:text="@string/gallery"
         android:textAppearance="?android:attr/textAppearanceLarge"	        
         android:textColor="@color/white"
         android:background="@color/ias_main" />

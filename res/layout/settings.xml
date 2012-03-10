@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/ias_background"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp" >
+
+    <ImageView
+        android:id="@+id/imageBanner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:contentDescription="@string/app_title"
+        android:src="@drawable/iasbanner" />
+
+    <TextView
+        android:id="@+id/textBlurb"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_blurb"
+        android:layout_gravity="center"
+        android:scrollHorizontally="false"
+        android:inputType="textMultiLine"
+        android:autoLink="web" />
+
+    <TextView
+        android:id="@+id/textUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp" />
+
+    <EditText
+        android:id="@+id/editUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:inputType="text"
+        android:hint="@string/username_hint">
+        <requestFocus />
+    </EditText>
+    
+     <TextView
+        android:id="@+id/textNoUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:layout_gravity="center"
+        android:autoLink="web"        
+        android:layout_marginTop="15dp" />
+     
+    <Button
+        android:id="@+id/buttonSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/done"
+        android:layout_marginTop="15dp"  />
+
+</LinearLayout>

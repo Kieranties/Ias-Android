@@ -19,6 +19,7 @@
     <string name="photo">Photo</string>
     <string name="taxa">Taxa</string>
     <string name="done">Done</string>
+    <string name="next">Next</string>
     <string name="hello">Hello World, InvadrActivity!</string>
     <string name="your_selected_image">Your selected image</string>
     <color name="ias_main">#D36165</color>

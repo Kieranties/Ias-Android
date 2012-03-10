@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/ias_background"
     android:orientation="vertical"
     android:paddingLeft="15dp"
@@ -20,11 +20,12 @@
     <TextView
         android:id="@+id/textBlurb"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:text="@string/settings_blurb"
         android:layout_gravity="center"
         android:scrollHorizontally="false"
         android:inputType="textMultiLine"
+        android:layout_weight="1"
         android:autoLink="web" />
 
     <TextView
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/register"
-        android:layout_gravity="center"
+        android:gravity="center"
         android:autoLink="web"        
         android:layout_marginTop="15dp" />
      

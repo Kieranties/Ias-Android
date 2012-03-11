@@ -20,21 +20,21 @@
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
         android:fillViewport="true" >
 
         <LinearLayout
             android:id="@+id/layoutInnerScroll"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="@string/location"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -42,15 +42,13 @@
                 android:id="@+id/mapView"
                 android:layout_width="fill_parent"
                 android:layout_height="252dp"
-                android:apiKey="0zlBzXcr0jhcCiIQbYelz1PJ9Xeh-m3Hio3uFZw"
-                android:clickable="true" />
+                android:apiKey="0zlBzXcr0jhcCiIQbYelz1PJ9Xeh-m3Hio3uFZw" />
 
             <TextView
                 android:id="@+id/textTaxa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:gravity="left"
                 android:text="@string/taxa"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -59,7 +57,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:gravity="left"
                 android:text="@string/taxa" />
 
             <TextView
@@ -67,7 +64,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:gravity="left"
                 android:text="@string/photo"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -75,7 +71,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="252dp"
                 android:layout_height="252dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/your_selected_image" />
 
             <Button

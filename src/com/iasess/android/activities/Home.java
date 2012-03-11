@@ -1,6 +1,5 @@
 package com.iasess.android.activities;
 
-import org.iasess.android.Logger;
 import org.iasess.android.R;
 
 import android.app.Activity;
@@ -30,7 +29,8 @@ public class Home extends Activity {
     	startActivity(intent);
     }
     public void onAboutClick(View v) {    	
-    	Logger.debug(this, "aboutClick not implemented");
+    	Intent intent = new Intent(this, About.class);
+    	startActivity(intent);
     }
 }
 

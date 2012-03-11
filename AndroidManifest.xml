@@ -12,12 +12,17 @@
         android:theme="@android:style/Theme.Light.NoTitleBar" >
         <activity
             android:name="com.iasess.android.activities.Home"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.iasess.android.activities.AddPhoto" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.iasess.android.activities.Gallery" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.iasess.android.activities.SelectTaxa" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.iasess.android.activities.Settings" android:screenOrientation="portrait"></activity>
+        <activity android:name="com.iasess.android.activities.Summary" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

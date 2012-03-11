@@ -18,14 +18,17 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="25dp" >
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:fillViewport="true" >
 
         <LinearLayout
             android:id="@+id/layoutInnerScroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/textLocation"
@@ -48,6 +51,7 @@
                 android:id="@+id/textTaxa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:gravity="left"
                 android:text="@string/taxa"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -56,6 +60,7 @@
                 android:id="@+id/textSelectedTaxa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="left"
                 android:text="@string/taxa" />
 
@@ -63,6 +68,7 @@
                 android:id="@+id/textPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:gravity="left"
                 android:text="@string/photo"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -82,6 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
+                android:onClick="onDoneClick"
                 android:text="@string/done"
                 android:width="120dp" />
         </LinearLayout>

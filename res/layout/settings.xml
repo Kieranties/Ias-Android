@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/ias_background"
     android:orientation="vertical"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
+    android:paddingLeft="15dp"    
     android:focusableInTouchMode="true"
     android:descendantFocusability="beforeDescendants" >
 
@@ -24,12 +23,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true" >
-
+
         <LinearLayout
             android:id="@+id/layoutInnerScroll"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingRight="15dp" >
 
             <TextView
                 android:id="@+id/textBlurb"
@@ -72,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:text="@string/done" />
         </LinearLayout>
     </ScrollView>

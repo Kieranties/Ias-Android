@@ -90,7 +90,8 @@
                 android:layout_marginTop="15dp"
                 android:onClick="onDoneClick"
                 android:text="@string/done"
-                android:width="120dp" />
+                android:width="120dp"
+                android:layout_marginBottom="15dp" />
         </LinearLayout>
     </ScrollView>
 

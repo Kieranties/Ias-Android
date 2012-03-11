@@ -74,13 +74,11 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <ImageView
-                android:id="@+id/imagePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_width="252dp"
+                android:layout_height="252dp"
                 android:layout_gravity="center"
-                android:contentDescription="@string/your_selected_image"
-                android:minHeight="252dp"
-                android:minWidth="252dp" />
+                android:contentDescription="@string/your_selected_image" />
 
             <Button
                 android:id="@+id/buttonDone"

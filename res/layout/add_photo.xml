@@ -35,12 +35,10 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="252dp"
+        android:layout_height="252dp"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
-        android:minWidth="252dp"
-		android:minHeight="252dp"
         android:contentDescription="@string/your_selected_image"
         android:onClick="onImageClick" />
     

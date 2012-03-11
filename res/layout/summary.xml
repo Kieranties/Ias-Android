@@ -38,14 +38,12 @@
                 android:text="@string/location"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <ImageView
+            <com.google.android.maps.MapView
                 android:id="@+id/mapView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/your_selected_image"
-                android:minHeight="252dp"
-                android:minWidth="252dp" />
+                android:layout_width="fill_parent"
+                android:layout_height="252dp"
+                android:apiKey="0zlBzXcr0jhcCiIQbYelz1PJ9Xeh-m3Hio3uFZw"
+                android:clickable="true" />
 
             <TextView
                 android:id="@+id/textTaxa"
@@ -85,11 +83,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:onClick="onDoneClick"
                 android:text="@string/done"
-                android:width="120dp"
-                android:layout_marginBottom="15dp" />
+                android:width="120dp" />
         </LinearLayout>
     </ScrollView>
 

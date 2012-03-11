@@ -3,63 +3,56 @@ package com.iasess.android.activities;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-public class Summary extends Activity implements LocationListener {
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
+import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
+
+public class Summary extends MapActivity{
     
 	private Uri selectedUri = null;
-	private LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-	private String provider;
-	private Location currentLocation;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.summary);
         
-        if(checkGpsStatus()){
-        	//get location with default criteria
-    		provider = locationManager.getBestProvider(new Criteria(), false);
-    		currentLocation = locationManager.getLastKnownLocation(provider); //get immediate location
-        }
-        
+        initMapComponents();        
         setImageView();	    
     }
-    
-    @Override
-	protected void onResume() {
-		super.onResume();
-		//request an update to location
-		locationManager.requestLocationUpdates(provider, 400, 1, this);
+           
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
     
-    @Override
-	protected void onPause() {
-		super.onPause();
-		locationManager.removeUpdates(this); //stop listening
+	private void initMapComponents(){
+		MapView mapView = (MapView) findViewById(R.id.mapView);
+		//mapView.setBuiltInZoomControls(true);
+		mapView.setSatellite(true);
+		
+		final MapController controller = mapView.getController();
+		final MyLocationOverlay locationOverlay = new MyLocationOverlay(this, mapView);
+		
+		locationOverlay.enableCompass();
+		locationOverlay.enableMyLocation();
+		locationOverlay.runOnFirstFix(new Runnable(){
+			public void run() {				
+				controller.animateTo(locationOverlay.getMyLocation());
+				controller.setZoom(18);
+			}			
+		});
+		mapView.getOverlays().add(locationOverlay);
 	}
-       
-    
-    private boolean checkGpsStatus(){
-    	boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-    	if (!enabled) {
-    		//TODO: display dialog informing the user we need gps
-    		Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-    		startActivity(intent);
-    	}
-    	return enabled;
-    }
+	
     
     private void setImageView(){
     	selectedUri = getIntent().getData();
@@ -82,26 +75,5 @@ public class Summary extends Activity implements LocationListener {
     	Intent intent = new Intent(this, Settings.class);
     	startActivity(intent);
     }
-
-    /** Location Listener implementation **/
-    public void onLocationChanged(Location location) {
-    	//TODO: update map view 
-    	currentLocation = location;
-	}
-    
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
 }
 

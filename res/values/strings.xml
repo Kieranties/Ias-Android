@@ -44,8 +44,5 @@
     <string-array name="camera_options">
         <item>Take Photo</item>
         <item>Choose Existing</item>
-    </string-array>
-    <color name="ias_main">#D36165</color>
-    <color name="ias_background">#F9FAF1</color>
-    <color name="white">#FFFFFF</color>
+    </string-array>    
 </resources>

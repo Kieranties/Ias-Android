@@ -1,5 +1,6 @@
 package com.iasess.android.activities;
 
+import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 
 import android.app.Activity;
@@ -20,6 +21,10 @@ public class AddPhoto extends Activity {
     	//Intent intent = new Intent(this, SelectTaxa.class);
     	Intent intent = new Intent(this, Summary.class);
     	startActivity(intent);
+    }
+    
+    public void onImageClick(View v){
+    	ImageHandler.getImage(this);
     }
 }
 

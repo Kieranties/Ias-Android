@@ -1,5 +1,6 @@
 package com.iasess.android.activities;
 
+import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 
 import android.app.Activity;
@@ -17,8 +18,10 @@ public class Home extends Activity {
     
     /** Events **/
     public void onAddPhotoClick(View v) {
-    	Intent intent = new Intent(this, AddPhoto.class);
-    	startActivity(intent);
+    	//get the user to select photo first
+    	ImageHandler.getImage(this);
+    	//Intent intent = new Intent(this, AddPhoto.class);
+    	//startActivity(intent);
     }
     public void onViewGalleryClick(View v) {
     	Intent intent = new Intent(this, Gallery.class);

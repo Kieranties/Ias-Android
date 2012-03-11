@@ -1,10 +1,12 @@
 package com.iasess.android.activities;
 
 import org.iasess.android.ImageHandler;
+import org.iasess.android.Logger;
 import org.iasess.android.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,12 +18,25 @@ public class Home extends Activity {
         setContentView(R.layout.home);
     }
     
+    @Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == Activity.RESULT_OK){
+			Uri selected = ImageHandler.getImageUriFromIntentResult(resultCode, requestCode, data);
+			if(selected != null){
+				Intent intent = new Intent(this, AddPhoto.class);
+				intent.setData(selected);
+				startActivity(intent);
+			}
+			else{
+				Logger.warn(this, "Could not get a selected image");
+			}
+		}		
+	}
+    
     /** Events **/
     public void onAddPhotoClick(View v) {
-    	//get the user to select photo first
     	ImageHandler.getImage(this);
-    	//Intent intent = new Intent(this, AddPhoto.class);
-    	//startActivity(intent);
     }
     public void onViewGalleryClick(View v) {
     	Intent intent = new Intent(this, Gallery.class);

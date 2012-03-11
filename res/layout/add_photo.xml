@@ -41,7 +41,8 @@
         android:layout_marginTop="15dp"
         android:minWidth="252dp"
 		android:minHeight="252dp"
-        android:contentDescription="@string/your_selected_image" />
+        android:contentDescription="@string/your_selected_image"
+        android:onClick="onImageClick" />
     
     <Button
        android:id="@+id/buttonNext"

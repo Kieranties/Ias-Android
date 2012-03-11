@@ -1,4 +1,4 @@
-package com.iasess.android.activities;
+package org.iasess.android.activities;
 
 import org.iasess.android.ImageHandler;
 import org.iasess.android.Logger;

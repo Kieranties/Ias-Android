@@ -1,4 +1,4 @@
-package com.iasess.android.activities;
+package org.iasess.android.activities;
 
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;

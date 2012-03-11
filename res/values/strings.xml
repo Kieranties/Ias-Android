@@ -41,6 +41,10 @@
         	<p>Williams, F., Eschen, R., Harris, A., Djeddour, D., Pratt, C., Shaw, R., Varia, S., Lamontagne-Godwin, J., Thomas, S. & Murphy, S. (2010). The Economic Cost of Invasive Non-Native Species on Great Britain. CABI. Available at <a href="http://www.cabi.org">http://www.cabi.org</a> [Accessed 15/11/11].</p>
         ]]>
     </string>
+    <string-array name="camera_options">
+        <item>Take Photo</item>
+        <item>Choose Existing</item>
+    </string-array>
     <color name="ias_main">#D36165</color>
     <color name="ias_background">#F9FAF1</color>
     <color name="white">#FFFFFF</color>

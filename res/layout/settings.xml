@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ias_background"
-    android:orientation="vertical"
-    android:paddingLeft="15dp"    
+    android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    android:descendantFocusability="beforeDescendants" >
+    android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/imageBanner"
@@ -23,12 +22,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true" >
-
+
         <LinearLayout
             android:id="@+id/layoutInnerScroll"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingLeft="15dp"
             android:paddingRight="15dp" >
 
             <TextView
@@ -37,15 +37,15 @@
                 android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:inputType="textMultiLine"
-                android:text="@string/settings_blurb" 
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/settings_blurb"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/textUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="15dp"
+                android:gravity="center"
                 android:text="@string/username"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -71,8 +71,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/done" />
         </LinearLayout>
     </ScrollView>

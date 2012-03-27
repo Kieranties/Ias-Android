@@ -1,46 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight" >
-    
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:onClick="onNextClick" >
+
     <ImageView
-        android:id="@+id/icon"        
+        android:id="@+id/icon"
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_marginRight="6dp"
         android:src="@drawable/launcher" />
-    
+
     <ImageView
-        android:id="@+id/iconExpander"       
-        android:layout_alignParentRight="true"
-        android:layout_toLeftOf="@id/icon"
-        android:src="@drawable/expander"
+        android:id="@+id/iconExpander"
         android:layout_width="?android:attr/listPreferredItemHeight"
         android:layout_height="?android:attr/listPreferredItemHeight"
-        android:padding="10dp" />
-    
-   <TextView  
-        android:id="@+id/textSecondary"
-        android:layout_width="wrap_content"
-        android:layout_height="26dip"         
-        android:layout_toRightOf="@id/icon"        
-        android:layout_toLeftOf="@id/iconExpander" 
-        android:layout_alignParentBottom="true"       
-        android:singleLine="true"
-        android:ellipsize="end" />
+        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@id/icon"
+        android:padding="10dp"
+        android:src="@drawable/expander" />
 
-    <TextView
-        android:id="@+id/textPrimary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_toLeftOf="@id/iconExpander"
         android:layout_toRightOf="@id/icon"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/textSecondary"
-        android:layout_alignWithParentIfMissing="true"
-        android:singleLine="true"
-        android:ellipsize="end"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:gravity="center_vertical"/>       
-    
+        android:orientation="vertical"
+        android:gravity="center_vertical" >
+
+        <TextView
+            android:id="@+id/textPrimary"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textSecondary"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:singleLine="true" />
+    </LinearLayout>
+
 </RelativeLayout>

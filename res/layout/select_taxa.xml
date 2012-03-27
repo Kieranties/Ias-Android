@@ -16,4 +16,10 @@
         android:textColor="@color/white"
         android:background="@color/ias_main" />
 
+    <ListView
+        android:id="@+id/listTaxa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
 </LinearLayout>

@@ -14,6 +14,10 @@ public class IasessApp extends Application {
 	public static final String PREFS_USERNAME = "username";
 	
 	/** Application wide properties **/
+	public static final Context getContext(){
+		return context;
+	}
+	
 	public static final SharedPreferences getPreferences(){
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
@@ -30,6 +34,10 @@ public class IasessApp extends Application {
 		editor.putString(key, value);
 		editor.commit();
 	}	
+	
+	public static final String getResourceString(int id){
+		return context.getString(id);
+	}
 	
 	@Override
 	public void onCreate() {

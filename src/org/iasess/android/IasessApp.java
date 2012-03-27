@@ -12,6 +12,7 @@ public class IasessApp extends Application {
 	
 	/** Application wide constants **/
 	public static final String PREFS_USERNAME = "username";
+	public static final String SELECTED_TAXA = "selectedTaxa";
 	
 	/** Application wide properties **/
 	public static final Context getContext(){

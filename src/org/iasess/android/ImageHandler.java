@@ -1,5 +1,6 @@
 package org.iasess.android;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -9,10 +10,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Base64;
 
 public final class ImageHandler {
 	// Don't want instances of this class created
@@ -79,7 +82,6 @@ public final class ImageHandler {
 		
 		return null;
 	}
-
 	
 	public static Bitmap getImageFromUri(Uri uri, Activity activity) {		
 		return getBitmap(uri, activity);
@@ -124,7 +126,7 @@ public final class ImageHandler {
 		return 0;
 	}
 	
-	private static String getPath(Uri uri, Activity activity) {
+	public static String getPath(Uri uri, Activity activity) {
 		String[] projection = { MediaStore.Images.Media.DATA };
 		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
 		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -132,5 +134,11 @@ public final class ImageHandler {
 		String path = cursor.getString(column_index);
 		cursor.close();
 		return path;
+	}
+	
+	public static byte[] getCompressed(Bitmap bm){
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+		bm.compress(Bitmap.CompressFormat.JPEG, 50, baos);   
+		return baos.toByteArray();
 	}
 }

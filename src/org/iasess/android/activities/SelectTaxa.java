@@ -2,6 +2,7 @@ package org.iasess.android.activities;
 
 import java.util.ArrayList;
 
+import org.iasess.android.IasessApp;
 import org.iasess.android.R;
 import org.iasess.android.adapters.TaxaItem;
 import org.iasess.android.adapters.TaxaItemAdapter;
@@ -31,11 +32,12 @@ public class SelectTaxa extends Activity {
     	listView.setAdapter(adapter);    	
     }
     
-    public void onNextClick(View v){
-        Uri selected = getIntent().getData();
-        //set the selected taxa
-        
+    public void onNextClick(View v){        
     	Intent intent = new Intent(this, Summary.class);
+        //set the selected taxa        
+    	intent.putExtra(IasessApp.SELECTED_TAXA, (String)v.getTag());
+    	//set the selected image
+    	Uri selected = getIntent().getData();
     	intent.setData(selected);
     	startActivity(intent);
     }

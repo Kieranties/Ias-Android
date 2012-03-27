@@ -35,6 +35,9 @@ public class TaxaItemAdapter extends ArrayAdapter<TaxaItem> {
 			primaryTitle.setText(item.getCommonName());
 			secondaryTitle.setText(item.getScientificName());
 			//imageSpot.setImageURI(item.getImageUri());
+			
+			//set tag to item identifier
+			v.setTag(item.getPk() + "|" + item.getCommonName());
 		}
 		return v;
 	}

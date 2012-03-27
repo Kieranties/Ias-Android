@@ -32,17 +32,17 @@
             android:id="@+id/textPrimary"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:ellipsize="end"
             android:singleLine="true"
+            android:text="Primary"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textSecondary"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:ellipsize="end"
+            android:text="Primary"
             android:singleLine="true" />
     </LinearLayout>
 

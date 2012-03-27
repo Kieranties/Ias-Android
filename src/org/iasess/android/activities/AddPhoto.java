@@ -43,9 +43,9 @@ public class AddPhoto extends Activity {
     }
     
     public void onNextClick(View v){
-    	//TODO: Implement taxa listing view and hook in activity
-    	//Intent intent = new Intent(this, SelectTaxa.class);
-    	Intent intent = new Intent(this, Summary.class);
+    	//Intent intent = new Intent(this, Summary.class);
+    	Intent intent = new Intent(this, SelectTaxa.class);
+
     	intent.setData(selectedUri);
     	startActivity(intent);
     }

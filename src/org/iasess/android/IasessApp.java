@@ -70,10 +70,10 @@ public class IasessApp extends Application {
 		return _context.getString(id);
 	}
 	
-	@Override
 	/*
 	 * Initializer
 	 */
+	@Override
 	public void onCreate() {
 		super.onCreate();
 		_context = (ContextWrapper) getApplicationContext();		

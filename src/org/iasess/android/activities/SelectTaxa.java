@@ -15,8 +15,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+/*
+ * Ativity to handle the Taxa selection screen
+ */
 public class SelectTaxa extends Activity {
-    /** Called when the activity is first created. */
+	
+	/*
+	 * Initializer
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,22 +30,32 @@ public class SelectTaxa extends Activity {
         fillList();
     }
     
+    /*
+     * Requests and populates the taxa selection
+     */
     public void fillList(){
     	ListView listView = (ListView)findViewById(R.id.listTaxa);
+    	
+    	//request items from api
     	ArrayList<TaxaItem> taxa = ApiHandler.getTaxa(true);
+    	
     	//populate list
     	TaxaItemAdapter adapter = new TaxaItemAdapter(this, R.layout.image_list_item, taxa);
     	listView.setAdapter(adapter);    	
     }
     
+    /*
+     * Handles the passing of selected data to next activity
+     */
     public void onNextClick(View v){        
     	Intent intent = new Intent(this, Summary.class);
-        //set the selected taxa        
-    	intent.putExtra(IasessApp.SELECTED_TAXA, (String)v.getTag());
     	//set the selected image
     	Uri selected = getIntent().getData();
     	intent.setData(selected);
+    	
+        //set the selected taxa        
+    	intent.putExtra(IasessApp.SELECTED_TAXA, (String)v.getTag());
+    	
     	startActivity(intent);
     }
 }
-

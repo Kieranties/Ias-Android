@@ -7,7 +7,14 @@ import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
 
+/*
+ * Activity to handle the about screen
+ */
 public class About extends Activity {
+	
+	/*
+	 * Initializer
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

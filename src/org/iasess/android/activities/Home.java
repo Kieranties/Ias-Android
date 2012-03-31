@@ -10,20 +10,63 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+/*
+ * Activity to handle the Home screen
+ */
 public class Home extends Activity {
-    /** Called when the activity is first created. */
+	
+	/*
+	 * Initializer
+	 */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
     }
     
+    
+   /*
+    * Handles the click event to request a photo
+    */
+    public void onAddPhotoClick(View v) {
+    	ImageHandler.getImage(this);
+    }
+    
+    /*
+     * Handles the click event to view the gallery
+     */
+    public void onViewGalleryClick(View v) {
+    	Intent intent = new Intent(this, Gallery.class);
+    	startActivity(intent);
+    }
+    
+    /*
+     * Handles the click event to view the settings
+     */
+    public void onSettingsClick(View v) {
+    	Intent intent = new Intent(this, Settings.class);
+    	startActivity(intent);
+    }
+    
+    /*
+     * Handles the click event to view the about activity
+     */
+    public void onAboutClick(View v) {    	
+    	Intent intent = new Intent(this, About.class);
+    	startActivity(intent);
+    }
+    
+    /*
+     * Handles the result of an intent
+     */
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK){
+			//we're expecting the intent to be an image intent initiated by this app
 			Uri selected = ImageHandler.getImageUriFromIntentResult(resultCode, requestCode, data);
 			if(selected != null){
+				//pass data to next activity
 				Intent intent = new Intent(this, AddPhoto.class);
 				intent.setData(selected);
 				startActivity(intent);
@@ -33,22 +76,4 @@ public class Home extends Activity {
 			}
 		}		
 	}
-    
-    /** Events **/
-    public void onAddPhotoClick(View v) {
-    	ImageHandler.getImage(this);
-    }
-    public void onViewGalleryClick(View v) {
-    	Intent intent = new Intent(this, Gallery.class);
-    	startActivity(intent);
-    }
-    public void onSettingsClick(View v) {
-    	Intent intent = new Intent(this, Settings.class);
-    	startActivity(intent);
-    }
-    public void onAboutClick(View v) {    	
-    	Intent intent = new Intent(this, About.class);
-    	startActivity(intent);
-    }
 }
-

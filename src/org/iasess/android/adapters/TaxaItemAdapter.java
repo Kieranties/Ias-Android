@@ -3,6 +3,7 @@ package org.iasess.android.adapters;
 import java.util.ArrayList;
 
 import org.iasess.android.R;
+import org.iasess.android.api.TaxaItem;
 
 import android.content.Context;
 import android.view.LayoutInflater;

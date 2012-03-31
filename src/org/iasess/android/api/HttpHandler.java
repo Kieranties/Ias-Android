@@ -23,17 +23,23 @@ import org.apache.http.util.EntityUtils;
 
 import android.util.Log;
 
+/*
+ * Handles Http requests, returning JSON response strings
+ */
 public class HttpHandler {
 
-	public static void executeMultipartPost(String url, String imgPath, HashMap<String, String> strings) throws Throwable {
+	/*
+	 * Executes a multi part post 
+	 */
+	public static void executeMultipartPost(String url, String imgPath, HashMap<String, String> fields) throws Exception {
 		try {
-			//client init
+			//init client
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpPost poster = new HttpPost(url);
 			
-			//populate submission content from strings
+			//populate submission content from field map
 			MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			for (HashMap.Entry<String, String> entry : strings.entrySet()) {
+			for (HashMap.Entry<String, String> entry : fields.entrySet()) {
 				multipartEntity.addPart(entry.getKey(), new StringBody(entry.getValue()));
 			}
 			
@@ -52,40 +58,51 @@ public class HttpHandler {
 					return null;
 				}
 			});
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw e;
-			// TODO: error handling you tool
 		}
 	}
 
+	/*
+	 * Returns the response string for the given request
+	 */
 	public static String getResponseString(String url) throws Exception {
 		try {
 			return executeGet(url);
 		} catch (Exception e) {
-			throw new Exception("Errorered", e);
+			throw e;
 		}
 	}
 
+	/*
+	 * Performs a get request
+	 */
 	private static String executeGet(String url) throws Exception {
 		try {
+			//init client
 			HttpClient client = new DefaultHttpClient();
 			HttpGet getter = new HttpGet(url);
+			
+			//execute
 			HttpResponse response = client.execute(getter);
 			HttpEntity entity = response.getEntity();
 
+			//check for and parse result entity
 			if (entity != null) {
 				InputStream stream = entity.getContent();
 				return convertStreamToString(stream);
 			}
 		} catch (Exception e) {
-			throw new Exception("Errorered", e);
+			throw e;
 		}
 		return null;
 	}
 
-	private static String convertStreamToString(InputStream stream) {
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(stream));
+	/*
+	 * Processes an InputStream to return the String content
+	 */
+	private static String convertStreamToString(InputStream stream) throws Exception {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		StringBuilder sb = new StringBuilder();
 
 		String line = null;
@@ -94,11 +111,12 @@ public class HttpHandler {
 				sb.append(line + "\n");
 			}
 		} catch (Exception e) {
+			throw e;
 		} finally {
 			try {
 				stream.close();
 			} catch (Exception e) {
-
+				throw e;
 			}
 		}
 		return sb.toString();

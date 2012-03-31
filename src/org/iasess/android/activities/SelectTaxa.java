@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
-import org.iasess.android.adapters.TaxaItem;
 import org.iasess.android.adapters.TaxaItemAdapter;
 import org.iasess.android.api.ApiHandler;
+import org.iasess.android.api.TaxaItem;
 
 import android.app.Activity;
 import android.content.Intent;

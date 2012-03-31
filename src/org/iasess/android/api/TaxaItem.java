@@ -1,4 +1,4 @@
-package org.iasess.android.adapters;
+package org.iasess.android.api;
 
 import java.util.Map;
 

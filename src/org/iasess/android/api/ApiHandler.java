@@ -6,27 +6,50 @@ import java.util.HashMap;
 
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
-import org.iasess.android.adapters.TaxaItem;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+/*
+ * Handler for interactions with the IAS API.
+ */
 public class ApiHandler {
 
+	/*
+	 * The base component of request URIs
+	 */
 	private static String API_BASE = IasessApp.getResourceString(R.string.ias_base);
+	
+	/*
+	 * The API version component of request URIs
+	 */
 	private static String API_VERSION = IasessApp.getResourceString(R.string.ias_api_version);
+	
+	/*
+	 * The gallery endpoint component of request URIs
+	 */
 	private static String API_TAXA_GALLERY = IasessApp.getResourceString(R.string.ias_taxa_gallery);
-	private static String API_USER_CHECK = IasessApp.getResourceString(R.string.ias_user_check);
+	
+	/*
+	 * The user check component of request URIs
+	 */
+	//private static String API_USER_CHECK = IasessApp.getResourceString(R.string.ias_user_check);
+	
+	/*
+	 * The sighting component of request URIs
+	 */
 	private static String API_SIGHTING = IasessApp.getResourceString(R.string.ias_sighting);
-	
-	private static String getFullApiUrl(String string){
-		return API_BASE + API_VERSION + string;
-	}
-	
+		
+	/*
+	 * Fetches a list of Taxa from the API service
+	 */
 	public static ArrayList<TaxaItem> getTaxa(boolean fromCache){
 		//TODO: implement fromCache
 		try {
-			String resp = HttpHandler.getResponseString(getFullApiUrl(API_TAXA_GALLERY));
+			//get service response
+			String resp = HttpHandler.getResponseString(composeApiUri(API_TAXA_GALLERY));
+			
+			//process through gson
 			Gson gson = new Gson();
         	Type collectionType = new TypeToken<ArrayList<TaxaItem>>(){}.getType();
         	return gson.fromJson(resp, collectionType); 
@@ -37,9 +60,13 @@ public class ApiHandler {
 		return null;
 	}
 	
+	/*
+	 * Submits a sighting to the service
+	 */
 	public static void submitSighting(String img, int taxa, double lat, double lon, String user){
-		try {
-			String url = getFullApiUrl(API_SIGHTING);
+		try {			
+			String url = composeApiUri(API_SIGHTING);
+			//compose field map
 			HashMap<String, String> fields = new HashMap<String, String>();
 			fields.put("email", user);
 			fields.put("location", "POINT(" + lat +" " + lon +")");			
@@ -48,9 +75,13 @@ public class ApiHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+	}
+	
+	/*
+	 * Composes the full API URI for requests
+	 */
+	private static String composeApiUri(String string){
+		return API_BASE + API_VERSION + string;
 	}
 }

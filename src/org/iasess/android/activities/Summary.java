@@ -2,27 +2,37 @@ package org.iasess.android.activities;
 
 import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
-import org.iasess.android.Logger;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
+import org.iasess.android.maps.IasessOverlay;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.OverlayItem;
 
 public class Summary extends MapActivity{
     
 	private Uri selectedImage;
 	private int selectedTaxa;
+	private MapController mapController;	
+	private MyLocationOverlay locationOverlay;
+	private LocationManager locationManager;
+	Drawable marker = this.getResources().getDrawable(R.drawable.marker);
+	final IasessOverlay iOverlay = new IasessOverlay(marker, this);
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +43,21 @@ public class Summary extends MapActivity{
         setTaxa();
         setImageView();	    
     }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+    		locationOverlay.enableMyLocation();
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	
+    	locationOverlay.disableMyLocation();
+    }
            
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -40,22 +65,33 @@ public class Summary extends MapActivity{
 	}
     
 	private void initMapComponents(){
+		//check gps is enabled
+		locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+		if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+			Toast.makeText(this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+			Intent gpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+			startActivity(gpsIntent);
+		}					
+		
+		//prepare the map componentsO
 		MapView mapView = (MapView) findViewById(R.id.mapView);
-		//mapView.setBuiltInZoomControls(true);
-		mapView.setSatellite(true);
-		
-		final MapController controller = mapView.getController();
-		final MyLocationOverlay locationOverlay = new MyLocationOverlay(this, mapView);
-		
-		locationOverlay.enableCompass();
+		mapView.setSatellite(true);		
+		mapController = mapView.getController();
+				
+		//prepare the default overlay to fetch current location
 		locationOverlay.enableMyLocation();
+		locationOverlay = new MyLocationOverlay(this, mapView);
 		locationOverlay.runOnFirstFix(new Runnable(){
 			public void run() {				
-				controller.animateTo(locationOverlay.getMyLocation());
-				controller.setZoom(18);
+				GeoPoint loc = locationOverlay.getMyLocation();
+				//add additional marker to custom overlay
+				iOverlay.add(new OverlayItem(loc, "Current", "Current location"));
+				mapController.animateTo(loc);
+				mapController.setZoom(18);
 			}			
 		});
 		mapView.getOverlays().add(locationOverlay);
+		mapView.getOverlays().add(iOverlay);
 	}
 	
 	private void setTaxa(){
@@ -76,12 +112,9 @@ public class Summary extends MapActivity{
     
     private void processDetails(){
     	String imgPath = ImageHandler.getPath(selectedImage, this);
-    	ApiHandler.submitSighting(imgPath, 100000, 1, 2, "Kieranties");
-    	
-//    	String img = ImageHandler.getEncodedImage(selectedImage);
-//    	String dataPack = "{photo: '" + img + "', taxon:100000, email: 'Kieranties', location: 'POINT(-2.543989419937134 51.46212918583009)'}";
-//    	Logger.debug(this, img);
-    }
+    	GeoPoint loc = iOverlay.getItem(0).getPoint();
+    	ApiHandler.submitSighting(imgPath, selectedTaxa, loc.getLatitudeE6()/1E6, loc.getLongitudeE6()/1E6, IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
+   }
     
     public void onDoneClick(View v){
     	processDetails();

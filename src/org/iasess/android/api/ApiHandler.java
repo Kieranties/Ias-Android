@@ -1,13 +1,15 @@
 package org.iasess.android.api;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import org.apache.http.HttpResponse;
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
 import org.iasess.android.adapters.TaxaItem;
 
-import android.net.Uri;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ApiHandler {
 
@@ -24,7 +26,10 @@ public class ApiHandler {
 	public static ArrayList<TaxaItem> getTaxa(boolean fromCache){
 		//TODO: implement fromCache
 		try {
-			return JsonClient.getJsonArray(getFullApiUrl(API_TAXA_GALLERY));
+			String resp = HttpHandler.getResponseString(getFullApiUrl(API_TAXA_GALLERY));
+			Gson gson = new Gson();
+        	Type collectionType = new TypeToken<ArrayList<TaxaItem>>(){}.getType();
+        	return gson.fromJson(resp, collectionType); 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,10 +37,14 @@ public class ApiHandler {
 		return null;
 	}
 	
-	public static void submitSighting(String img, int taxa, int lat, int lon, String user){
+	public static void submitSighting(String img, int taxa, double lat, double lon, String user){
 		try {
 			String url = getFullApiUrl(API_SIGHTING);
-			JsonClient.executeMultipartPost(url, img, user);
+			HashMap<String, String> fields = new HashMap<String, String>();
+			fields.put("email", user);
+			fields.put("location", "POINT(" + lat +" " + lon +")");			
+			fields.put("taxon", Integer.toString(taxa));			
+			HttpHandler.executeMultipartPost(url, img, fields);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,6 +4,7 @@
     <color name="ias_background">#F9FAF1</color>
     <color name="white">#FFFFFF</color>
     <style name="Ias" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:background">@color/ias_background</item>
+        <item name="android:windowBackground">@color/ias_background</item>
+        <item name="android:colorBackground">@color/ias_background</item>
     </style>
 </resources>

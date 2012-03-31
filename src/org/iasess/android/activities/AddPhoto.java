@@ -35,7 +35,7 @@ public class AddPhoto extends Activity {
 	}
     
     private void setImageView(Uri uri){
-    	Bitmap bm = ImageHandler.getImageFromUri(uri, this);
+    	Bitmap bm = ImageHandler.getBitmap(uri, this);
     	ImageView iv = (ImageView)findViewById(R.id.imageView);
     	iv.setImageBitmap(bm);
     	

@@ -71,7 +71,7 @@ public class ApiHandler {
 			//compose field map
 			HashMap<String, String> fields = new HashMap<String, String>();
 			fields.put("email", user);
-			fields.put("location", "POINT(" + lat +" " + lon +")");			
+			fields.put("location", "POINT(" + lon +" " + lat +")");			
 			fields.put("taxon", Integer.toString(taxa));			
 			String resp = HttpHandler.executeMultipartPost(url, img, fields);
 			Gson gson = new Gson();

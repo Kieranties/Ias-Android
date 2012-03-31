@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/settingsWrapper" >
 
     <ImageView
         android:id="@+id/imageBanner"

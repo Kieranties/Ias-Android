@@ -93,7 +93,7 @@ public class HttpHandler {
 			//init client
 			HttpClient client = new DefaultHttpClient();			
 			if(qsParams != null){
-				url += URLEncodedUtils.format(qsParams, "UTF-8");
+				url += "?" + URLEncodedUtils.format(qsParams, "UTF-8");
 			}
 			HttpGet getter = new HttpGet(url);
 			//execute

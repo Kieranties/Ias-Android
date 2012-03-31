@@ -4,6 +4,7 @@ import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
+import org.iasess.android.api.SubmissionResponse;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -16,7 +17,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -80,9 +80,22 @@ public class Summary extends MapActivity{
      * Handles the Done click event to submit details
      */
     public void onDoneClick(View v){
-    	submitDetails();
-    	Intent intent = new Intent(this, Settings.class);
-    	startActivity(intent);
+    	ProgressDialog dialog = ProgressDialog.show(this, "", "Submitting...", true);
+    	SubmissionResponse resp = submitDetails();
+    	dialog.cancel();
+    	
+    	if(resp.getId() != Integer.MIN_VALUE){
+    		IasessApp.makeToast(this, "Submitted!");    		
+    		
+    		//we're done for this submission so return the app to the start
+    		Intent home = new Intent(this, Home.class);
+            home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //resets the activity stack
+            startActivity(home);
+            
+            //display the success page to the user
+            Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(resp.getUrl()));
+    		startActivity(Intent.createChooser(browse,"Select Browser"));
+    	}    	
     }
     
     /*
@@ -133,7 +146,7 @@ public class Summary extends MapActivity{
 		//check gps is enabled
 		_locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
 		if (!_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-			Toast.makeText(this, "Please enable GPS", Toast.LENGTH_LONG).show();
+			IasessApp.makeToast(this, "Please enable GPS");
 			Intent gpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 			startActivityForResult(gpsIntent, GPS_INTENT);
 		} else{
@@ -193,9 +206,9 @@ public class Summary extends MapActivity{
     /*
      * Submits the selected details to the site
      */
-    private void submitDetails(){
+    private SubmissionResponse submitDetails(){
     	String imgPath = ImageHandler.getPath(_selectedImage, this);    
     	Location fix = _locationOverlay.getLastFix();    	
-    	ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
+    	return ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
     }
 }

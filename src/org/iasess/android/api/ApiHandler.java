@@ -65,7 +65,7 @@ public class ApiHandler {
 	/*
 	 * Submits a sighting to the service
 	 */
-	public static void submitSighting(String img, int taxa, double lat, double lon, String user){
+	public static SubmissionResponse submitSighting(String img, int taxa, double lat, double lon, String user){
 		try {			
 			String url = composeApiUri(API_SIGHTING);
 			//compose field map
@@ -73,11 +73,14 @@ public class ApiHandler {
 			fields.put("email", user);
 			fields.put("location", "POINT(" + lat +" " + lon +")");			
 			fields.put("taxon", Integer.toString(taxa));			
-			HttpHandler.executeMultipartPost(url, img, fields);
+			String resp = HttpHandler.executeMultipartPost(url, img, fields);
+			Gson gson = new Gson();
+			return gson.fromJson(resp, SubmissionResponse.class);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	/*

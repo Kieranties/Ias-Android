@@ -14,7 +14,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 /*
  * Activity for the Settings screen
@@ -58,7 +57,7 @@ public class Settings extends Activity implements OnEditorActionListener {
 			final ProgressDialog dialog = ProgressDialog.show(Settings.this, "", "Checking Username...", true);
 			UserCheckResponse userCheck = ApiHandler.checkUser(_editText.getText().toString());
 			dialog.cancel();
-			Toast.makeText(this, userCheck.getAnswer(), Toast.LENGTH_LONG).show();
+			IasessApp.makeToast(this, userCheck.getAnswer());
 			String username = userCheck.getUsername();
 			if(username != null && username != ""){
 				_editText.setText(username);

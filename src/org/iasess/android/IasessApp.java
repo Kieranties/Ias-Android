@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 /*
  * Application wide methods
@@ -70,6 +71,12 @@ public class IasessApp extends Application {
 		return _context.getString(id);
 	}
 	
+	/*
+	 * Displays a toast message
+	 */
+	public static void makeToast(ContextWrapper context, String message){
+		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+	}
 	/*
 	 * Initializer
 	 */

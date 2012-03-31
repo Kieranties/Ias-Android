@@ -4,11 +4,12 @@ import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
-import org.iasess.android.maps.IasessOverlay;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,13 +23,16 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.OverlayItem;
 
 /*
  * Activity to handle the Summary screen
  */
 public class Summary extends MapActivity{
-    
+    /*
+     * Request code for GPS intent
+     */
+	private static final int GPS_INTENT = 948484;
+	
 	/*
 	 * The selected image URI
 	 */
@@ -55,15 +59,10 @@ public class Summary extends MapActivity{
 	private LocationManager _locationManager;
 	
 	/*
-	 * The marker displayed for the selected sighting location
+	 * The MapView which renders the location details
 	 */
-	private Drawable _marker = this.getResources().getDrawable(R.drawable.marker);
-	
-	/*
-	 * The overlay used for custom markers
-	 */
-	final IasessOverlay _customOverlay = new IasessOverlay(_marker, this);
-	
+	private MapView _mapView;
+
 	/*
 	 * Initializer
 	 */
@@ -91,10 +90,8 @@ public class Summary extends MapActivity{
      */
     @Override
     protected void onResume() {
-    	super.onResume();
-    	
-    	if(_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-    		_locationOverlay.enableMyLocation();
+    	super.onResume();   	
+    	renderMapView();
     }
     
     /*
@@ -115,39 +112,60 @@ public class Summary extends MapActivity{
 		return false;
 	}
     
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == Activity.RESULT_OK && requestCode == GPS_INTENT){
+			renderMapView();
+		}		
+	}
+	
 	/*
 	 * Initializes the map components and checks for GPS permissions
 	 */
 	private void initMapComponents(){
+		//init map related properties for pause/resume events
+		_mapView = (MapView) findViewById(R.id.mapView);
+		_mapView.setSatellite(true);		
+		_mapController = _mapView.getController();
+		_locationOverlay = new MyLocationOverlay(this, _mapView);		
+		
 		//check gps is enabled
 		_locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
 		if (!_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-			Toast.makeText(this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Please enable GPS", Toast.LENGTH_LONG).show();
 			Intent gpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-			startActivity(gpsIntent);
-		}					
+			startActivityForResult(gpsIntent, GPS_INTENT);
+		} else{
+			renderMapView();
+		}		
+	}
+	
+	/*
+	 * Renders the map view components when GPS is enabled
+	 */
+	private void renderMapView(){		
+		if(!_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) return;
 		
-		//prepare the map componentsO
-		MapView mapView = (MapView) findViewById(R.id.mapView);
-		mapView.setSatellite(true);		
-		_mapController = mapView.getController();
-				
-		//prepare the default overlay to fetch current location
+		//inform user we are waiting for a fix
+		final ProgressDialog dialog = ProgressDialog.show(this, "", "Finding location...", true);
+		
+		//prepare the default overlay to fetch current location	
 		_locationOverlay.enableMyLocation();
-		_locationOverlay = new MyLocationOverlay(this, mapView);
 		_locationOverlay.runOnFirstFix(new Runnable(){
 			public void run() {				
+				//get the location and set properties
 				GeoPoint loc = _locationOverlay.getMyLocation();
-				//add additional marker to custom overlay
-				_customOverlay.add(new OverlayItem(loc, "Current", "Current location"));
 				_mapController.animateTo(loc);
 				_mapController.setZoom(18);
+				
+				//we're done fetching initial fix
+				dialog.cancel();
 			}			
 		});
 		
 		//add overlays to map view
-		mapView.getOverlays().add(_locationOverlay);
-		mapView.getOverlays().add(_customOverlay);
+		_mapView.getOverlays().add(_locationOverlay);
 	}
 	
 	/*
@@ -176,8 +194,8 @@ public class Summary extends MapActivity{
      * Submits the selected details to the site
      */
     private void submitDetails(){
-    	String imgPath = ImageHandler.getPath(_selectedImage, this);
-    	GeoPoint loc = _customOverlay.getItem(0).getPoint();
-    	ApiHandler.submitSighting(imgPath, _selectedTaxa, loc.getLatitudeE6()/1E6, loc.getLongitudeE6()/1E6, IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
+    	String imgPath = ImageHandler.getPath(_selectedImage, this);    
+    	Location fix = _locationOverlay.getLastFix();    	
+    	ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
     }
 }

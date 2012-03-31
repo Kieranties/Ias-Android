@@ -14,23 +14,25 @@ public class TaxaItem {
 	 * The text details of the item
 	 */
 	@SerializedName("key_text")
-	private String keyText;
+	private String _keyText;
 	
 	/*
 	 * The full scientific name of the item
 	 */
 	@SerializedName("scientific_name")
-	private String scientificName;
+	private String _scientificName;
 	
 	/*
 	 * List of sightings for the item
 	 */
-	private int[] sightings;
+	@SerializedName("sightings")
+	private int[] _sightings;
 	
 	/*
 	 * The rank of the item
 	 */
-	private String rank;
+	@SerializedName("rank")
+	private String _rank;
 	
 	/*
 	 * Map of images for the item.
@@ -38,66 +40,53 @@ public class TaxaItem {
 	 * of that size
 	 */
 	@SerializedName("key_images")
-	private Map<String, String[]> keyImages;
+	private Map<String, String[]> _keyImages;
 	
 	/*
 	 * The common/simple name for the item
 	 */
 	@SerializedName("common_name")
-	private String commonName;
+	private String _commonName;
 	
 	/*
 	 * The unique identifier for the item
 	 */
-	private int pk;	
+	@SerializedName("pk")
+	private int _pk;	
 	
 	
 	/*
 	 * Gets the item key text	
 	 */
-	public String getKeyTxt(){		
-		return keyText;
-	}
+	public String getKeyTxt(){ return _keyText; }
 	
 	/*
 	 * Gets the item scientific name	
 	 */
-	public String getScientificName(){
-		return scientificName;
-	}
+	public String getScientificName(){ return _scientificName; }
 	
 	/*
 	 * Gets the item sightings	
 	 */
-	public int[] getSightings(){
-		return sightings;
-	}
+	public int[] getSightings(){ return _sightings; }
 	
 	/*
 	 * Gets the item rank
 	 */
-	public String getRank(){
-		return rank;
-	}
+	public String getRank(){ return _rank; }
 	
 	/*
 	 * Gets the item key images
 	 */
-	public Map<String, String[]> getKeyImages(){
-		return keyImages;
-	}
+	public Map<String, String[]> getKeyImages(){ return _keyImages; }
 	
 	/*
 	 * Gets the item common name
 	 */
-	public String getCommonName(){
-		return commonName;
-	}
+	public String getCommonName(){ return _commonName; }
 	
 	/*
 	 * Gets the item unique identifier	
 	 */
-	public int getPk(){
-		return pk;
-	}
+	public int getPk(){ return _pk;	}
 }

@@ -5,15 +5,18 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
@@ -68,7 +71,15 @@ public class HttpHandler {
 	 */
 	public static String getResponseString(String url) throws Exception {
 		try {
-			return executeGet(url);
+			return executeGet(url, null);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	public static String getResponseString(String url, ArrayList<NameValuePair> qsParams) throws Exception {
+		try {
+			return executeGet(url, qsParams);
 		} catch (Exception e) {
 			throw e;
 		}
@@ -77,12 +88,14 @@ public class HttpHandler {
 	/*
 	 * Performs a get request
 	 */
-	private static String executeGet(String url) throws Exception {
+	private static String executeGet(String url, ArrayList<NameValuePair> qsParams) throws Exception {
 		try {
 			//init client
-			HttpClient client = new DefaultHttpClient();
+			HttpClient client = new DefaultHttpClient();			
+			if(qsParams != null){
+				url += URLEncodedUtils.format(qsParams, "UTF-8");
+			}
 			HttpGet getter = new HttpGet(url);
-			
 			//execute
 			HttpResponse response = client.execute(getter);
 			HttpEntity entity = response.getEntity();

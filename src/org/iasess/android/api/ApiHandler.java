@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
 
@@ -33,7 +35,7 @@ public class ApiHandler {
 	/*
 	 * The user check component of request URIs
 	 */
-	//private static String API_USER_CHECK = IasessApp.getResourceString(R.string.ias_user_check);
+	private static String API_USER_CHECK = IasessApp.getResourceString(R.string.ias_user_check);
 	
 	/*
 	 * The sighting component of request URIs
@@ -79,9 +81,30 @@ public class ApiHandler {
 	}
 	
 	/*
+	 * Submits a check for a username
+	 */
+	public static UserCheckResponse checkUser(String username){
+		try {
+			//get service response
+			ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("un_or_e", username));
+			String resp = HttpHandler.getResponseString(composeApiUri(API_USER_CHECK), params);
+			
+			//process through gson
+			Gson gson = new Gson();
+			return gson.fromJson(resp, UserCheckResponse.class);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*
 	 * Composes the full API URI for requests
 	 */
-	private static String composeApiUri(String string){
+ 	private static String composeApiUri(String string){
 		return API_BASE + API_VERSION + string;
 	}
 }

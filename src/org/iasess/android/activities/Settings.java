@@ -16,7 +16,7 @@ public class Settings extends Activity {
 	/*
 	 * The text control containing the user details
 	 */
-	private EditText _editText = (EditText)findViewById(R.id.editUsername);
+	private EditText _editText;
 	
 	/*
 	 * Initializer
@@ -25,7 +25,8 @@ public class Settings extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);      
-        
+                
+        _editText = (EditText)findViewById(R.id.editUsername);
         //set from application preferences
         _editText.setText(IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
     }

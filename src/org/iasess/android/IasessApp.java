@@ -1,7 +1,7 @@
 package org.iasess.android;
 
 import android.app.Application;
-import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
  */
 public class IasessApp extends Application {
 
-	private static Context context;
+	private static ContextWrapper _context;
 	
 	/*
 	 * Reference for username property
@@ -25,17 +25,17 @@ public class IasessApp extends Application {
 	public static final String SELECTED_TAXA = "selectedTaxa";
 	
 	/*
-	 * Getter for applciation context
+	 * Getter for application context
 	 */
-	public static final Context getContext(){
-		return context;
+	public static final ContextWrapper getContext(){
+		return _context;
 	}
 	
 	/*
 	 * Returns the default shared preferences for the application
 	 */
 	public static final SharedPreferences getPreferences(){
-		return PreferenceManager.getDefaultSharedPreferences(context);
+		return PreferenceManager.getDefaultSharedPreferences(_context);
 	}
 	
 	/*
@@ -67,7 +67,7 @@ public class IasessApp extends Application {
 	 * Returns the requested resource string from the application context
 	 */
 	public static final String getResourceString(int id){
-		return context.getString(id);
+		return _context.getString(id);
 	}
 	
 	@Override
@@ -76,6 +76,6 @@ public class IasessApp extends Application {
 	 */
 	public void onCreate() {
 		super.onCreate();
-		context = getApplicationContext();		
+		_context = (ContextWrapper) getApplicationContext();		
 	}
 }

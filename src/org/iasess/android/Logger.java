@@ -1,20 +1,33 @@
 package org.iasess.android;
 
-import android.content.ContextWrapper;
 import android.util.Log;
 
+/*
+ * Application wide instance to handle logging
+ */
 public final class Logger {
+	
+	/*
+	 * The application wide tag name used for entris to LogCat
+	 */
+	private static String _tagName = IasessApp.getContext().getResources().getString(R.string.app_name);
+	
+	/*
+	 * Static constructor - Don't want instances of this class created
+	 */
 	private Logger(){}
 	
-	private static String getTagName(ContextWrapper context){
-		return context.getResources().getString(R.string.app_name);
+	/*
+	 * Logs the given DEBUG message to LogCat
+	 */
+	public static void debug(String message){
+		Log.d(_tagName, message);
 	}
 	
-	public static void debug(ContextWrapper context, String message){
-		Log.d(getTagName(context), message);
-	}
-	
-	public static void warn(ContextWrapper context, String message){
-		Log.w(getTagName(context), message);
+	/*
+	 * Logs the given WARNING message to LogCat
+	 */
+	public static void warn(String message){
+		Log.w(_tagName, message);
 	}
 }

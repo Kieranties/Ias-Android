@@ -29,7 +29,7 @@ public class Home extends Activity {
 				startActivity(intent);
 			}
 			else{
-				Logger.warn(this, "Could not get a selected image");
+				Logger.warn("Could not get a selected image");
 			}
 		}		
 	}

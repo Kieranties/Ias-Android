@@ -77,6 +77,14 @@ public class IasessApp extends Application {
 	public static void makeToast(ContextWrapper context, String message){
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
+	
+	/*
+	 * Displays a toast message for the application context
+	 */
+	public static void makeToast(String message){
+		makeToast(_context, message);
+	}
+	
 	/*
 	 * Initializer
 	 */

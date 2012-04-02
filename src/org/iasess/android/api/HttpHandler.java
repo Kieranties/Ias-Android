@@ -60,28 +60,43 @@ public class HttpHandler {
 	}
 
 	/*
-	 * Returns the response string for the given request
+	 * Returns the response string for the given url
 	 */
 	public static String getResponseString(String url) throws Exception {
 		try {
-			return executeGet(url, null);
+			return getResponseString(url, null);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 	
+	/*
+	 * Returns the response string for the given url and params
+	 */
 	public static String getResponseString(String url, ArrayList<NameValuePair> qsParams) throws Exception {
 		try {
-			return executeGet(url, qsParams);
+			return EntityUtils.toString(executeGet(url, qsParams));
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 
 	/*
+	 * Returns a byte array for the given url
+	 */
+	public static byte[] getResponseByteArray(String url) throws Exception {
+		try {
+			return EntityUtils.toByteArray(executeGet(url, null));
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	
+	/*
 	 * Performs a get request
 	 */
-	private static String executeGet(String url, ArrayList<NameValuePair> qsParams) throws Exception {
+	private static HttpEntity executeGet(String url, ArrayList<NameValuePair> qsParams) throws Exception {
 		try {
 			//init client
 			HttpClient client = new DefaultHttpClient();			
@@ -91,8 +106,7 @@ public class HttpHandler {
 			HttpGet getter = new HttpGet(url);
 			//execute
 			HttpResponse response = client.execute(getter);
-			HttpEntity entity = response.getEntity();
-			return EntityUtils.toString(entity);
+			return response.getEntity();
 		} catch (Exception e) {
 			throw e;
 		}

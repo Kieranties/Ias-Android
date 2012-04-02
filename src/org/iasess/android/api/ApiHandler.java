@@ -7,7 +7,11 @@ import java.util.HashMap;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.iasess.android.IasessApp;
+import org.iasess.android.Logger;
 import org.iasess.android.R;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -54,7 +58,12 @@ public class ApiHandler {
 			//process through gson
 			Gson gson = new Gson();
         	Type collectionType = new TypeToken<ArrayList<TaxaItem>>(){}.getType();
-        	return gson.fromJson(resp, collectionType); 
+        	ArrayList<TaxaItem> items = gson.fromJson(resp, collectionType);
+        	//init their listing images
+        	for(TaxaItem item : items){
+        		item.initListingImage();
+        	}
+        	return items;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,6 +109,22 @@ public class ApiHandler {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/*
+	 * Returns a bitmap image for the given request
+	 */
+	public static Bitmap getBitmap(String url){
+		try {
+			byte[] bb = null;
+			bb = HttpHandler.getResponseByteArray(API_BASE + url);
+			if(bb != null){				
+				return BitmapFactory.decodeByteArray(bb, 0, bb.length);
+			}
+		} catch (Exception e) {
+			Logger.debug("Failed fetching image at: " + url);
 		}
 		return null;
 	}

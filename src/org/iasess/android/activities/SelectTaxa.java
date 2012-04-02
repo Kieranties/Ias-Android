@@ -31,7 +31,7 @@ public class SelectTaxa extends Activity {
         setContentView(R.layout.select_taxa);
         new PopulateList().execute(""); // <- TODO: ugly!
     }   
-   
+       
     /*
      * Handles the passing of selected data to next activity
      */

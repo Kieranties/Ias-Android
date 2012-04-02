@@ -6,10 +6,12 @@ import org.iasess.android.R;
 import org.iasess.android.api.TaxaItem;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /*
@@ -40,13 +42,18 @@ public class TaxaItemAdapter extends ArrayAdapter<TaxaItem> {
 		TaxaItem item = this.getItem(position);
 		if (item != null) {
 			TextView primaryTitle = (TextView) v.findViewById(R.id.textPrimary);
-			TextView secondaryTitle = (TextView) v.findViewById(R.id.textSecondary);
-			//ImageView imageSpot = (ImageView) v.findViewById(R.id.icon);
-
 			primaryTitle.setText(item.getCommonName());
-			secondaryTitle.setText(item.getScientificName());
-			//imageSpot.setImageURI(item.getImageUri());
 			
+			TextView secondaryTitle = (TextView) v.findViewById(R.id.textSecondary);
+			secondaryTitle.setText(item.getScientificName());
+			
+			
+			Bitmap image = item.getListingImage();
+			if(image != null){
+				ImageView imageSpot = (ImageView) v.findViewById(R.id.icon);
+				imageSpot.setImageBitmap(image);
+			}
+						
 			//set tag to item identifier and common name for later reference
 			v.setTag(item.getPk() + "|" + item.getCommonName());
 		}

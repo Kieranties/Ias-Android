@@ -2,6 +2,8 @@ package org.iasess.android.api;
 
 import java.util.Map;
 
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 
 /*
@@ -54,6 +56,10 @@ public class TaxaItem {
 	@SerializedName("pk")
 	private int _pk;	
 	
+	/*
+	 * The bitmap image to display in listings
+	 */
+	private Bitmap _listingImage;
 	
 	/*
 	 * Gets the item key text	
@@ -89,4 +95,24 @@ public class TaxaItem {
 	 * Gets the item unique identifier	
 	 */
 	public int getPk(){ return _pk;	}
+	
+	/*
+	 * Returns the listing icon for the image
+	 */
+	public Bitmap getListingImage(){
+		return _listingImage;
+	}
+	
+	/*
+	 * Initialise the listing image
+	 * TODO: Remove this nastiness
+	 */
+	public void initListingImage(){
+		if(_keyImages.containsKey("100")){
+			String[] vals = _keyImages.get("100");
+			if(vals.length > 0){
+				_listingImage = ApiHandler.getBitmap(vals[0]);
+			}
+		}
+	}
 }

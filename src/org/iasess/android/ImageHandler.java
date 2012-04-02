@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,12 +42,11 @@ public final class ImageHandler {
 	private ImageHandler() {}
 
 	/*
-	 * Request an image for the given activity
+	 * Request an image
 	 */
 	public static void getImage(Activity activity) {
 		// get the user selection
-		AlertDialog dlg = initCameraDialog(activity);
-		dlg.show();
+		initCameraDialog(activity).show();
 	}
 
 	/*
@@ -66,16 +66,16 @@ public final class ImageHandler {
 	}
 	
 	/*
-	 * Given a uri, returns the image bitmap in the context of the given activity
+	 * Given a uri, returns the image bitmap
 	 */
-	public static Bitmap getBitmap(Uri uri, Activity activity) {
+	public static Bitmap getBitmap(Uri uri) {
 		Bitmap bm = null;
 		try {
 			//find in the media store
-			bm = MediaStore.Images.Media.getBitmap(activity.getContentResolver(),uri);
+			bm = MediaStore.Images.Media.getBitmap(IasessApp.getContext().getContentResolver(),uri);
 			
 			//check it's orientation
-			int rotation = getImageRotation(uri, activity);
+			int rotation = getImageRotation(uri);
 			if (rotation != 0){
 				//rotate if required
 				Matrix mtx = new Matrix();
@@ -92,9 +92,10 @@ public final class ImageHandler {
 	/*
 	 * Given a uri, returns the actual path to the item on the device
 	 */
-	public static String getPath(Uri uri, Activity activity) {
+	public static String getPath(Uri uri) {
 		String[] projection = { MediaStore.Images.Media.DATA };
-		Cursor cursor = activity.managedQuery(uri, projection, null, null, null);
+		ContentResolver resolver = IasessApp.getContext().getContentResolver();
+		Cursor cursor = resolver.query(uri, projection, null, null, null);
 		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 		cursor.moveToFirst();
 		String path = cursor.getString(column_index);
@@ -153,10 +154,10 @@ public final class ImageHandler {
 	 * Get the degrees required to rotate the image.
 	 * (Work around for Samsung devices)
 	 */
-	private static int getImageRotation(Uri uri, Activity activity) {
+	private static int getImageRotation(Uri uri) {
 		try {
 			// check orientation
-			ExifInterface exif = new ExifInterface(getPath(uri, activity));
+			ExifInterface exif = new ExifInterface(getPath(uri));
 			int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
 			switch (orientation) {

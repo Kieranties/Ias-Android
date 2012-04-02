@@ -75,7 +75,7 @@ public class Summary extends MapActivity{
         setTaxa();
         setImageView();	    
     }
-    
+       
     /*
      * Handles the Done click event to submit details
      */
@@ -115,6 +115,7 @@ public class Summary extends MapActivity{
     	super.onPause();
     	
     	_locationOverlay.disableMyLocation();
+    	
     }
          
     /*
@@ -198,16 +199,16 @@ public class Summary extends MapActivity{
 	 */
     private void setImageView(){
     	_selectedImage = getIntent().getData();
-    	Bitmap bm = ImageHandler.getBitmap(_selectedImage, this);
+    	Bitmap bm = ImageHandler.getBitmap(_selectedImage);
     	ImageView iv = (ImageView)findViewById(R.id.imageView);
-    	iv.setImageBitmap(bm);   	
+    	iv.setImageBitmap(bm);   
     }
     
     /*
      * Submits the selected details to the site
      */
     private SubmissionResponse submitDetails(){
-    	String imgPath = ImageHandler.getPath(_selectedImage, this);    
+    	String imgPath = ImageHandler.getPath(_selectedImage);    
     	Location fix = _locationOverlay.getLastFix();    	
     	return ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
     }

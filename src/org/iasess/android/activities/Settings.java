@@ -7,7 +7,6 @@ import org.iasess.android.api.UserCheckResponse;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;

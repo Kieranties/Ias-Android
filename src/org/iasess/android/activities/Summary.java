@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -80,22 +81,7 @@ public class Summary extends MapActivity{
      * Handles the Done click event to submit details
      */
     public void onDoneClick(View v){
-    	ProgressDialog dialog = ProgressDialog.show(this, "", "Submitting...", true);
-    	SubmissionResponse resp = submitDetails();
-    	dialog.cancel();
-    	
-    	if(resp.getId() != Integer.MIN_VALUE){
-    		IasessApp.makeToast(this, "Submitted!");    		
-    		
-    		//we're done for this submission so return the app to the start
-    		Intent home = new Intent(this, Home.class);
-            home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //resets the activity stack
-            startActivity(home);
-            
-            //display the success page to the user
-            Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(resp.getUrl()));
-    		startActivity(Intent.createChooser(browse,"Select Browser"));
-    	}    	
+    	new SubmitSightingTask().execute("");
     }
     
     /*
@@ -113,9 +99,7 @@ public class Summary extends MapActivity{
     @Override
     protected void onPause() {
     	super.onPause();
-    	
     	_locationOverlay.disableMyLocation();
-    	
     }
          
     /*
@@ -205,11 +189,53 @@ public class Summary extends MapActivity{
     }
     
     /*
-     * Submits the selected details to the site
+     * Separate thread action to submit contents
      */
-    private SubmissionResponse submitDetails(){
-    	String imgPath = ImageHandler.getPath(_selectedImage);    
-    	Location fix = _locationOverlay.getLastFix();    	
-    	return ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
-    }
+    private class SubmitSightingTask extends AsyncTask<String, Void, SubmissionResponse> {	
+		/*
+		 * The progress dialog to display to the user
+		 */
+		private ProgressDialog _dlg;
+		
+		/*
+		 * Executed before any processing of the task itself
+		 */
+		protected void onPreExecute() {
+			//display the dialog to the user
+			_dlg = ProgressDialog.show(Summary.this, "", "Submitting...", true);
+	    }
+        
+		/*
+		 * The actual execution method ran in a background thread 
+		 */
+	    protected SubmissionResponse doInBackground(String... params) {
+	    	//don't need params
+	    	String imgPath = ImageHandler.getPath(_selectedImage);    
+	    	Location fix = _locationOverlay.getLastFix(); 
+        	return ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
+	    }
+	    
+	    /*
+	     * Fired when all processing has finished
+	     */
+	    protected void onPostExecute(SubmissionResponse result) { 
+	    	_dlg.dismiss();
+	    	if(result.getId() != Integer.MIN_VALUE){
+	    		IasessApp.makeToast("Submitted!");    		
+	    		
+	    		//we're done for this submission so return the app to the start
+	    		Intent home = new Intent(Summary.this, Home.class);
+	            home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //resets the activity stack
+	            startActivity(home);
+	            
+	            //display the success page to the user
+	            Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getUrl()));
+	    		startActivity(Intent.createChooser(browse,"Select Browser"));
+	    	}  
+	    	else
+	    	{
+	    		IasessApp.makeToast("Sorry, please try again later :-(");
+	    	}
+	    }
+	}
 }

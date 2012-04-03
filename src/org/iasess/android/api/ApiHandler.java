@@ -10,9 +10,6 @@ import org.iasess.android.IasessApp;
 import org.iasess.android.Logger;
 import org.iasess.android.R;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -49,8 +46,7 @@ public class ApiHandler {
 	/*
 	 * Fetches a list of Taxa from the API service
 	 */
-	public static ArrayList<TaxaItem> getTaxa(boolean fromCache){
-		//TODO: implement fromCache
+	public static ArrayList<TaxaItem> getTaxa(){
 		try {
 			//get service response
 			String resp = HttpHandler.getResponseString(composeApiUri(API_TAXA_GALLERY));
@@ -59,10 +55,6 @@ public class ApiHandler {
 			Gson gson = new Gson();
         	Type collectionType = new TypeToken<ArrayList<TaxaItem>>(){}.getType();
         	ArrayList<TaxaItem> items = gson.fromJson(resp, collectionType);
-        	//init their listing images
-        	for(TaxaItem item : items){
-        		item.initListingImage();
-        	}
         	return items;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -114,15 +106,13 @@ public class ApiHandler {
 	}
 	
 	/*
-	 * Returns a bitmap image for the given request
+	 * Returns a byte array for the given request
 	 */
-	public static Bitmap getBitmap(String url){
+	public static byte[] getByteArray(String url, boolean isRelative){
 		try {
-			byte[] bb = null;
-			bb = HttpHandler.getResponseByteArray(API_BASE + url);
-			if(bb != null){				
-				return BitmapFactory.decodeByteArray(bb, 0, bb.length);
-			}
+			if(isRelative) url = API_BASE + url;
+			
+			return HttpHandler.getResponseByteArray(url);
 		} catch (Exception e) {
 			Logger.debug("Failed fetching image at: " + url);
 		}

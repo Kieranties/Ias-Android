@@ -1,21 +1,24 @@
 package org.iasess.android.activities;
 
-import java.util.ArrayList;
-
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
-import org.iasess.android.adapters.TaxaItemAdapter;
 import org.iasess.android.api.ApiHandler;
-import org.iasess.android.api.TaxaItem;
+import org.iasess.android.data.TaxaStore;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.SimpleCursorAdapter.ViewBinder;
 
 /*
  * Ativity to handle the Taxa selection screen
@@ -50,7 +53,7 @@ public class SelectTaxa extends Activity {
     /*
      * Separate thread action to fetch list details
      */
-    private class PopulateList extends AsyncTask<String, Void, ArrayList<TaxaItem>> {	
+    private class PopulateList extends AsyncTask<String, Void, Cursor> {	
 		/*
 		 * The progress dialog to display to the user
 		 */
@@ -67,19 +70,60 @@ public class SelectTaxa extends Activity {
 		/*
 		 * The actual execution method ran in a background thread 
 		 */
-	    protected ArrayList<TaxaItem> doInBackground(String... params) {        	
-        	//request items from api - don't need params...
-        	return ApiHandler.getTaxa(true);
+	    protected Cursor doInBackground(String... params) {        	
+        	// - don't need params...
+	    	//check for items from the database first
+	    	TaxaStore store = new TaxaStore(SelectTaxa.this);
+	    	Cursor taxaCursor = store.getAllItems();
+	    	if(!taxaCursor.moveToFirst()){ //is an empty set
+	    		taxaCursor.close();
+	    		//get from the api as not initialised
+	    		store.addTaxa(ApiHandler.getTaxa());
+	    		
+	    		//re-fetch cursor data
+	    		taxaCursor = store.getAllItems();
+	    	}
+	    	
+	    	return taxaCursor;
 	    }
 	    
 	    /*
 	     * Fired when all processing has finished
 	     */
-	    protected void onPostExecute(ArrayList<TaxaItem> result) {    	
+	    protected void onPostExecute(Cursor result) {    	
 	    	//populate list
-	    	ListView listView = (ListView)findViewById(R.id.listTaxa);	    	
-        	TaxaItemAdapter adapter = new TaxaItemAdapter(SelectTaxa.this, R.layout.image_list_item, result);
-        	listView.setAdapter(adapter);   		
+	    	ListView listView = (ListView)findViewById(R.id.listTaxa);	
+	    	final int pkIndex = result.getColumnIndex(TaxaStore.COL_PK);
+			final int commonIndex = result.getColumnIndex(TaxaStore.COL_COMMON_NAME);
+	    	String[] columns = new String[] {TaxaStore.COL_COMMON_NAME, TaxaStore.COL_SCIENTIFIC_NAME, TaxaStore.COL_LISTING_IMAGE, TaxaStore.COL_PK};
+	    	int[] to = new int[] {R.id.textPrimary, R.id.textSecondary, R.id.icon};
+	    	
+	    	SimpleCursorAdapter adapter = new SimpleCursorAdapter(SelectTaxa.this, R.layout.image_list_item, result, columns, to);
+	    	adapter.setViewBinder(new ViewBinder() {					    		
+				public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+					if(view.getId() == R.id.icon){
+						ImageView imageSpot = (ImageView) view;
+						Bitmap bm = null;
+						byte[] bytes = cursor.getBlob(columnIndex);
+						if(bytes == null){				
+							bm = BitmapFactory.decodeResource(view.getResources(), R.drawable.launcher);
+						} else {
+							bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+						}
+						imageSpot.setImageBitmap(bm);
+						
+						//set the tag of the parent view
+						View parent = (View)view.getParent();						
+						parent.setTag(cursor.getString(pkIndex) + "|" + cursor.getString(commonIndex));
+						
+						//return true to say we handled to binding
+						return true;
+					}
+					return false;
+				}
+			});
+        	listView.setAdapter(adapter);   	
+        	
         	_dlg.dismiss();
 	    }
 	}

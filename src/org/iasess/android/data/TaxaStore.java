@@ -60,24 +60,30 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	
 	public void addTaxa(TaxaItem item){
 		SQLiteDatabase db = this.getWritableDatabase();		 
-	    insertTaxa(item, db);
+	    insertTaxaItem(item, db);
 	    db.close();
 	}
 	
 	public void addTaxa(ArrayList<TaxaItem> taxa){
 		SQLiteDatabase db = this.getWritableDatabase();	
 		for(TaxaItem item : taxa){
-			insertTaxa(item, db);
+			insertTaxaItem(item, db);
 		}
 		db.close();
 	}
 	
 	public void udpateTaxa(TaxaItem item){
-		
+		SQLiteDatabase db = this.getWritableDatabase();		 
+		updateTaxaItem(item, db);
+	    db.close();
 	}
 	
 	public void updateTaxa(ArrayList<TaxaItem> taxa){
-		
+		SQLiteDatabase db = this.getWritableDatabase();	
+		for(TaxaItem item : taxa){
+			updateTaxaItem(item, db);
+		}
+		db.close();
 	}
 	
 	public Cursor getAllItems() {
@@ -87,9 +93,17 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    return db.rawQuery(selectQuery, null);
 	}
 	
-	private void insertTaxa(TaxaItem item, SQLiteDatabase db){
-		
-		//populate the storage values
+	private void updateTaxaItem(TaxaItem item, SQLiteDatabase db){
+		ContentValues values = getContent(item);
+		db.update(TABLE_NAME, values, COL_PK + " = " + item.getPk(), null);
+	}
+	
+	private void insertTaxaItem(TaxaItem item, SQLiteDatabase db){
+	    //insert the entry
+	    db.insert(TABLE_NAME, null, getContent(item));
+	}
+	
+	private ContentValues getContent(TaxaItem item){
 		ContentValues values = new ContentValues();
 	    values.put(COL_PK, item.getPk());
 	    values.put(COL_COMMON_NAME, item.getCommonName());
@@ -102,8 +116,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    	values.put(COL_LISTING_IMAGE, imageData);
 	    }
 	    
-	    //insert the entry
-	    db.insert(TABLE_NAME, null, values);
+	    return values;
 	}
 	
 	private byte[] getListingImage(TaxaItem item){

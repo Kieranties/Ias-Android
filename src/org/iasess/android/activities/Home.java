@@ -1,5 +1,6 @@
 package org.iasess.android.activities;
 
+import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.Logger;
 import org.iasess.android.R;
@@ -22,6 +23,11 @@ public class Home extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        
+        //check we have a username saved
+        if(IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME).equals("")){
+        	displaySettings();
+        }
     }
     
     
@@ -44,8 +50,7 @@ public class Home extends Activity {
      * Handles the click event to view the settings
      */
     public void onSettingsClick(View v) {
-    	Intent intent = new Intent(this, Settings.class);
-    	startActivity(intent);
+    	displaySettings();
     }
     
     /*
@@ -76,4 +81,9 @@ public class Home extends Activity {
 			}
 		}		
 	}
+    
+    private void displaySettings(){
+    	Intent intent = new Intent(this, Settings.class);
+    	startActivity(intent);
+    }
 }

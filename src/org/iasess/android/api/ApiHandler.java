@@ -66,14 +66,14 @@ public class ApiHandler {
 	/*
 	 * Submits a sighting to the service
 	 */
-	public static SubmissionResponse submitSighting(String img, int taxa, double lat, double lon, String user){
+	public static SubmissionResponse submitSighting(String img, long taxa, double lat, double lon, String user){
 		try {			
 			String url = composeApiUri(API_SIGHTING);
 			//compose field map
 			HashMap<String, String> fields = new HashMap<String, String>();
 			fields.put("email", user);
 			fields.put("location", "POINT(" + lon +" " + lat +")");			
-			fields.put("taxon", Integer.toString(taxa));			
+			fields.put("taxon", Long.toString(taxa));			
 			String resp = HttpHandler.executeMultipartPost(url, img, fields);
 			Gson gson = new Gson();
 			return gson.fromJson(resp, SubmissionResponse.class);

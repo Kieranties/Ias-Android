@@ -1,6 +1,7 @@
 package org.iasess.android.activities;
 
 import org.iasess.android.IasessApp;
+import org.iasess.android.Logger;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
@@ -18,7 +19,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
@@ -36,6 +40,27 @@ public class SelectTaxa extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.select_taxa);
 		new PopulateList().execute(""); // <- TODO: ugly!
+		
+		ListView lv = (ListView) findViewById(R.id.listTaxa);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
+				Intent intent = new Intent(IasessApp.getContext(), Summary.class);
+				// set the selected image
+				Uri selected = getIntent().getData();
+				intent.setData(selected);
+
+				
+				// set the selected taxa
+				Cursor cursor = (Cursor) adapter.getItemAtPosition(position);
+				String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
+				
+				intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
+				intent.putExtra(IasessApp.SELECTED_TAXA_NAME, name);
+
+				startActivity(intent);				
+			}
+		});
 	}
 
 	/*
@@ -125,13 +150,10 @@ public class SelectTaxa extends Activity {
 		protected void onPostExecute(Cursor result) {
 			// populate list
 			ListView listView = (ListView) findViewById(R.id.listTaxa);
-			if (listView.getAdapter() != null) {
-				SimpleCursorAdapter adapter = (SimpleCursorAdapter) listView.getAdapter();
-				adapter.changeCursor(result);
+			ListAdapter currentAdapter = listView.getAdapter();
+			if ( currentAdapter != null) {
+				((SimpleCursorAdapter)currentAdapter).changeCursor(result);
 			} else {
-
-				final int pkIndex = result.getColumnIndex(TaxaStore.COL_PK);
-				final int commonIndex = result.getColumnIndex(TaxaStore.COL_COMMON_NAME);
 				String[] columns = new String[] { TaxaStore.COL_COMMON_NAME, TaxaStore.COL_SCIENTIFIC_NAME,	TaxaStore.COL_LISTING_IMAGE, TaxaStore.COL_PK };
 				int[] to = new int[] { R.id.textPrimary, R.id.textSecondary, R.id.icon };
 
@@ -151,11 +173,7 @@ public class SelectTaxa extends Activity {
 								bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 							}
 							imageSpot.setImageBitmap(bm);
-
-							// set the tag of the parent view
-							View parent = (View) view.getParent();
-							parent.setTag(cursor.getString(pkIndex) + "|" + cursor.getString(commonIndex));
-
+							
 							// return true to say we handled to binding
 							return true;
 						}

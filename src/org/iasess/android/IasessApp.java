@@ -26,6 +26,12 @@ public class IasessApp extends Application {
 	public static final String SELECTED_TAXA = "selectedTaxa";
 	
 	/*
+	 * Reference for selected taxa name property
+	 * (used when passing bewteen Activites/Intents
+	 */
+	public static final String SELECTED_TAXA_NAME = "selectedTaxaName";
+	
+	/*
 	 * Getter for application context
 	 */
 	public static final ContextWrapper getContext(){

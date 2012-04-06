@@ -42,7 +42,7 @@ public class Summary extends MapActivity{
 	/*
 	 * The selected Taxa details [i|name]
 	 */
-	private int _selectedTaxa;
+	private long _selectedTaxa;
 	
 	/*
 	 * The map controller for the position of the sighting
@@ -170,12 +170,12 @@ public class Summary extends MapActivity{
 	 * Populates the taxa details in the view
 	 */
 	private void setTaxa(){
-		String taxaData = getIntent().getExtras().getString(IasessApp.SELECTED_TAXA);
-		String[] vals = taxaData.split("\\|");
+		Bundle extras = getIntent().getExtras();
+		_selectedTaxa = extras.getLong(IasessApp.SELECTED_TAXA);
+		String taxaName = extras.getString(IasessApp.SELECTED_TAXA_NAME);
 		
 		TextView tv = (TextView)findViewById(R.id.textSelectedTaxa);
-		tv.setText(vals[1]);
-		_selectedTaxa = Integer.parseInt(vals[0]);
+		tv.setText(taxaName);
 	}
     
 	/*

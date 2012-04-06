@@ -1,7 +1,6 @@
 package org.iasess.android.activities;
 
 import org.iasess.android.IasessApp;
-import org.iasess.android.Logger;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
@@ -20,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -28,9 +26,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
 /*
- * Ativity to handle the Taxa selection screen
+ * Activity to handle the Taxa selection screen
  */
-public class SelectTaxa extends Activity {
+public class TaxaListing extends Activity {
 
 	/*
 	 * Initializer
@@ -38,29 +36,17 @@ public class SelectTaxa extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.select_taxa);
+		setContentView(R.layout.taxa_listing);
 		new PopulateList().execute(""); // <- TODO: ugly!
 		
 		ListView lv = (ListView) findViewById(R.id.listTaxa);
-		lv.setOnItemClickListener(new OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
-				Intent intent = new Intent(IasessApp.getContext(), Summary.class);
-				// set the selected image
-				Uri selected = getIntent().getData();
-				intent.setData(selected);
-
-				
-				// set the selected taxa
-				Cursor cursor = (Cursor) adapter.getItemAtPosition(position);
-				String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
-				
-				intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
-				intent.putExtra(IasessApp.SELECTED_TAXA_NAME, name);
-
-				startActivity(intent);				
-			}
-		});
+		//check to see if we are display in a gallery view
+		Bundle extras = getIntent().getExtras();
+		if(extras != null && extras.containsKey("gallery") && extras.getBoolean("gallery")){
+			lv.setOnItemClickListener(new GalleryViewListener());
+		} else {
+			lv.setOnItemClickListener(new SightingSubmissionListener());	
+		}
 	}
 
 	/*
@@ -103,6 +89,38 @@ public class SelectTaxa extends Activity {
 		startActivity(intent);
 	}
 
+	
+	private class SightingSubmissionListener implements  AdapterView.OnItemClickListener{
+
+		public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
+			Intent intent = new Intent(IasessApp.getContext(), Summary.class);
+			// set the selected image
+			Uri selected = getIntent().getData();
+			intent.setData(selected);
+
+			
+			// set the selected taxa
+			Cursor cursor = (Cursor) adapter.getItemAtPosition(position);
+			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
+			
+			intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
+			intent.putExtra(IasessApp.SELECTED_TAXA_NAME, name);
+
+			startActivity(intent);				
+		}		
+	}
+	
+	private class GalleryViewListener implements  AdapterView.OnItemClickListener{
+
+		public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
+			Intent intent = new Intent(IasessApp.getContext(), TaxaDetails.class);			
+			intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
+
+			startActivity(intent);				
+		}		
+	}
+	
+	
 	/*
 	 * Separate thread action to fetch list details
 	 */
@@ -117,7 +135,7 @@ public class SelectTaxa extends Activity {
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
-			_dlg = ProgressDialog.show(SelectTaxa.this, "", "Fetching taxa...",
+			_dlg = ProgressDialog.show(TaxaListing.this, "", "Fetching taxa...",
 					true);
 		}
 
@@ -125,7 +143,7 @@ public class SelectTaxa extends Activity {
 		 * The actual execution method ran in a background thread
 		 */
 		protected Cursor doInBackground(String... params) {
-			TaxaStore store = new TaxaStore(SelectTaxa.this);
+			TaxaStore store = new TaxaStore(TaxaListing.this);
 			if (params.length > 0 && params[0].equals("refresh")) {
 				store.updateTaxa(ApiHandler.getTaxa());
 				return store.getAllItems();
@@ -158,7 +176,7 @@ public class SelectTaxa extends Activity {
 				int[] to = new int[] { R.id.textPrimary, R.id.textSecondary, R.id.icon };
 
 				SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-						SelectTaxa.this, R.layout.image_list_item, result,
+						TaxaListing.this, R.layout.image_list_item, result,
 						columns, to);
 				adapter.setViewBinder(new ViewBinder() {
 					public boolean setViewValue(View view, Cursor cursor,

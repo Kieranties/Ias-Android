@@ -39,7 +39,7 @@ public class AddPhoto extends Activity {
      * Handles the passing of data from this activity to the next
      */
     public void onNextClick(View v){
-    	Intent intent = new Intent(this, SelectTaxa.class);
+    	Intent intent = new Intent(this, TaxaListing.class);
     	intent.setData(_selectedUri);
     	startActivity(intent);
     }

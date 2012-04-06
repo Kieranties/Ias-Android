@@ -28,8 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.AddPhoto" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activities.Gallery" android:screenOrientation="portrait"></activity>
-        <activity android:name=".activities.SelectTaxa" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activities.TaxaDetails" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activities.TaxaListing" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.Settings" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.Summary" android:screenOrientation="portrait"></activity>
         <activity android:name=".activities.About" android:screenOrientation="portrait"></activity>

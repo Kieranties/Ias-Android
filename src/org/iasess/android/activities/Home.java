@@ -42,7 +42,8 @@ public class Home extends Activity {
      * Handles the click event to view the gallery
      */
     public void onViewGalleryClick(View v) {
-    	Intent intent = new Intent(this, Gallery.class);
+    	Intent intent = new Intent(this, TaxaListing.class);
+    	intent.putExtra("gallery", true);
     	startActivity(intent);
     }
     

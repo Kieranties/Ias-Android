@@ -86,11 +86,17 @@ public class TaxaStore  extends SQLiteOpenHelper {
 		db.close();
 	}
 	
-	public Cursor getAllItems() {
-	    String selectQuery = "SELECT * FROM " + TABLE_NAME;
-	 
-	    SQLiteDatabase db = this.getWritableDatabase();
-	    return db.rawQuery(selectQuery, null);
+	public Cursor getAllItems() {	 
+	    return executeStringQuery("SELECT * FROM " + TABLE_NAME);
+	}
+	
+	public Cursor getByPk(long pk){
+		return executeStringQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_PK + " = " + pk);
+	}
+	
+	private Cursor executeStringQuery(String q){
+		SQLiteDatabase db = this.getReadableDatabase();
+	    return db.rawQuery(q, null);
 	}
 	
 	private void updateTaxaItem(TaxaItem item, SQLiteDatabase db){

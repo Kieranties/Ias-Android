@@ -74,6 +74,16 @@ public class TaxaListing extends Activity {
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		ListView listView = (ListView) findViewById(R.id.listTaxa);
+		ListAdapter currentAdapter = listView.getAdapter();
+		if ( currentAdapter != null) {
+			((SimpleCursorAdapter)currentAdapter).getCursor().close();
+		}
+	}
 	/*
 	 * Handles the passing of selected data to next activity
 	 */
@@ -167,6 +177,7 @@ public class TaxaListing extends Activity {
 		 */
 		protected void onPostExecute(Cursor result) {
 			// populate list
+			startManagingCursor(result);
 			ListView listView = (ListView) findViewById(R.id.listTaxa);
 			ListAdapter currentAdapter = listView.getAdapter();
 			if ( currentAdapter != null) {

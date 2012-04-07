@@ -1,72 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:padding="10dp" >
 
     <ImageView
         android:id="@+id/imageBanner"
         android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center"
-        android:src="@drawable/iasbanner"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        android:contentDescription="@string/app_title" />
-
-    <Button
-        android:id="@+id/buttonSubmit"
-        android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center"
-		android:width="252dp"
-		android:height="150dp"
-        android:text="@string/add_sighting"
-        android:background="@color/ias_main"
-        android:textColor="@color/white"
-        android:onClick="onAddPhotoClick" 
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
-    
-    <Button
-        android:id="@+id/buttonGallery"
-        android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center"
-		android:layout_marginTop="15dp"
-		android:width="252dp"
-		android:height="150dp"
-        android:text="@string/view_gallery"
-        android:background="@color/ias_main"
-        android:textColor="@color/white"
-        android:onClick="onViewGalleryClick"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/app_title"
+        android:src="@drawable/iasbanner" />
 
     <LinearLayout
-        android:id="@+id/layoutButtonWrap"
-        android:layout_width="wrap_content"
+        android:id="@+id/buttonWrap"
+        android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        >
+        android:layout_alignLeft="@+id/imageBanner"
+        android:layout_alignRight="@+id/imageBanner"
+        android:layout_below="@+id/imageBanner"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:weightSum="1" >
 
         <Button
-            android:id="@+id/buttonAbout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/about"
-            android:width="120dp"
-            android:layout_marginRight="6dp"
-            android:onClick="onAboutClick"/>
+            android:id="@+id/buttonSubmit"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".375"
+            android:background="@color/ias_main"
+            android:onClick="onAddPhotoClick"
+            android:text="@string/add_sighting"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".05" />
 
         <Button
-            android:id="@+id/buttonSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:width="120dp"
-            android:layout_marginLeft="6dp"
-            android:onClick="onSettingsClick"/>
+            android:id="@+id/buttonGallery"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".375"
+            android:background="@color/ias_main"
+            android:onClick="onViewGalleryClick"
+            android:text="@string/view_gallery"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white" />
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".05" />
+
+        <RelativeLayout
+            android:id="@+id/otherWrap"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".15"
+            android:gravity="center_horizontal" >
+
+            <View
+                android:id="@+id/strut"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
+
+            <Button
+                android:id="@+id/buttonAbout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignRight="@+id/strut"
+                android:onClick="onAboutClick"
+                android:text="@string/about" />
+            
+            <Button
+                android:id="@+id/buttonSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:layout_alignLeft="@+id/strut"
+                android:onClick="onSettingsClick"
+                android:text="@string/settings" />
+        </RelativeLayout>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
-    android:padding="10dp" >
+    android:padding="15dp" >
 
     <ImageView
         android:id="@+id/imageBanner"
@@ -20,16 +20,19 @@
         android:layout_alignLeft="@+id/imageBanner"
         android:layout_alignRight="@+id/imageBanner"
         android:layout_below="@+id/imageBanner"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:weightSum="1" >
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".033" />
+        
         <Button
             android:id="@+id/buttonSubmit"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".375"
+            android:layout_weight=".4"
             android:background="@color/ias_main"
             android:onClick="onAddPhotoClick"
             android:text="@string/add_sighting"
@@ -39,13 +42,13 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".05" />
+            android:layout_weight=".033" />
 
         <Button
             android:id="@+id/buttonGallery"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".375"
+            android:layout_weight=".4"
             android:background="@color/ias_main"
             android:onClick="onViewGalleryClick"
             android:text="@string/view_gallery"
@@ -55,13 +58,13 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".05" />
+            android:layout_weight=".033" />
 
         <RelativeLayout
             android:id="@+id/otherWrap"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".15"
+            android:layout_weight=".1"
             android:gravity="center_horizontal" >
 
             <View

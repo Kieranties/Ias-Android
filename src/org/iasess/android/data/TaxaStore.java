@@ -87,7 +87,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	}
 	
 	public Cursor getAllItems() {	 
-	    return executeStringQuery("SELECT * FROM " + TABLE_NAME);
+	    return executeStringQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_COMMON_NAME + " ASC");
 	}
 	
 	public Cursor getByPk(long pk){

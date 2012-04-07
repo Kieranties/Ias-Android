@@ -147,7 +147,7 @@ public class TaxaListing extends Activity {
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
-			_dlg = ProgressDialog.show(TaxaListing.this, "", "Submitting...", true,true, new OnCancelListener() {
+			_dlg = ProgressDialog.show(TaxaListing.this, "", "Fetching taxa...", true,true, new OnCancelListener() {
 				public void onCancel(DialogInterface dialog) {
 					PopulateList.this.cancel(true);	
 					finish();

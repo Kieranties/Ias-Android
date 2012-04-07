@@ -68,8 +68,9 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="252dp"
+                android:layout_width="fill_parent"
                 android:layout_height="252dp"
+                android:adjustViewBounds="true"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/your_selected_image" />
 

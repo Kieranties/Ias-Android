@@ -8,6 +8,8 @@ import org.iasess.android.api.SubmissionResponse;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -202,7 +204,12 @@ public class Summary extends MapActivity{
 		 */
 		protected void onPreExecute() {
 			//display the dialog to the user
-			_dlg = ProgressDialog.show(Summary.this, "", "Submitting...", true);
+			_dlg = ProgressDialog.show(Summary.this, "", "Submitting...", true,true, new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					SubmitSightingTask.this.cancel(true);	
+					finish();
+				}
+			});
 	    }
         
 		/*

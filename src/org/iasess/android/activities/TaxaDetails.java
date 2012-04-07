@@ -3,11 +3,12 @@ package org.iasess.android.activities;
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
-import org.iasess.android.api.TaxaItem;
 import org.iasess.android.data.TaxaStore;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,10 +17,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.SimpleCursorAdapter.ViewBinder;
 import android.widget.TextView;
 
 public class TaxaDetails extends Activity {
@@ -77,7 +74,12 @@ public class TaxaDetails extends Activity {
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
-			_dlg = ProgressDialog.show(TaxaDetails.this, "", "Fetching image...", true);
+			_dlg = ProgressDialog.show(TaxaDetails.this, "", "Fetching image...", true,true, new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					PopulateDetails.this.cancel(true);	
+					finish();
+				}
+			});
 		}
 
 		/*

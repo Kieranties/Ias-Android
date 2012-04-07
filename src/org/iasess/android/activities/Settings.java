@@ -7,6 +7,8 @@ import org.iasess.android.api.UserCheckResponse;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -56,9 +58,19 @@ public class Settings extends Activity implements OnEditorActionListener {
 	 * Capture events from the soft keyboard for the username edit box
 	 */
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		if(actionId == EditorInfo.IME_ACTION_DONE){
-			new UsernameCheckTask().execute(_editText.getText().toString());			
+		
+		switch(actionId){
+			case EditorInfo.IME_ACTION_DONE:
+			case EditorInfo.IME_ACTION_GO:
+			case EditorInfo.IME_ACTION_NEXT:
+				new UsernameCheckTask().execute(_editText.getText().toString());
+				return false;
 		}
+		
+		if(event.getKeyCode() == KeyEvent.KEYCODE_ENTER){
+			new UsernameCheckTask().execute(_editText.getText().toString());
+		}
+		
 		return false;
 	}
 	
@@ -76,7 +88,12 @@ public class Settings extends Activity implements OnEditorActionListener {
 		 */
 		protected void onPreExecute() {
 			//display the dialog to the user
-			_dlg = ProgressDialog.show(Settings.this, "", "Checking Username...", true);
+			_dlg = ProgressDialog.show(Settings.this, "", "Checking...", true,true, new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					UsernameCheckTask.this.cancel(true);	
+					finish();
+				}
+			});
 	    }
         
 		/*
@@ -93,15 +110,20 @@ public class Settings extends Activity implements OnEditorActionListener {
 	    protected void onPostExecute(UserCheckResponse result) {
 	    	_dlg.dismiss();
 	    	
-	    	//inform the user of the response
-	    	IasessApp.makeToast(result.getAnswer());
-	    	
-	    	//update ui if required
-			String username = result.getUsername();
-			if(username != null && username != ""){
-				_editText.setText(username);
-			}
-			_editText.clearFocus();			
+	    	if(result != null){
+	    		//inform the user of the response
+		    	IasessApp.makeToast(result.getAnswer());
+		    	
+		    	//update ui if required
+				String username = result.getUsername();
+				if(username != null && username != ""){
+					_editText.setText(username);
+				}
+				_editText.clearFocus();		
+	    	} else {
+	    		IasessApp.makeToast("Could not contact website.  Please try again later.");
+	    	}
+	    		
 	    }
 	}
 }

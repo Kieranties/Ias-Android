@@ -7,6 +7,8 @@ import org.iasess.android.data.TaxaStore;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -145,8 +147,12 @@ public class TaxaListing extends Activity {
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
-			_dlg = ProgressDialog.show(TaxaListing.this, "", "Fetching taxa...",
-					true);
+			_dlg = ProgressDialog.show(TaxaListing.this, "", "Submitting...", true,true, new OnCancelListener() {
+				public void onCancel(DialogInterface dialog) {
+					PopulateList.this.cancel(true);	
+					finish();
+				}
+			});
 		}
 
 		/*

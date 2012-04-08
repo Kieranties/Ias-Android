@@ -18,7 +18,9 @@
     <ListView
         android:id="@+id/listTaxa"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:divider="@color/ias_blue"
+  		android:dividerHeight="0.5sp" >
     </ListView>
 
 </LinearLayout>

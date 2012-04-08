@@ -42,7 +42,7 @@
                 android:id="@+id/mapView"
                 android:layout_width="fill_parent"
                 android:layout_height="252dp"
-                android:apiKey="0zlBzXcr0jhcCiIQbYelz1PJ9Xeh-m3Hio3uFZw"
+                android:apiKey="@string/mapsKey"
                 android:background="@color/ias_blue"
                 android:padding="1dp" />
 

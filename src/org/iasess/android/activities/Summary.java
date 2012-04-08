@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.net.Uri.Builder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -236,7 +237,10 @@ public class Summary extends MapActivity{
 	            startActivity(home);
 	            
 	            //display the success page to the user
-	            Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(result.getUrl()));
+	            //add in device query string param
+	            Uri uri = Uri.parse(result.getUrl());
+	            Builder uriBuilder = uri.buildUpon().appendQueryParameter("device", "android");
+	            Intent browse = new Intent(Intent.ACTION_VIEW, uriBuilder.build());
 	    		startActivity(Intent.createChooser(browse,"Select Browser"));
 	    	}  
 	    	else

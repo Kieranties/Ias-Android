@@ -40,7 +40,7 @@ public class TaxaDetails extends Activity {
 			_cursor.close();
 			
 			TextView tv = (TextView)findViewById(R.id.textDescription);
-			tv.setText(Html.fromHtml(description));
+			tv.setText(description);
 			
 			TextView tvTitle = (TextView)findViewById(R.id.textBanner);
 			tvTitle.setText(name);

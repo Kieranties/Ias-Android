@@ -13,4 +13,4 @@ An Android application to handle mobile user submissions to the IAS site.
 
 [@Kieranties]: http://twitter.com/kieranties
 [@stringfellow]: http://twitter.com/stringfellow
-[Homepage]: http://ias-ess.appspot.com/
+[Homepage]: http://ias-ess.org/

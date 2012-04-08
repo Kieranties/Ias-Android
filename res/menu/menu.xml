@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/mnu_settings" android:title="Settings" android:icon="@drawable/ic_menu_preferences"/>
-    <item android:id="@+id/mnu_history" android:title="History" android:icon="@drawable/ic_menu_recent_history"/>
-    <item android:id="@+id/mnu_refresh" android:title="Refresh Taxa" android:titleCondensed="Refresh" android:icon="@drawable/ic_menu_refresh"/>
-</menu>

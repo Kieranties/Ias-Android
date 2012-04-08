@@ -45,10 +45,7 @@ public class TaxaDetails extends Activity {
 			TextView tvTitle = (TextView)findViewById(R.id.textBanner);
 			tvTitle.setText(name);
 			
-			if(imgUrl == null || imgUrl == ""){
-				ImageView imgView = (ImageView) findViewById(R.id.imageView);
-				imgView.setVisibility(View.GONE);
-			} else {
+			if(imgUrl != null && imgUrl != ""){
 				new PopulateDetails().execute(imgUrl);
 			}
 		}
@@ -96,10 +93,10 @@ public class TaxaDetails extends Activity {
 			ImageView imgView = (ImageView) findViewById(R.id.imageView);
 			if(result == null){
 				IasessApp.makeToast("No image found...");
-				imgView.setVisibility(View.GONE);
 			} else {
 				Bitmap bm = BitmapFactory.decodeByteArray(result, 0, result.length);
 				imgView.setImageBitmap(bm);
+				imgView.setVisibility(View.VISIBLE);
 			}
 			_dlg.dismiss();
 		}

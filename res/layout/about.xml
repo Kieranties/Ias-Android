@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:contentDescription="@string/app_title"
         android:src="@drawable/iasbanner" />
 
@@ -26,8 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:paddingRight="15dp" />
     </ScrollView>
 
 </LinearLayout>

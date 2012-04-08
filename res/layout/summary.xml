@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"    
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <TextView
@@ -25,10 +25,10 @@
             android:id="@+id/layoutInnerScroll"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:paddingTop="15dp"
-            android:orientation="vertical" >
+            android:paddingTop="15dp" >
 
             <TextView
                 android:id="@+id/textLocation"
@@ -41,7 +41,9 @@
                 android:id="@+id/mapView"
                 android:layout_width="fill_parent"
                 android:layout_height="252dp"
-                android:apiKey="0zlBzXcr0jhcCiIQbYelz1PJ9Xeh-m3Hio3uFZw" />
+                android:apiKey="0zlBzXcr0jhcCiIQbYelz1PJ9Xeh-m3Hio3uFZw"
+                android:background="@color/ias_blue"
+                android:padding="1dp" />
 
             <TextView
                 android:id="@+id/textTaxa"
@@ -68,11 +70,14 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="fill_parent"
-                android:layout_height="252dp"
-                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/your_selected_image" />
+                android:adjustViewBounds="true"
+                android:background="@color/ias_blue"
+                android:contentDescription="@string/your_selected_image"
+                android:maxHeight="252dp"
+                android:padding="1dp" />
 
             <Button
                 android:id="@+id/buttonDone"

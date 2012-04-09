@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
@@ -33,7 +34,7 @@ import com.google.android.maps.MyLocationOverlay;
 /**
  * Controls the 'Summary' Activity view
  */
-public class Summary extends Activity{
+public class Summary extends MapActivity{
     
 	/**
 	 * Request Code for the GPS intent
@@ -85,15 +86,17 @@ public class Summary extends Activity{
         setImageView();	    
     }
        
-    /**
-     * Executes an {@link AsyncTask} to submit a sighting
-     * 
-     * @param v The {@link View} which fired the event handler
-     */
-    public void onDoneClick(View v){
-    	new SubmitSightingTask().execute("");
-    }
-    
+	/**
+	 * Required override when using MapView
+	 * 
+	 * @see com.google.android.maps.MapActivity#isRouteDisplayed()
+	 */
+	@Override
+	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	    
     /**
      * Reinstates the mapping functionality when the view
      * is bought back into focus
@@ -132,6 +135,15 @@ public class Summary extends Activity{
 		}		
 	}
 	
+    /**
+     * Executes an {@link AsyncTask} to submit a sighting
+     * 
+     * @param v The {@link View} which fired the event handler
+     */
+    public void onDoneClick(View v){
+    	new SubmitSightingTask().execute("");
+    }
+    
 	/**
 	 * Initialises the map components of this Activity
 	 */

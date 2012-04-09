@@ -98,13 +98,7 @@ public class TaxaItem {
 	 * @return
 	 */
 	public String getListingImagePath(){
-		if(_keyImages.containsKey("100")){
-			String[] vals = _keyImages.get("100");
-			if(vals.length > 0){
-				return vals[0];
-			}
-		}
-		return null;
+		return getImagePath("100");
 	}	
 	
 	/**
@@ -112,8 +106,16 @@ public class TaxaItem {
 	 * @return
 	 */
 	public String getLargeImagePath(){
-		if(_keyImages.containsKey("800")){
-			String[] vals = _keyImages.get("800");
+		return getImagePath("800");
+	}
+	
+	/**
+	 * Helper method to return the image path from a given subset
+	 * in the items key images
+	 */
+	private String getImagePath(String size){
+		if(_keyImages.containsKey(size)){
+			String[] vals = _keyImages.get(size);
 			if(vals.length > 0){
 				return vals[0];
 			}

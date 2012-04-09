@@ -3,7 +3,7 @@ package org.iasess.android.api;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Simple response object for username valdiation API requests
+ * Simple response object for username validation API requests
  */
 public class UserCheckResponse {
 

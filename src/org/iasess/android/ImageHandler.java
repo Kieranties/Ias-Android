@@ -18,39 +18,58 @@ import android.provider.MediaStore;
 /*
  * Handles the retrieval and processing of images
  */
+/**
+ * Singleton class to manage all image interactions with
+ * the device camera or media storage
+ */
 public final class ImageHandler {
 	
-	/*
-	 * The request code to handle camera image selection intents
+	/**
+	 * The intent request code for intents returning an image
+	 * from the users camera
 	 */
 	public static final int CAMERA_OPTION = 1000;
 	
-	/*
-	 * The request code to handle gallery image selection intents
+	/**
+	 * The intent request code for intents returning an image
+	 * from the users gallery
 	 */
 	public static final int GALLERY_OPTION = 1001;
 	
-	/*
-	 * The location in which the last created image was placed.
-	 * Work around for Samsung devices 
+	
+	/**
+	 * Work around for Samsung devices.
+	 * <p>
+	 * Holds the URI of the last created image by the devices camera
 	 */
 	private static Uri lastCreatedImageUri;
 	
-	/*
-	 * Static constructor - Don't want instances of this class to be created
+	/**
+	 * Private constructor to promote singleton use of class 
 	 */
 	private ImageHandler() {}
 
-	/*
-	 * Request an image
+	
+	/**
+	 * Display a dialog to the user to allow them to select an image.
+	 * <p>
+	 * Fires of the relevant intents. 
+	 * 
+	 * @param activity The activity context to display the dialog
 	 */
 	public static void getImage(Activity activity) {
 		// get the user selection
 		initCameraDialog(activity).show();
 	}
 
-	/*
-	 * Processes intent result data for an image
+	
+	/**
+	 * Returns the URI selected by the user in an image selection intent
+	 * 
+	 * @param resultCode The result of the Intent
+	 * @param requestCode The identity of the Intent
+	 * @param data The actual data of the Intent
+	 * @return The URI of the selected image
 	 */
 	public static Uri getImageUriFromIntentResult(int resultCode, int requestCode, Intent data) {
 		if (resultCode != Activity.RESULT_OK) return null;
@@ -65,8 +84,12 @@ public final class ImageHandler {
 		return null;
 	}
 	
-	/*
-	 * Given a uri, returns the image bitmap
+	
+	/**
+	 * Fetches the Bitmap of the given URI
+	 * 
+	 * @param uri The URI to return a Bitmap for
+	 * @return The Bitmap of the URI correctly orientated
 	 */
 	public static Bitmap getBitmap(Uri uri) {
 		Bitmap bm = null;
@@ -89,8 +112,11 @@ public final class ImageHandler {
 		return bm;
 	}
 	
-	/*
-	 * Given a uri, returns the actual path to the item on the device
+	/**
+	 * Gets the physical path to a given URI on the device
+	 * 
+	 * @param uri The URI to find the physical path for
+	 * @return The physical path to the URI
 	 */
 	public static String getPath(Uri uri) {
 		String[] projection = { MediaStore.Images.Media.DATA };
@@ -103,8 +129,13 @@ public final class ImageHandler {
 		return path;
 	}	
 	
-	/*
-	 * Creates the dialog displayed to the user to select an image
+	
+	/**
+	 * Creates an AlertDialog allowing the user to select where/how
+	 * they would select an image for the application
+	 * 
+	 * @param activity The Context for which the dialog should be displayed
+	 * @return The AlertDialog instance
 	 */
 	private static AlertDialog initCameraDialog(final Activity activity) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -121,8 +152,12 @@ public final class ImageHandler {
 		return builder.create();
 	}
 
-	/*
-	 * Executes an intent for the selection of an image from the devices camera
+	
+	/**
+	 * Creates and executes and Intent to process an image selection
+	 * based on a newly created image in the devices camera application
+	 * 
+	 * @param activity The context with which Intent occurs within
 	 */
 	private static void cameraIntent(Activity activity) {
 		String fileName = "ias-" + System.currentTimeMillis() + ".jpg";
@@ -138,9 +173,12 @@ public final class ImageHandler {
 		activity.startActivityForResult(Intent.createChooser(intent,"Select Picture"), CAMERA_OPTION);
 	}
 
-	/*
-	 * Executes an intent for the selection of an image from the devices storage
-	 * (through a gallery application)
+
+	/**
+	 * Creates and executes and Intent to capture and process an image selection
+	 * from the users gallery/device
+	 * 
+	 * @param activity The Activity within which the Intent occurs 
 	 */
 	private static void galleryIntent(Activity activity) {
 		Intent intent = new Intent();
@@ -150,9 +188,13 @@ public final class ImageHandler {
 		activity.startActivityForResult(intent, GALLERY_OPTION);
 	}
 
-	/*
-	 * Get the degrees required to rotate the image.
-	 * (Work around for Samsung devices)
+	
+	/**
+	 * Returns the number of degrees an image should be rotated to 
+	 * provide its correct orientation
+	 * 
+	 * @param uri The URI of the image
+	 * @return The number if degrees to rotate the image
 	 */
 	private static int getImageRotation(Uri uri) {
 		try {

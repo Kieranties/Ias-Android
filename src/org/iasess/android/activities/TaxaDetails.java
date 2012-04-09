@@ -43,6 +43,7 @@ public class TaxaDetails extends Activity {
 			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
 			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
 			cursor.close();
+			store.close();
 			
 			TextView tv = (TextView)findViewById(R.id.textDescription);
 			tv.setText(description);

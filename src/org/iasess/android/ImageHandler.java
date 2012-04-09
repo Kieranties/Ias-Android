@@ -10,14 +10,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-/*
- * Handles the retrieval and processing of images
- */
 /**
  * Singleton class to manage all image interactions with
  * the device camera or media storage
@@ -36,7 +34,6 @@ public final class ImageHandler {
 	 */
 	public static final int GALLERY_OPTION = 1001;
 	
-	
 	/**
 	 * Work around for Samsung devices.
 	 * <p>
@@ -45,23 +42,9 @@ public final class ImageHandler {
 	private static Uri lastCreatedImageUri;
 	
 	/**
-	 * Private constructor to promote singleton use of class 
+	 * The contextual Activity for instances of this class
 	 */
-	private ImageHandler() {}
-
-	
-	/**
-	 * Display a dialog to the user to allow them to select an image.
-	 * <p>
-	 * Fires of the relevant intents. 
-	 * 
-	 * @param activity The activity context to display the dialog
-	 */
-	public static void getImage(Activity activity) {
-		// get the user selection
-		initCameraDialog(activity).show();
-	}
-
+	private Activity _activity;
 	
 	/**
 	 * Returns the URI selected by the user in an image selection intent
@@ -84,28 +67,43 @@ public final class ImageHandler {
 		return null;
 	}
 	
-	
 	/**
 	 * Fetches the Bitmap of the given URI
 	 * 
 	 * @param uri The URI to return a Bitmap for
+	 * @param width The width of the viewport the image should be scaled to
 	 * @return The Bitmap of the URI correctly orientated
 	 */
-	public static Bitmap getBitmap(Uri uri) {
+	public static Bitmap getBitmap(Uri uri, int width) {
 		Bitmap bm = null;
 		try {
-			//find in the media store
-			bm = MediaStore.Images.Media.getBitmap(IasessApp.getContext().getContentResolver(),uri);
+			String imgPath = getPath(uri);
 			
+			// http://stackoverflow.com/a/823966 => winner!
+			
+			//get the size of the image to scale without loading the actual bitmap
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+	        BitmapFactory.decodeFile(imgPath, options);
+
+	        //Find the correct scale value. It should be the power of 2.
+	        int scale=1;
+	        while(options.outWidth/scale/2 >= width) scale *= 2;
+
+	        //Decode with inSampleSize to save memory
+	        options = new BitmapFactory.Options();
+	        options.inSampleSize = scale;
+	        bm = BitmapFactory.decodeFile(imgPath, options);
+	        
 			//check it's orientation
 			int rotation = getImageRotation(uri);
 			if (rotation != 0){
 				//rotate if required
 				Matrix mtx = new Matrix();
 				mtx.postRotate(rotation);
-				bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(),mtx, true);
+				bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), mtx, true);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -128,67 +126,7 @@ public final class ImageHandler {
 		cursor.close();
 		return path;
 	}	
-	
-	
-	/**
-	 * Creates an AlertDialog allowing the user to select where/how
-	 * they would select an image for the application
-	 * 
-	 * @param activity The Context for which the dialog should be displayed
-	 * @return The AlertDialog instance
-	 */
-	private static AlertDialog initCameraDialog(final Activity activity) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		// set items from resource list
-		final String[] options = activity.getResources().getStringArray(R.array.camera_options);
-		builder.setItems(options, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				if (item == 0) 
-					cameraIntent(activity);
-				else 
-					galleryIntent(activity);
-			}
-		});
-		return builder.create();
-	}
 
-	
-	/**
-	 * Creates and executes and Intent to process an image selection
-	 * based on a newly created image in the devices camera application
-	 * 
-	 * @param activity The context with which Intent occurs within
-	 */
-	private static void cameraIntent(Activity activity) {
-		String fileName = "ias-" + System.currentTimeMillis() + ".jpg";
-		ContentValues values = new ContentValues();
-		values.put(MediaStore.Images.Media.TITLE, fileName);
-		values.put(MediaStore.Images.Media.DESCRIPTION, "Taken for invadr");
-		lastCreatedImageUri = activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        
-		// create intent with extra output to grab uri later
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, lastCreatedImageUri);
-		
-		activity.startActivityForResult(Intent.createChooser(intent,"Select Picture"), CAMERA_OPTION);
-	}
-
-
-	/**
-	 * Creates and executes and Intent to capture and process an image selection
-	 * from the users gallery/device
-	 * 
-	 * @param activity The Activity within which the Intent occurs 
-	 */
-	private static void galleryIntent(Activity activity) {
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		
-		activity.startActivityForResult(intent, GALLERY_OPTION);
-	}
-
-	
 	/**
 	 * Returns the number of degrees an image should be rotated to 
 	 * provide its correct orientation
@@ -216,4 +154,64 @@ public final class ImageHandler {
 		}
 		return 0;
 	}
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param activity The {@link Activity} context to fetch the 
+	 * image within
+	 */
+	public ImageHandler(Activity activity) {
+		_activity = activity;
+	}
+
+	/**
+	 * Creates an AlertDialog allowing the user to select where/how
+	 * they would select an image for the application
+	 */
+	public void showChooser() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(_activity);
+		// set items from resource list
+		String[] options = _activity.getResources().getStringArray(R.array.camera_options);
+		builder.setItems(options, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int item) {
+				if (item == 0) 
+					cameraIntent();
+				else 
+					galleryIntent();
+			}
+		});
+		builder.create().show();
+	}
+
+	/**
+	 * Creates and executes and Intent to process an image selection
+	 * based on a newly created image in the devices camera application
+	 */
+	private void cameraIntent() {
+		String fileName = "ias-" + System.currentTimeMillis() + ".jpg";
+		ContentValues values = new ContentValues();
+		values.put(MediaStore.Images.Media.TITLE, fileName);
+		values.put(MediaStore.Images.Media.DESCRIPTION, "Taken for invadr");
+		lastCreatedImageUri = _activity.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        
+		// create intent with extra output to grab uri later
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, lastCreatedImageUri);
+		
+		_activity.startActivityForResult(Intent.createChooser(intent,"Select Picture"), CAMERA_OPTION);
+	}
+
+	/**
+	 * Creates and executes and Intent to capture and process an image selection
+	 * from the users gallery/device
+	 */
+	private void galleryIntent() {
+		Intent intent = new Intent();
+		intent.setType("image/*");
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		
+		_activity.startActivityForResult(intent, GALLERY_OPTION);
+	}
+
 }

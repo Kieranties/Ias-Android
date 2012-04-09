@@ -22,11 +22,6 @@ import android.widget.TextView;
  * Controls the 'TaxaDetails' Activity view
  */
 public class TaxaDetails extends Activity {
-
-	/**
-	 * The data to display in the list view
-	 */
-	private Cursor _cursor;
 	
 	/**
 	 * Initialises the content of this Activity
@@ -41,14 +36,13 @@ public class TaxaDetails extends Activity {
 		long taxaPk = getIntent().getLongExtra(IasessApp.SELECTED_TAXA, -1);
 		if(taxaPk != -1){
 			TaxaStore store = new TaxaStore(this);
-			_cursor = store.getByPk(taxaPk);
-			startManagingCursor(_cursor);
+			Cursor cursor = store.getByPk(taxaPk);
 			
-			_cursor.moveToFirst();
-			String imgUrl = _cursor.getString(_cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
-			String description = _cursor.getString(_cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
-			String name = _cursor.getString(_cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
-			_cursor.close();
+			cursor.moveToFirst();
+			String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
+			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
+			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
+			cursor.close();
 			
 			TextView tv = (TextView)findViewById(R.id.textDescription);
 			tv.setText(description);
@@ -60,17 +54,6 @@ public class TaxaDetails extends Activity {
 				new PopulateDetails().execute(imgUrl);
 			}
 		}
-	}
-	
-	/**
-	 * Clean up the resources used by this Activity
-	 * 
-	 * @see android.app.Activity#onDestroy()
-	 */
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		_cursor.close();
 	}
 	
 	/**

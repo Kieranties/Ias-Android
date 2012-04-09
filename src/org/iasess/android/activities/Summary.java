@@ -210,8 +210,9 @@ public class Summary extends MapActivity{
      */
     private void setImageView(){
     	_selectedImage = getIntent().getData();
-    	Bitmap bm = ImageHandler.getBitmap(_selectedImage);
     	ImageView iv = (ImageView)findViewById(R.id.imageView);
+    	Bitmap bm = ImageHandler.getBitmap(_selectedImage, iv.getWidth());
+    	
     	iv.setImageBitmap(bm);   
     }
     

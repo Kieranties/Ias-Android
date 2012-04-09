@@ -1,5 +1,7 @@
 package org.iasess.android.activities;
 
+import java.net.URI;
+
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 
@@ -23,7 +25,7 @@ public class AddPhoto extends Activity {
 	
     
 	/**
-	 * Initiliases the content of the Activity
+	 * Initialises the content of the Activity
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -54,10 +56,9 @@ public class AddPhoto extends Activity {
      * @param v The {@link View} which fired the event handler
      */
     public void onImageClick(View v){
-    	ImageHandler.getImage(this);
+    	new ImageHandler(this).showChooser();
     }
-    
-    
+     
     /**
      * Handles the response from an ActivityResult fired in the context
      * of this Activity
@@ -81,10 +82,9 @@ public class AddPhoto extends Activity {
      * @param uri The {@link URI} to be displayed
      */
     private void setImageView(Uri uri){
-    	Bitmap bm = ImageHandler.getBitmap(uri);
     	ImageView iv = (ImageView)findViewById(R.id.imageView);
+    	Bitmap bm = ImageHandler.getBitmap(uri, iv.getWidth());    	
     	iv.setImageBitmap(bm);
-    	
     	//cache for sending to later activities/intents
     	_selectedUri = uri;
     }

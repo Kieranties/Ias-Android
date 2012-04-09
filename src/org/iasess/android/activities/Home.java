@@ -39,7 +39,7 @@ public class Home extends Activity {
      * @param v The {@link View} which fired the event handler
      */
     public void onAddPhotoClick(View v) {
-    	ImageHandler.getImage(this);
+    	new ImageHandler(this).showChooser();
     }
     
     

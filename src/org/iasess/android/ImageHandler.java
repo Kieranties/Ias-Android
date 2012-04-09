@@ -71,10 +71,9 @@ public final class ImageHandler {
 	 * Fetches the Bitmap of the given URI
 	 * 
 	 * @param uri The URI to return a Bitmap for
-	 * @param width The width of the viewport the image should be scaled to
 	 * @return The Bitmap of the URI correctly orientated
 	 */
-	public static Bitmap getBitmap(Uri uri, int width) {
+	public static Bitmap getBitmap(Uri uri) {
 		Bitmap bm = null;
 		try {
 			String imgPath = getPath(uri);
@@ -87,8 +86,9 @@ public final class ImageHandler {
 	        BitmapFactory.decodeFile(imgPath, options);
 
 	        //Find the correct scale value. It should be the power of 2.
-	        int scale=1;
-	        while(options.outWidth/scale/2 >= width) scale *= 2;
+	        int scale = 1;
+	        final int MAX_WIDTH = 800; //==> set to arbitrary value as measuring views is an arse
+	        while(options.outWidth/scale/2 >= MAX_WIDTH) scale *= 2;
 
 	        //Decode with inSampleSize to save memory
 	        options = new BitmapFactory.Options();

@@ -23,7 +23,6 @@ public class AddPhoto extends Activity {
 	 */
 	private Uri _selectedUri = null;
 	
-    
 	/**
 	 * Initialises the content of the Activity
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -33,11 +32,11 @@ public class AddPhoto extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_photo);
         
-        //check we have an image to process
+        //if we have a selected image, set it
         Uri selected = getIntent().getData();
         if(selected != null) setImageView(selected);
-    }
-    
+    }    
+	
     /**
      * Handler to populate and execute an Intent
      * to pass control to the next stage of the application
@@ -83,7 +82,7 @@ public class AddPhoto extends Activity {
      */
     private void setImageView(Uri uri){
     	ImageView iv = (ImageView)findViewById(R.id.imageView);
-    	Bitmap bm = ImageHandler.getBitmap(uri, iv.getWidth());    	
+    	Bitmap bm = ImageHandler.getBitmap(uri);    	
     	iv.setImageBitmap(bm);
     	//cache for sending to later activities/intents
     	_selectedUri = uri;

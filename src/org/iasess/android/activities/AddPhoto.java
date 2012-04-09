@@ -32,10 +32,33 @@ public class AddPhoto extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_photo);
         
+        Uri selected = null;
+        //check for data from state change
+        if(savedInstanceState != null && savedInstanceState.containsKey("selectedUri")){
+        	selected = savedInstanceState.getParcelable("selectedUri");
+        };
+        
+        //check for data from intent
+        if(selected == null){
+        	selected = getIntent().getData();
+        }
+        
         //if we have a selected image, set it
-        Uri selected = getIntent().getData();
         if(selected != null) setImageView(selected);
     }    
+	
+	/**
+	 * Store saved content on Activity state change
+	 * 
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+		outState.putParcelable("selectedUri", _selectedUri);
+	}
 	
     /**
      * Handler to populate and execute an Intent

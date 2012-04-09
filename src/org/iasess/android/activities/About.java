@@ -7,13 +7,14 @@ import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
 
-/*
- * Activity to handle the about screen
+/**
+ * Controls the 'About' Activity view
  */
 public class About extends Activity {
 	
-	/*
-	 * Initializer
+	/**
+	 * Initialises the content of the Activity
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +26,4 @@ public class About extends Activity {
 		String content = getResources().getString(R.string.about_blurb);
 		tv.setText(Html.fromHtml(content));
 	}
-
 }

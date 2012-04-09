@@ -1,10 +1,13 @@
 package org.iasess.android.activities;
 
+import java.net.URI;
+
 import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.api.SubmissionResponse;
+import org.iasess.android.api.TaxaItem;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -23,53 +26,55 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
-/*
- * Activity to handle the Summary screen
+/**
+ * Controls the 'Summary' Activity view
  */
-public class Summary extends MapActivity{
-    /*
-     * Request code for GPS intent
-     */
+public class Summary extends Activity{
+    
+	/**
+	 * Request Code for the GPS intent
+	 */
 	private static final int GPS_INTENT = 948484;
 	
-	/*
-	 * The selected image URI
+	/**
+	 * The {@link URI} for the user selected image
 	 */
 	private Uri _selectedImage;
 	
-	/*
-	 * The selected Taxa details [i|name]
+	/**
+	 * The primary key identifier for the user selected {@link TaxaItem}
 	 */
 	private long _selectedTaxa;
 	
-	/*
-	 * The map controller for the position of the sighting
+	/**
+	 * The {@link MapController} used to manage the users location
 	 */
 	private MapController _mapController;
 	
-	/*
-	 * The location overlay for the users current position
+	/**
+	 * The {@link MyLocationOverlay} used to manage the users location
 	 */
 	private MyLocationOverlay _locationOverlay;
 	
-	/*
-	 * The location manager to communicate with the GPS device
+	/**
+	 * The {@link LocationManager} used to manage the users location 
 	 */
 	private LocationManager _locationManager;
 	
-	/*
-	 * The MapView which renders the location details
+	/**
+	 * The {@link MapView} used to manage the users location 
 	 */
 	private MapView _mapView;
 
-	/*
-	 * Initializer
-	 */
+    /**
+     * Initialises the content of the Activity
+     * 
+     * @see com.google.android.maps.MapActivity#onCreate(android.os.Bundle)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +85,20 @@ public class Summary extends MapActivity{
         setImageView();	    
     }
        
-    /*
-     * Handles the Done click event to submit details
+    /**
+     * Executes an {@link AsyncTask} to submit a sighting
+     * 
+     * @param v The {@link View} which fired the event handler
      */
     public void onDoneClick(View v){
     	new SubmitSightingTask().execute("");
     }
     
-    /*
-     * Re-instates the location functionality
+    /**
+     * Reinstates the mapping functionality when the view
+     * is bought back into focus
+     * 
+     * @see com.google.android.maps.MapActivity#onResume()
      */
     @Override
     protected void onResume() {
@@ -96,23 +106,24 @@ public class Summary extends MapActivity{
     	renderMapView();
     }
     
-    /*
-     * Pause the location functionality
+    /**
+     * Pauses the mapping functionality when the view loses
+     * focus
+     * 
+     * @see com.google.android.maps.MapActivity#onPause()
      */
     @Override
     protected void onPause() {
     	super.onPause();
     	_locationOverlay.disableMyLocation();
     }
-         
-    /*
-     * Required override
-     */
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
     
+	/**
+	 * Handlesthe response of an ActivityResult fired in the context
+	 * of this Activity
+	 * 
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -121,8 +132,8 @@ public class Summary extends MapActivity{
 		}		
 	}
 	
-	/*
-	 * Initializes the map components and checks for GPS permissions
+	/**
+	 * Initialises the map components of this Activity
 	 */
 	private void initMapComponents(){
 		//init map related properties for pause/resume events
@@ -142,8 +153,9 @@ public class Summary extends MapActivity{
 		}		
 	}
 	
-	/*
-	 * Renders the map view components when GPS is enabled
+	/**
+	 * Performs the rendering functions for the {@link MapView} contained
+	 * in this Activity
 	 */
 	private void renderMapView(){		
 		if(!_locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) return;
@@ -169,8 +181,8 @@ public class Summary extends MapActivity{
 		_mapView.getOverlays().add(_locationOverlay);
 	}
 	
-	/*
-	 * Populates the taxa details in the view
+	/**
+	 * Sets the details for the selected Taxa on the page
 	 */
 	private void setTaxa(){
 		Bundle extras = getIntent().getExtras();
@@ -181,9 +193,9 @@ public class Summary extends MapActivity{
 		tv.setText(taxaName);
 	}
     
-	/*
-	 * Populates the image details in the view
-	 */
+    /**
+     * Sets the details for the selected image on the page
+     */
     private void setImageView(){
     	_selectedImage = getIntent().getData();
     	Bitmap bm = ImageHandler.getBitmap(_selectedImage);
@@ -191,17 +203,21 @@ public class Summary extends MapActivity{
     	iv.setImageBitmap(bm);   
     }
     
-    /*
-     * Separate thread action to submit contents
+    /**
+     * Class to handle the submission of details in a separate thread
+     *
      */
     private class SubmitSightingTask extends AsyncTask<String, Void, SubmissionResponse> {	
-		/*
-		 * The progress dialog to display to the user
+		
+		/**
+		 * The progress dialog to display while processing
 		 */
 		private ProgressDialog _dlg;
-		
-		/*
-		 * Executed before any processing of the task itself
+				
+		/**
+		 * Displays a progress dialog prior to the start of any processing
+		 * 
+		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		protected void onPreExecute() {
 			//display the dialog to the user
@@ -212,19 +228,23 @@ public class Summary extends MapActivity{
 				}
 			});
 	    }
-        
-		/*
-		 * The actual execution method ran in a background thread 
-		 */
+        		
+	    /**
+	     * Submits the details of a sighting through the API
+	     * 
+	     * @see android.os.AsyncTask#doInBackground(Params[])
+	     */
 	    protected SubmissionResponse doInBackground(String... params) {
 	    	//don't need params
 	    	String imgPath = ImageHandler.getPath(_selectedImage);    
 	    	Location fix = _locationOverlay.getLastFix(); 
         	return ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
 	    }
-	    
-	    /*
-	     * Fired when all processing has finished
+	    	    
+	    /**
+	     * Processes the result of the submission
+	     * 
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 	     */
 	    protected void onPostExecute(SubmissionResponse result) { 
 	    	_dlg.dismiss();

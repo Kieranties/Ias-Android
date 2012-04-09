@@ -27,13 +27,15 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
 
-/*
- * Activity to handle the Taxa selection screen
+/**
+ * Controls the 'TaxaListing' Activity view
  */
 public class TaxaListing extends Activity {
 
-	/*
-	 * Initializer
+	/**
+	 * Initialises the content of this Activity
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,10 @@ public class TaxaListing extends Activity {
 		}
 	}
 
-	/*
-	 * Hook in refresh options
+	/**
+	 * Handler for the display of the menu
+	 * 
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -61,21 +65,28 @@ public class TaxaListing extends Activity {
 		return true;
 	}
 
-	/*
-	 * Handle menu selection
+	/**
+	 * Handler for the selection of a menu option
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.menu_refresh:
-			new PopulateList().execute("refresh");
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+			case R.id.menu_refresh:
+				new PopulateList().execute("refresh");
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
+	/**
+	 * Clean up the resources of this Activity when destroyed
+	 * 
+	 * @see android.app.Activity#onDestroy()
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -86,24 +97,18 @@ public class TaxaListing extends Activity {
 			((SimpleCursorAdapter)currentAdapter).getCursor().close();
 		}
 	}
-	/*
-	 * Handles the passing of selected data to next activity
+		
+	/**
+	 * Class to listen to ListView item selection events when
+	 * the user is in the process of submitting a sighting
 	 */
-	public void onNextClick(View v) {
-		Intent intent = new Intent(this, Summary.class);
-		// set the selected image
-		Uri selected = getIntent().getData();
-		intent.setData(selected);
-
-		// set the selected taxa
-		intent.putExtra(IasessApp.SELECTED_TAXA, (String) v.getTag());
-
-		startActivity(intent);
-	}
-
-	
 	private class SightingSubmissionListener implements  AdapterView.OnItemClickListener{
 
+		/**
+		 * Handler to capture and process the selection of a ListView item
+		 * 
+		 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
+		 */
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
 			Intent intent = new Intent(IasessApp.getContext(), Summary.class);
 			// set the selected image
@@ -122,8 +127,17 @@ public class TaxaListing extends Activity {
 		}		
 	}
 	
+	/**
+	 * Class to listen to ListView item selection events when
+	 * the user is in the process of viewing the details of a Taxa
+	 */
 	private class GalleryViewListener implements  AdapterView.OnItemClickListener{
 
+		/**
+		 * Handler to capture and process the selection of a ListView item
+		 * 
+		 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
+		 */
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
 			Intent intent = new Intent(IasessApp.getContext(), TaxaDetails.class);			
 			intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
@@ -133,17 +147,21 @@ public class TaxaListing extends Activity {
 	}
 	
 	
-	/*
-	 * Separate thread action to fetch list details
+	
+	/**
+	 * Class to handle the processing of the list content in a separate thread
 	 */
 	private class PopulateList extends AsyncTask<String, Void, Cursor> {
-		/*
-		 * The progress dialog to display to the user
+		
+		/**
+		 * The progress dialog to display  to the user during processing
 		 */
 		private ProgressDialog _dlg;
-
-		/*
-		 * Executed before any processing of the task itself
+		
+		/**
+		 * Displays the progress dialog to the user before processing the taxa items
+		 * 
+		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
@@ -154,9 +172,12 @@ public class TaxaListing extends Activity {
 				}
 			});
 		}
-
-		/*
-		 * The actual execution method ran in a background thread
+		
+		/**
+		 * Performs a query against the cached data store.
+		 * Fetches from the API if the store is empty or 'refresh' has been passed in params
+		 * 
+		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		protected Cursor doInBackground(String... params) {
 			TaxaStore store = new TaxaStore(TaxaListing.this);
@@ -178,8 +199,10 @@ public class TaxaListing extends Activity {
 			}
 		}
 
-		/*
-		 * Fired when all processing has finished
+		/**
+		 * Processes the results of the AsyncTask
+		 * 
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		protected void onPostExecute(Cursor result) {
 			// populate list

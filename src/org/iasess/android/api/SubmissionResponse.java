@@ -2,30 +2,33 @@ package org.iasess.android.api;
 
 import com.google.gson.annotations.SerializedName;
 
-/*
- * Implementation of the response given by API submissions
+/**
+ * Simple response object for API submissions
  */
 public class SubmissionResponse {
 	
-	/*
-	 * The url of the submission
+	/**
+	 * The URL of a successful response, where a user may be directed to
 	 */
 	@SerializedName("url")
 	private String _url;
 	
-	/*
-	 * The unique identifier for the submission
+	/**
+	 * The identifier associated with the sighting submission
 	 */
 	@SerializedName("id")
 	private int _id;
 	
-	/*
-	 * Gets the url for the submission
+	/**
+	 * Gets the URL returned in a successful submission
+	 * 
+	 * @return The URL as a String
 	 */
 	public String getUrl(){ return _url; }
-	
-	/*
-	 * Gets the unique identifier for the submission
+
+	/**
+	 * Gets the Id of the successful submission
+	 * @return
 	 */
 	public int getId(){ return _id;}
 	

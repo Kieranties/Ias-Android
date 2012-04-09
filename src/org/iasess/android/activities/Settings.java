@@ -18,18 +18,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-/*
- * Activity for the Settings screen
+/**
+ * Controls the 'Settings' Activity view
  */
 public class Settings extends Activity implements OnEditorActionListener {
 
-	/*
-	 * The text control containing the user details
+	/**
+	 * The {@link EditText} for the username
 	 */
 	private EditText _editText;
 
-	/*
-	 * Initializer
+	/**
+	 * Initialises the content of the Activity
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,16 +48,20 @@ public class Settings extends Activity implements OnEditorActionListener {
 		_editText.setOnEditorActionListener(this);
 	}
 
-	/*
-	 * Handles the click event to set preference and end activity
+	/**
+	 * Stores the given username and ends this Activity
+	 * 
+	 * @param v The {@link View} which fired this event handler
 	 */
 	public void onDoneClick(View v) {
 		IasessApp.setPreferenceString(IasessApp.PREFS_USERNAME, _editText.getText().toString());
 		finish();
 	}
 
-	/*
-	 * Capture events from the soft keyboard for the username edit box
+	/**
+	 * Handler for key events on the username {@link EditText}
+	 * 
+	 * @see android.widget.TextView.OnEditorActionListener#onEditorAction(android.widget.TextView, int, android.view.KeyEvent)
 	 */
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		
@@ -74,17 +80,22 @@ public class Settings extends Activity implements OnEditorActionListener {
 		return false;
 	}
 	
-	/*
-	 * Class to handle async requests to server
+	
+	/**
+	 * Class to process the checking of a username in a separate thread
 	 */
 	private class UsernameCheckTask extends AsyncTask<String, Void, UserCheckResponse> {	
-		/*
-		 * The progress dialog to display to the user
+		
+		/**
+		 * The progress dialog to display while processing
 		 */
 		private ProgressDialog _dlg;
 		
-		/*
-		 * Executed before any processing of the task itself
+		
+		/**
+		 * Displays the progress dialog before executing the async task
+		 * 
+		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		protected void onPreExecute() {
 			//display the dialog to the user
@@ -96,16 +107,21 @@ public class Settings extends Activity implements OnEditorActionListener {
 			});
 	    }
         
-		/*
-		 * The actual execution method ran in a background thread 
+		/**
+		 * Executes a request to the API to check the username
+		 * 
+		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
-	    protected UserCheckResponse doInBackground(String... textValue) {
+		protected UserCheckResponse doInBackground(String... textValue) {
 	    	//return the response from the api
 	        return ApiHandler.checkUser(textValue[0]);
 	    }
 	    
-	    /*
-	     * Fired when all processing has finished
+	    /**
+	     * Dismisses the dialog and updates the UI with the results
+	     * of the API request
+	     * 
+	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 	     */
 	    protected void onPostExecute(UserCheckResponse result) {
 	    	_dlg.dismiss();
@@ -122,8 +138,7 @@ public class Settings extends Activity implements OnEditorActionListener {
 				_editText.clearFocus();		
 	    	} else {
 	    		IasessApp.makeToast("Could not contact website.  Please try again later.");
-	    	}
-	    		
+	    	}	    		
 	    }
 	}
 }

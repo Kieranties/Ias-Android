@@ -21,13 +21,19 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-/*
- * Handles Http requests, returning JSON response strings
+/**
+ * Class to perform all HTTP operations for the application
  */
 public class HttpHandler {
 
-	/*
-	 * Executes a multi part post 
+	/**
+	 * Performs a multi-part POST request
+	 * 
+	 * @param url The URL for the request
+	 * @param imgPath The path to an image to be submitted
+	 * @param fields A collection of key/values to submit as fields
+	 * @return A String of JSON data
+	 * @throws Exception
 	 */
 	public static String executeMultipartPost(String url, String imgPath, HashMap<String, String> fields) throws Exception {
 		try {
@@ -59,8 +65,12 @@ public class HttpHandler {
 		}
 	}
 
-	/*
-	 * Returns the response string for the given url
+	/**
+	 * Returns the response of a simple GET request
+	 * 
+	 * @param url The URL to execute the request against
+	 * @return A String of JSON data
+	 * @throws Exception
 	 */
 	public static String getResponseString(String url) throws Exception {
 		try {
@@ -70,8 +80,13 @@ public class HttpHandler {
 		}
 	}
 	
-	/*
-	 * Returns the response string for the given url and params
+	/**
+	 * Returns the response of a simple GET request
+	 * 
+	 * @param url The URL to execute the request against
+	 * @param qsParams A collection of query string parameters to append to the URL
+	 * @return A String of JSON data
+	 * @throws Exception
 	 */
 	public static String getResponseString(String url, ArrayList<NameValuePair> qsParams) throws Exception {
 		try {
@@ -81,8 +96,12 @@ public class HttpHandler {
 		}
 	}
 
-	/*
-	 * Returns a byte array for the given url
+	/**
+	 * Fetches a byte[] for the given URL
+	 * 
+	 * @param url The URL to execute the request against
+	 * @return A byte[] of the response
+	 * @throws Exception
 	 */
 	public static byte[] getResponseByteArray(String url) throws Exception {
 		try {
@@ -92,9 +111,13 @@ public class HttpHandler {
 		}
 	}
 	
-	
-	/*
-	 * Performs a get request
+	/**
+	 * Executes a GET request
+	 * 
+	 * @param url The URL to execute the request against
+	 * @param qsParams The query string parameters to be sent in the request
+	 * @return An {@link HtepEntity} of the response data
+	 * @throws Exception
 	 */
 	private static HttpEntity executeGet(String url, ArrayList<NameValuePair> qsParams) throws Exception {
 		try {

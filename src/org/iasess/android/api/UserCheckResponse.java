@@ -2,31 +2,33 @@ package org.iasess.android.api;
 
 import com.google.gson.annotations.SerializedName;
 
-/*
- * Represents details that can be sent back by a username check
- * through the API
+/**
+ * Simple response object for username validation API requests
  */
 public class UserCheckResponse {
 
-	/*
-	 * The answer from the server
+	/**
+	 * The answer from the request
 	 */
 	@SerializedName("answer")
 	private String _answer;
-	
-	/*
-	 * The username sent back from the server
+
+	/**
+	 * The username returned from the server
+	 * when matching email addresses
 	 */
 	@SerializedName("username")
 	private String _username;
 	
-	/*
-	 * Returns the response answer
+	/**
+	 * Gets the answer the server provided
+	 * @return
 	 */
 	public String getAnswer(){ return _answer; }
 	
-	/*
-	 * Returns the response username
+	/**
+	 * Gets the username the server provided
+	 * @return
 	 */
 	public String getUsername(){ return _username; }
 	

@@ -4,104 +4,118 @@ import java.util.Map;
 
 import com.google.gson.annotations.SerializedName;
 
-/*
- * Object implementation of the data returned by the API
- * for Taxon requests.  Can be serialized/deserialized with Gson 
+/**
+ * Simple wrapper object for data returned in taxa/gallery requests
  */
 public class TaxaItem {
 	
-	/*
-	 * The text details of the item
+	/**
+	 * The key text for an item
 	 */
 	@SerializedName("key_text")
 	private String _keyText;
 	
-	/*
-	 * The full scientific name of the item
+	/**
+	 * The scientific name for an item
 	 */
 	@SerializedName("scientific_name")
 	private String _scientificName;
 	
-	/*
-	 * List of sightings for the item
+	/**
+	 * The collection of sightings associated with the item
 	 */
 	@SerializedName("sightings")
 	private int[] _sightings;
 	
-	/*
+	/**
 	 * The rank of the item
 	 */
 	@SerializedName("rank")
 	private String _rank;
 	
-	/*
-	 * Map of images for the item.
-	 * Each Map entry relates to a size and set of images
-	 * of that size
+	/**
+	 * The collection of key images associated with the item
 	 */
 	@SerializedName("key_images")
 	private Map<String, String[]> _keyImages;
 	
-	/*
-	 * The common/simple name for the item
+	/**
+	 * The common name for the item
 	 */
 	@SerializedName("common_name")
 	private String _commonName;
 	
-	/*
+	/**
 	 * The unique identifier for the item
 	 */
 	@SerializedName("pk")
 	private int _pk;	
 		
-	/*
-	 * Gets the item key text	
+	/**
+	 * Gets the key text for the item
+	 * @return
 	 */
 	public String getKeyTxt(){ return _keyText; }
 	
-	/*
-	 * Gets the item scientific name	
+	/**
+	 * Gets the scientific name for the item
+	 * @return
 	 */
 	public String getScientificName(){ return _scientificName; }
-	
-	/*
-	 * Gets the item sightings	
+
+	/**
+	 * Gets the collection of sightings for the item
+	 * @return
 	 */
 	public int[] getSightings(){ return _sightings; }
 	
-	/*
-	 * Gets the item rank
+	/**
+	 * Gets the rank of the item
+	 * @return
 	 */
 	public String getRank(){ return _rank; }
 	
-	/*
-	 * Gets the item key images
+	/**
+	 * Gets the key images for the item
+	 * @return
 	 */
 	public Map<String, String[]> getKeyImages(){ return _keyImages; }
 	
-	/*
-	 * Gets the item common name
+	/**
+	 * Gets the common name for the item
+	 * @return
 	 */
 	public String getCommonName(){ return _commonName; }
 	
-	/*
-	 * Gets the item unique identifier	
+	/**
+	 * Gets the primary key (unique identifier) for the item
+	 * @return
 	 */
 	public int getPk(){ return _pk;	}
 	
+	/**
+	 * Gets the path of the image to use when displaying the item in a list view
+	 * @return
+	 */
 	public String getListingImagePath(){
-		if(_keyImages.containsKey("100")){
-			String[] vals = _keyImages.get("100");
-			if(vals.length > 0){
-				return vals[0];
-			}
-		}
-		return null;
+		return getImagePath("100");
+	}	
+	
+	/**
+	 * Gets the path of a large item to use when displaying details of the item
+	 * @return
+	 */
+	public String getLargeImagePath(){
+		return getImagePath("800");
 	}
 	
-	public String getLargeImagePath(){
-		if(_keyImages.containsKey("800")){
-			String[] vals = _keyImages.get("800");
+	/**
+	 * Helper method to return the image path from a given subset
+	 * in the items key images
+	 */
+	private String getImagePath(String size){
+		if(_keyImages.containsKey(size)){
+			String[] vals = _keyImages.get(size);
 			if(vals.length > 0){
 				return vals[0];
 			}

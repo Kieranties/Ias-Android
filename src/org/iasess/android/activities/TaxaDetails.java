@@ -14,14 +14,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Controls the 'TaxaDetails' Activity view
+ */
 public class TaxaDetails extends Activity {
-
-	private Cursor _cursor;
+	
+	/**
+	 * Initialises the content of this Activity
+	 * 
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,14 +36,14 @@ public class TaxaDetails extends Activity {
 		long taxaPk = getIntent().getLongExtra(IasessApp.SELECTED_TAXA, -1);
 		if(taxaPk != -1){
 			TaxaStore store = new TaxaStore(this);
-			_cursor = store.getByPk(taxaPk);
-			startManagingCursor(_cursor);
+			Cursor cursor = store.getByPk(taxaPk);
 			
-			_cursor.moveToFirst();
-			String imgUrl = _cursor.getString(_cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
-			String description = _cursor.getString(_cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
-			String name = _cursor.getString(_cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
-			_cursor.close();
+			cursor.moveToFirst();
+			String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
+			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
+			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
+			cursor.close();
+			store.close();
 			
 			TextView tv = (TextView)findViewById(R.id.textDescription);
 			tv.setText(description);
@@ -51,23 +57,20 @@ public class TaxaDetails extends Activity {
 		}
 	}
 	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		_cursor.close();
-	}
-	
-	/*
-	 * Separate thread action to fetch list details
+	/**
+	 * Class to handle the population of taxa details in a separate thread
 	 */
 	private class PopulateDetails extends AsyncTask<String, Void, byte[]> {
-		/*
-		 * The progress dialog to display to the user
+		
+		/**
+		 * The progress dialog to display while processing
 		 */
 		private ProgressDialog _dlg;
 
-		/*
-		 * Executed before any processing of the task itself
+		/**
+		 * Display the progress dialog to the user before processing the AsyncTask
+		 * 
+		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
@@ -78,16 +81,20 @@ public class TaxaDetails extends Activity {
 				}
 			});
 		}
-
-		/*
-		 * The actual execution method ran in a background thread
+		
+		/**
+		 * Fetches an image from the API
+		 * 
+		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		protected byte[] doInBackground(String... params) {
 			return ApiHandler.getByteArray(params[0], false);
 		}
 
-		/*
-		 * Fired when all processing has finished
+		/**
+		 * Process the results of the AsyncTask
+		 * 
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		protected void onPostExecute(byte[] result) {
 			ImageView imgView = (ImageView) findViewById(R.id.imageView);

@@ -11,14 +11,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
-/*
- * Activity to handle the Home screen
+/**
+ * Controls the 'Home' Activity view
  */
 public class Home extends Activity {
 	
-	/*
-	 * Initializer
-	 */
+    /**
+     * Initialises the content of the Activity
+     * @see android.app.Activity#onCreate(android.os.Bundle)
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,20 +27,27 @@ public class Home extends Activity {
         
         //check we have a username saved
         if(IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME).equals("")){
+        	//if we don't, show the settings screen.
         	displaySettings();
         }
     }
     
     
-   /*
-    * Handles the click event to request a photo
-    */
+    /**
+     * Handler to pass control to the image selection process
+     * 
+     * @param v The {@link View} which fired the event handler
+     */
     public void onAddPhotoClick(View v) {
-    	ImageHandler.getImage(this);
+    	new ImageHandler(this).showChooser();
     }
     
-    /*
-     * Handles the click event to view the gallery
+    
+    /**
+     * Handler to populate and process an Intent to 
+     * pass control to the gallery view of the application
+     * 
+     * @param v The {@link View} which fired the event handler
      */
     public void onViewGalleryClick(View v) {
     	Intent intent = new Intent(this, TaxaListing.class);
@@ -47,23 +55,32 @@ public class Home extends Activity {
     	startActivity(intent);
     }
     
-    /*
-     * Handles the click event to view the settings
+    /**
+     * Handler to populate and process an Intent
+     * to pass control of the application to the settings Activity
+     * 
+     * @param v The {@link View} which fired the event handler
      */
     public void onSettingsClick(View v) {
     	displaySettings();
     }
     
-    /*
-     * Handles the click event to view the about activity
+    /**
+     * Handler to populate and process an Intent to 
+     * pass control of the application to the About Activity
+     * 
+     * @param v The {@link View} which fired the event handler
      */
     public void onAboutClick(View v) {    	
     	Intent intent = new Intent(this, About.class);
     	startActivity(intent);
     }
     
-    /*
-     * Handles the result of an intent
+    /**
+     * Handles the response of an ActivityResult fired in the context of
+     * this Activity
+     * 
+     * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
      */
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -83,6 +100,9 @@ public class Home extends Activity {
 		}		
 	}
     
+    /**
+     * Creates and starts a new Settings Activity
+     */
     private void displaySettings(){
     	Intent intent = new Intent(this, Settings.class);
     	startActivity(intent);

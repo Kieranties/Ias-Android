@@ -5,7 +5,6 @@ import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -30,7 +29,7 @@ import android.widget.SimpleCursorAdapter.ViewBinder;
 /**
  * Controls the 'TaxaListing' Activity view
  */
-public class TaxaListing extends Activity {
+public class TaxaListing extends InvadrActivityBase {
 
 	/**
 	 * Initialises the content of this Activity
@@ -111,10 +110,12 @@ public class TaxaListing extends Activity {
 		 */
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
 			Intent intent = new Intent(IasessApp.getContext(), Summary.class);
+			
 			// set the selected image
-			Uri selected = getIntent().getData();
+			Intent orig = getIntent();
+			Uri selected = orig.getData();
 			intent.setData(selected);
-
+			intent.putExtras(orig.getExtras());
 			
 			// set the selected taxa
 			Cursor cursor = (Cursor) adapter.getItemAtPosition(position);
@@ -123,7 +124,7 @@ public class TaxaListing extends Activity {
 			intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
 			intent.putExtra(IasessApp.SELECTED_TAXA_NAME, name);
 
-			startActivity(intent);				
+			startActivityForResult(intent, 0);				
 		}		
 	}
 	

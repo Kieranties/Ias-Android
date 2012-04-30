@@ -16,12 +16,13 @@ import android.widget.ImageView;
 /**
  * Controls the 'AddPhoto' Activity view
  */
-public class AddPhoto extends Activity {
+public class AddPhoto extends InvadrActivityBase {
     
 	/**
 	 * The {@link URI} selected by the user
 	 */
 	private Uri _selectedUri = null;
+	private boolean _isExternal = false;
 	
 	/**
 	 * Initialises the content of the Activity
@@ -38,6 +39,8 @@ public class AddPhoto extends Activity {
         if(selected == null){
         	Bundle extras = getIntent().getExtras();
         	if(extras.containsKey(Intent.EXTRA_STREAM)){
+        		//need to set a flag to track that we have come in from external source
+        		_isExternal = true;
         		selected = extras.getParcelable(Intent.EXTRA_STREAM);
         	}
         }
@@ -55,7 +58,8 @@ public class AddPhoto extends Activity {
     public void onNextClick(View v){
     	Intent intent = new Intent(this, TaxaListing.class);
     	intent.setData(_selectedUri);
-    	startActivity(intent);
+    	intent.putExtra("isExternal", _isExternal);
+    	startActivityForResult(intent, 0);
     }
     
     /**

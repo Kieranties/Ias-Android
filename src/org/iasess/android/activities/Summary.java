@@ -1,7 +1,5 @@
 package org.iasess.android.activities;
 
-import java.net.URI;
-
 import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
@@ -70,6 +68,8 @@ public class Summary extends MapActivity{
 	 * The {@link MapView} used to manage the users location 
 	 */
 	private MapView _mapView;
+	
+	private boolean _isExternal = false;
 
     /**
      * Initialises the content of the Activity
@@ -80,7 +80,8 @@ public class Summary extends MapActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.summary);
-        
+        _isExternal = getIntent().getBooleanExtra("isExternal", false);
+        		
         initMapComponents();
         setTaxa();
         setImageView();	    
@@ -93,7 +94,6 @@ public class Summary extends MapActivity{
 	 */
 	@Override
 	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	    
@@ -259,22 +259,29 @@ public class Summary extends MapActivity{
 	     * 
 	     * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 	     */
-	    protected void onPostExecute(SubmissionResponse result) { 
+	    protected void onPostExecute(SubmissionResponse result) {	    	
 	    	_dlg.dismiss();
 	    	if(result.getId() != Integer.MIN_VALUE){
 	    		IasessApp.makeToast("Submitted!");    		
-	    		
-	    		//we're done for this submission so return the app to the start
-	    		Intent home = new Intent(Summary.this, Home.class);
-	            home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //resets the activity stack
-	            startActivity(home);
-	            
-	            //display the success page to the user
+	    		 
+	    		//display the success page to the user
 	            //add in device query string param
 	            Uri uri = Uri.parse(result.getUrl());
 	            Builder uriBuilder = uri.buildUpon().appendQueryParameter("device", "android");
 	            Intent browse = new Intent(Intent.ACTION_VIEW, uriBuilder.build());
-	    		startActivity(Intent.createChooser(browse,"Select Browser"));
+	            
+	    		if(_isExternal){
+	    			startActivityForResult(Intent.createChooser(browse,"Select Browser"), InvadrActivityBase.CLOSE_ALL);
+	    			setResult(InvadrActivityBase.CLOSE_ALL);
+	    			finish();
+	    		} else {
+	    			//we're done for this submission so return the app to the start
+		    		Intent home = new Intent(Summary.this, Home.class);
+		            home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //resets the activity stack
+		            startActivity(home);
+		            
+	    			startActivity(Intent.createChooser(browse,"Select Browser"));
+	    		}	    		 
 	    	}  
 	    	else
 	    	{

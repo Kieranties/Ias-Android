@@ -32,12 +32,21 @@ public class AddPhoto extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_photo);
         
-        //if we have a selected image, set it
         Uri selected = getIntent().getData();
+        	
+        //if still null check if we have come from a share/send to action
+        if(selected == null){
+        	Bundle extras = getIntent().getExtras();
+        	if(extras.containsKey(Intent.EXTRA_STREAM)){
+        		selected = extras.getParcelable(Intent.EXTRA_STREAM);
+        	}
+        }
+        
+        //if we have a selected image, set it
         if(selected != null) setImageView(selected);
     }    
 	
-    /**
+	/**
      * Handler to populate and execute an Intent
      * to pass control to the next stage of the application
      * 

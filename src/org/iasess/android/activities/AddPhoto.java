@@ -16,12 +16,13 @@ import android.widget.ImageView;
 /**
  * Controls the 'AddPhoto' Activity view
  */
-public class AddPhoto extends Activity {
+public class AddPhoto extends InvadrActivityBase {
     
 	/**
 	 * The {@link URI} selected by the user
 	 */
 	private Uri _selectedUri = null;
+	private boolean _isExternal = false;
 	
 	/**
 	 * Initialises the content of the Activity
@@ -32,12 +33,23 @@ public class AddPhoto extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_photo);
         
-        //if we have a selected image, set it
         Uri selected = getIntent().getData();
+        	
+        //if still null check if we have come from a share/send to action
+        if(selected == null){
+        	Bundle extras = getIntent().getExtras();
+        	if(extras.containsKey(Intent.EXTRA_STREAM)){
+        		//need to set a flag to track that we have come in from external source
+        		_isExternal = true;
+        		selected = extras.getParcelable(Intent.EXTRA_STREAM);
+        	}
+        }
+        
+        //if we have a selected image, set it
         if(selected != null) setImageView(selected);
     }    
 	
-    /**
+	/**
      * Handler to populate and execute an Intent
      * to pass control to the next stage of the application
      * 
@@ -46,7 +58,8 @@ public class AddPhoto extends Activity {
     public void onNextClick(View v){
     	Intent intent = new Intent(this, TaxaListing.class);
     	intent.setData(_selectedUri);
-    	startActivity(intent);
+    	intent.putExtra("isExternal", _isExternal);
+    	startActivityForResult(intent, 0);
     }
     
     /**

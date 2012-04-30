@@ -2,7 +2,6 @@ package org.iasess.android.activities;
 
 import org.iasess.android.R;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.widget.TextView;
@@ -10,7 +9,7 @@ import android.widget.TextView;
 /**
  * Controls the 'About' Activity view
  */
-public class About extends Activity {
+public class About extends InvadrActivityBase {
 	
 	/**
 	 * Initialises the content of the Activity

@@ -35,11 +35,11 @@
                 <data android:mimeType="image/*"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.TaxaDetails" />
-        <activity android:name=".activities.TaxaListing" />
-        <activity android:name=".activities.Settings" />
-        <activity android:name=".activities.Summary" />
-        <activity android:name=".activities.About" />
+        <activity android:name=".activities.TaxaDetails" android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".activities.TaxaListing" android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".activities.Settings" android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".activities.Summary" android:configChanges="orientation|keyboardHidden" />
+        <activity android:name=".activities.About" android:configChanges="orientation|keyboardHidden"/>
     </application>
 
 </manifest>

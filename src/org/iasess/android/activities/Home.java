@@ -91,27 +91,6 @@ public class Home extends Activity {
     }
     
     /**
-     * Handler to populate and process an Intent
-     * to pass control of the application to the settings Activity
-     * 
-     * @param v The {@link View} which fired the event handler
-     */
-    public void onSettingsClick(View v) {
-    	displaySettings();
-    }
-    
-    /**
-     * Handler to populate and process an Intent to 
-     * pass control of the application to the About Activity
-     * 
-     * @param v The {@link View} which fired the event handler
-     */
-    public void onAboutClick(View v) {    	
-    	Intent intent = new Intent(this, About.class);
-    	startActivity(intent);
-    }
-    
-    /**
      * Handles the response of an ActivityResult fired in the context of
      * this Activity
      * 

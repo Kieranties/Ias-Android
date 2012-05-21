@@ -32,7 +32,7 @@
             android:id="@+id/buttonSubmit"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_weight=".465"
             android:background="@color/ias_main"
             android:onClick="onAddPhotoClick"
             android:text="@string/add_sighting"
@@ -48,53 +48,12 @@
             android:id="@+id/buttonGallery"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight=".4"
+            android:layout_weight=".465"
             android:background="@color/ias_main"
             android:onClick="onViewGalleryClick"
             android:text="@string/view_gallery"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".033" />
-
-        <RelativeLayout
-            android:id="@+id/otherWrap"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".1"
-            android:gravity="center_horizontal" >
-
-            <View
-                android:id="@+id/strut"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true"/>
-
-            <Button
-                android:id="@+id/buttonAbout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerHorizontal="true"
-                android:layout_alignRight="@+id/strut"
-                android:layout_marginRight="4dp"
-                android:onClick="onAboutClick"
-                android:text="@string/about" />
-            
-            <Button
-                android:id="@+id/buttonSettings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerHorizontal="true"
-                android:layout_alignLeft="@+id/strut"
-                android:layout_marginLeft="4dp"
-                android:onClick="onSettingsClick"
-                android:text="@string/settings" />
-        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

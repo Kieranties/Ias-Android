@@ -5,7 +5,6 @@ import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 /**
  * Controls the 'TaxaDetails' Activity view
  */
-public class TaxaDetails extends Activity {
+public class TaxaDetails extends InvadrActivityBase {
 	
 	/**
 	 * Initialises the content of this Activity
@@ -56,6 +55,8 @@ public class TaxaDetails extends Activity {
 			}
 		}
 	}
+	
+	
 	
 	/**
 	 * Class to handle the population of taxa details in a separate thread

@@ -71,7 +71,7 @@ public class AddPhoto extends InvadrActivityBase {
 		
 		outState.putParcelable("selectedUri", _selectedUri);
 	}
-	
+		
     /**
      * Handler to populate and execute an Intent
      * to pass control to the next stage of the application

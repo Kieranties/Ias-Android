@@ -5,6 +5,9 @@ import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 /**
@@ -124,6 +127,22 @@ public class IasessApp extends Application {
 		makeToast(_context, message);
 	}
 	
+	public static void unbindDrawables(View view){
+		if(view == null || view instanceof AdapterView){
+			return;
+		}
+		
+	    if (view.getBackground() != null) {
+	        view.getBackground().setCallback(null);
+	    }
+	    
+	    if (view instanceof ViewGroup) {
+	        for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+	            unbindDrawables(((ViewGroup) view).getChildAt(i));
+	        }
+	        ((ViewGroup) view).removeAllViews();
+	    }
+	}
 	/**
 	 * @see android.app.Application#onCreate()
 	 */

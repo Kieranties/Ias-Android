@@ -17,7 +17,7 @@ import android.view.View;
 /**
  * Controls the 'Home' Activity view
  */
-public class Home extends Activity {
+public class Home extends InvadrActivityBase {
 	
     /**
      * Initialises the content of the Activity
@@ -54,18 +54,25 @@ public class Home extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
+		
 		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.menu_about:
-				Intent intent = new Intent(this, About.class);
-		    	startActivity(intent);
-				return true;
+				intent = new Intent(this, About.class);
+				break;
 			case R.id.menu_settings:
-				displaySettings();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+				intent = new Intent(this, Settings.class);
+				break;
 		}
+
+		if(intent != null){
+			startActivity(intent);
+			return true;
+		}
+		else{
+			return super.onOptionsItemSelected(item);
+		}    	
 	}
 	
     /**
@@ -118,7 +125,6 @@ public class Home extends Activity {
      * Creates and starts a new Settings Activity
      */
     private void displaySettings(){
-    	Intent intent = new Intent(this, Settings.class);
-    	startActivity(intent);
+    	
     }
 }

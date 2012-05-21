@@ -51,6 +51,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="italic"
                 android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:layout_marginTop="5dp"/>
             
             <LinearLayout

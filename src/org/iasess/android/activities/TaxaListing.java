@@ -190,7 +190,7 @@ public class TaxaListing extends InvadrActivityBase {
 				if (!taxaCursor.moveToFirst()) { // is an empty set
 					taxaCursor.close();
 					// get from the api as not initialised
-					store.addTaxa(ApiHandler.getTaxa());
+					store.updateTaxa(ApiHandler.getTaxa());
 
 					// re-fetch cursor data
 					taxaCursor = store.getAllItems();

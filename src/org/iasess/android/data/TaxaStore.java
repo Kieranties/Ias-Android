@@ -12,12 +12,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class TaxaStore  extends SQLiteOpenHelper {
-
 	
 	/**
 	 * Database instance name 
 	 */
 	private static final String DATABASE_NAME = "IAS.db";
+	
     /**
      * Current database version
      */
@@ -28,36 +28,40 @@ public class TaxaStore  extends SQLiteOpenHelper {
      */
     private static final String TABLE_NAME = "taxa";
     
-    
     /**
      * The column name for the primary key of a taxa
      */
     public static final String COL_PK  = "_id"; // NEEDS to be called _id otherwise cursors don't work
+    
     /**
      * The column name for the common name property of a taxa
      */
     public static final String COL_COMMON_NAME = "common_name";
+    
     /**
      * The column name for the scientific name of a taxa
      */
     public static final String COL_SCIENTIFIC_NAME = "scientfic_name";
+    
     /**
      * The column name for the rank of a taxa
      */
     public static final String COL_RANK = "rank";
+    
     /**
      * The column name for the key text of a taxa
      */
     public static final String COL_KEY_TEXT = "key_text"; 
+    
     /**
      * The column name for the listing image for a taxa
      */
     public static final String COL_LISTING_IMAGE = "listing_image";
+    
     /**
      * The column name for the large image for a taxa
      */
     public static final String COL_LARGE_IMAGE = "large_image";
-    
     
     /**
      * The table create scripts 
@@ -73,7 +77,6 @@ public class TaxaStore  extends SQLiteOpenHelper {
             + COL_LISTING_IMAGE + " blob,"
             + COL_LARGE_IMAGE + " text );";
 
-    
     /**
      * Constructor method
      * @param context The context to create this instance against
@@ -102,44 +105,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 		onCreate(db);
 		
 	}
-	
-	/**
-	 * Stores the give {@link TaxaItem} in this store
-	 * 
-	 * @param item The item to save
-	 */
-	public void addTaxa(TaxaItem item){
-		SQLiteDatabase db = this.getWritableDatabase();		 
-	    insertTaxaItem(item, db);
-	    db.close();
-	}
-	
-	/**
-	 * Stores the given collection of {@link TaxaItem} in this store
-	 * 
-	 * @param collection The collection to save
-	 */
-	public void addTaxa(ArrayList<TaxaItem> collection){
-		SQLiteDatabase db = this.getWritableDatabase();	
-		for(TaxaItem item : collection){
-			insertTaxaItem(item, db);
-		}
-		db.close();
-	}
-	
-	/**
-	 * Updates the store with details of the given item.
-	 * <p>
-	 * Updates are performed based on the items PK field.
-	 * 
-	 * @param item The {@link TaxaItem} to update.
-	 */
-	public void udpateTaxa(TaxaItem item){
-		SQLiteDatabase db = this.getWritableDatabase();		 
-		updateTaxaItem(item, db);
-	    db.close();
-	}
-	
+			
 	/**
 	  * Updates the store with details of the given collection of {@link TaxaItem}.
 	 * <p>
@@ -148,10 +114,12 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	 * @param collection The {@link TaxaItem} collection to update.
 	 */
 	public void updateTaxa(ArrayList<TaxaItem> collection){
-		SQLiteDatabase db = this.getWritableDatabase();	
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.beginTransaction();		
 		for(TaxaItem item : collection){
-			updateTaxaItem(item, db);
+			db.replace(TABLE_NAME, null, getContent(item));
 		}
+		db.endTransaction();
 		db.close();
 	}
 	
@@ -188,28 +156,6 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * Executes the update script for a given {@link TaxaItem}
-	 * 
-	 * @param item The {@link TaxaItem} being updated
-	 * @param db The {@link SQLiteDatabase} the update should be executed against
-	 */
-	private void updateTaxaItem(TaxaItem item, SQLiteDatabase db){
-		ContentValues values = getContent(item);
-		db.update(TABLE_NAME, values, COL_PK + " = " + item.getPk(), null);
-	}
-	
-	/**
-	 * Executes the insert script for a given {@link TaxaItem}
-	 * 
-	 * @param item The {@link TaxaItem} being inserted
-	 * @param db The {@link SQLiteDatabase} the item is being inserted into
-	 */
-	private void insertTaxaItem(TaxaItem item, SQLiteDatabase db){
-	    //insert the entry
-	    db.insert(TABLE_NAME, null, getContent(item));
-	}
-	
-	/**
 	 * Gets the {@link ContentValues} to be stored for a given {@link TaxaItem}
 	 * 
 	 * @param item The {@link TaxaItem} to process
@@ -223,6 +169,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    values.put(COL_RANK, item.getRank());
 	    values.put(COL_KEY_TEXT, item.getKeyTxt());
 	    values.put(COL_LARGE_IMAGE, item.getLargeImagePath());
+	    
 	    //fetch the listing image bytes to be saved
 	    byte[] imageData = getListingImage(item);
 	    if(imageData != null){

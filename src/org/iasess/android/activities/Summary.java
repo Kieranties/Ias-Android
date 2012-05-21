@@ -1,5 +1,7 @@
 package org.iasess.android.activities;
 
+import java.net.URI;
+
 import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
@@ -133,6 +135,14 @@ public class Summary extends MapActivity{
 		if(resultCode == Activity.RESULT_OK && requestCode == GPS_INTENT){
 			renderMapView();
 		}		
+	}
+	
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	 
+	    IasessApp.unbindDrawables(findViewById(R.id.RootView));
+	    System.gc();
 	}
 	
     /**

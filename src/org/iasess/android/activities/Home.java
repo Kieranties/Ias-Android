@@ -9,12 +9,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
  * Controls the 'Home' Activity view
  */
-public class Home extends Activity {
+public class Home extends InvadrActivityBase {
 	
     /**
      * Initialises the content of the Activity
@@ -32,7 +35,46 @@ public class Home extends Activity {
         }
     }
     
+    /**
+	 * Handler for the display of the menu
+	 * 
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home_menu, menu);
+		return true;
+	}
     
+	/**
+	 * Handler for the selection of a menu option
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = null;
+		
+		// Handle item selection
+		switch (item.getItemId()) {
+			case R.id.menu_about:
+				intent = new Intent(this, About.class);
+				break;
+			case R.id.menu_settings:
+				intent = new Intent(this, Settings.class);
+				break;
+		}
+
+		if(intent != null){
+			startActivity(intent);
+			return true;
+		}
+		else{
+			return super.onOptionsItemSelected(item);
+		}    	
+	}
+	
     /**
      * Handler to pass control to the image selection process
      * 
@@ -52,27 +94,6 @@ public class Home extends Activity {
     public void onViewGalleryClick(View v) {
     	Intent intent = new Intent(this, TaxaListing.class);
     	intent.putExtra("gallery", true);
-    	startActivity(intent);
-    }
-    
-    /**
-     * Handler to populate and process an Intent
-     * to pass control of the application to the settings Activity
-     * 
-     * @param v The {@link View} which fired the event handler
-     */
-    public void onSettingsClick(View v) {
-    	displaySettings();
-    }
-    
-    /**
-     * Handler to populate and process an Intent to 
-     * pass control of the application to the About Activity
-     * 
-     * @param v The {@link View} which fired the event handler
-     */
-    public void onAboutClick(View v) {    	
-    	Intent intent = new Intent(this, About.class);
     	startActivity(intent);
     }
     
@@ -104,7 +125,6 @@ public class Home extends Activity {
      * Creates and starts a new Settings Activity
      */
     private void displaySettings(){
-    	Intent intent = new Intent(this, Settings.class);
-    	startActivity(intent);
+    	
     }
 }

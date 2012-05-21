@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class TaxaStore  extends SQLiteOpenHelper {
-	
+
 	/**
 	 * Database instance name 
 	 */
@@ -21,7 +21,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
     /**
      * Current database version
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     
     /**
      * Database table for this store
@@ -63,6 +63,10 @@ public class TaxaStore  extends SQLiteOpenHelper {
      */
     public static final String COL_LARGE_IMAGE = "large_image";
     
+    
+    public static final String COL_SIGHTINGS_COUNT = "sightings_count";
+    
+    
     /**
      * The table create scripts 
      */
@@ -74,6 +78,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
     		+ COL_SCIENTIFIC_NAME + " text, "
     		+ COL_RANK + " text, "
     		+ COL_KEY_TEXT + " text, "
+    		+ COL_SIGHTINGS_COUNT + " integer, "
             + COL_LISTING_IMAGE + " blob,"
             + COL_LARGE_IMAGE + " text );";
 
@@ -105,7 +110,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 		onCreate(db);
 		
 	}
-			
+	
 	/**
 	  * Updates the store with details of the given collection of {@link TaxaItem}.
 	 * <p>
@@ -114,7 +119,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	 * @param collection The {@link TaxaItem} collection to update.
 	 */
 	public void updateTaxa(ArrayList<TaxaItem> collection){
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();	
 		db.beginTransaction();		
 		for(TaxaItem item : collection){
 			db.replace(TABLE_NAME, null, getContent(item));
@@ -167,6 +172,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    values.put(COL_COMMON_NAME, item.getCommonName());
 	    values.put(COL_SCIENTIFIC_NAME, item.getScientificName());
 	    values.put(COL_RANK, item.getRank());
+	    values.put(COL_SIGHTINGS_COUNT, item.getSightings().length);
 	    values.put(COL_KEY_TEXT, item.getKeyTxt());
 	    values.put(COL_LARGE_IMAGE, item.getLargeImagePath());
 	    

@@ -33,23 +33,46 @@ public class AddPhoto extends InvadrActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_photo);
         
-        Uri selected = getIntent().getData();
-        	
+        Uri selected = null;
+		
+		//check for data from state change
+        if(savedInstanceState != null && savedInstanceState.containsKey("selectedUri")){
+        	selected = savedInstanceState.getParcelable("selectedUri");
+	    }
+        
+        //if still null check for data from intent
+        if(selected == null){
+        	selected = getIntent().getData();
+        }
+        
         //if still null check if we have come from a share/send to action
         if(selected == null){
         	Bundle extras = getIntent().getExtras();
-        	if(extras.containsKey(Intent.EXTRA_STREAM)){
+        	if(extras != null && extras.containsKey(Intent.EXTRA_STREAM)){
         		//need to set a flag to track that we have come in from external source
         		_isExternal = true;
         		selected = extras.getParcelable(Intent.EXTRA_STREAM);
         	}
-        }
+        }                    
         
         //if we have a selected image, set it
         if(selected != null) setImageView(selected);
     }    
 	
-	/**
+    /**
+	 * Store saved content on Activity state change
+	 * 
+	 * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+	 */
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		
+		outState.putParcelable("selectedUri", _selectedUri);
+	}
+		
+    /**
      * Handler to populate and execute an Intent
      * to pass control to the next stage of the application
      * 

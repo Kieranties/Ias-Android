@@ -91,6 +91,8 @@ public class TaxaListing extends InvadrActivityBase {
 		super.onDestroy();
 		
 		ListView listView = (ListView) findViewById(R.id.listTaxa);
+		if(listView == null) return;
+		
 		ListAdapter currentAdapter = listView.getAdapter();
 		if ( currentAdapter != null) {
 			((SimpleCursorAdapter)currentAdapter).getCursor().close();

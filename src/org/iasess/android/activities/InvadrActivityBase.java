@@ -1,5 +1,8 @@
 package org.iasess.android.activities;
 
+import org.iasess.android.IasessApp;
+import org.iasess.android.R;
+
 import android.app.Activity;
 import android.content.Intent;
 
@@ -17,5 +20,13 @@ public class InvadrActivityBase extends Activity {
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	@Override
+	protected void onDestroy() {
+	    super.onDestroy();
+	 
+	    IasessApp.unbindDrawables(findViewById(R.id.RootView));
+	    System.gc();
 	}
 }

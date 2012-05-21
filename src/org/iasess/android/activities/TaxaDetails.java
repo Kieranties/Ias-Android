@@ -5,7 +5,6 @@ import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -21,7 +20,7 @@ import android.widget.TextView;
 /**
  * Controls the 'TaxaDetails' Activity view
  */
-public class TaxaDetails extends Activity {
+public class TaxaDetails extends InvadrActivityBase {
 	
 	/**
 	 * Initialises the content of this Activity
@@ -42,20 +41,36 @@ public class TaxaDetails extends Activity {
 			String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
 			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
 			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
+			String scientific = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_SCIENTIFIC_NAME));
+			String sightings = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_SIGHTINGS_COUNT));
+			String rank = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_RANK));
 			cursor.close();
 			store.close();
 			
-			TextView tv = (TextView)findViewById(R.id.textDescription);
-			tv.setText(description);
+			TextView tvDesc = (TextView)findViewById(R.id.textDescription);
+			tvDesc.setText(description);
 			
 			TextView tvTitle = (TextView)findViewById(R.id.textBanner);
 			tvTitle.setText(name);
+			
+			TextView tvScientific = (TextView)findViewById(R.id.scientific_name);
+			tvScientific.setText(scientific);
+			
+			TextView tvSightings = (TextView)findViewById(R.id.sightings_count);
+			String sightingsStub = getResources().getString(R.string.sightings);
+			tvSightings.setText(sightingsStub + " " + sightings);
+			
+			TextView tvRank = (TextView)findViewById(R.id.rank);
+			String rankStub = getResources().getString(R.string.rank);
+			tvRank.setText(rankStub + " " + rank);
 			
 			if(imgUrl != null && imgUrl != ""){
 				new PopulateDetails().execute(imgUrl);
 			}
 		}
 	}
+	
+	
 	
 	/**
 	 * Class to handle the population of taxa details in a separate thread

@@ -9,6 +9,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 /**
@@ -32,7 +35,39 @@ public class Home extends Activity {
         }
     }
     
+    /**
+	 * Handler for the display of the menu
+	 * 
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home_menu, menu);
+		return true;
+	}
     
+	/**
+	 * Handler for the selection of a menu option
+	 * 
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+			case R.id.menu_about:
+				Intent intent = new Intent(this, About.class);
+		    	startActivity(intent);
+				return true;
+			case R.id.menu_settings:
+				displaySettings();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+	
     /**
      * Handler to pass control to the image selection process
      * 

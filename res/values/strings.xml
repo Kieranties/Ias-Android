@@ -25,6 +25,8 @@
     <string name="username_hint">ias-ess.org username or email</string>
     <string name="taxa_image">Taxa image</string>
     <string name="taxa_selector">Taxa selector</string>
+    <string name="sightings">Sightings:</string>
+    <string name="rank">Rank:</string>
     <string name="about_blurb">
         <![CDATA[
         	<p>Welcome to invadr! This app accompanies the website <a href="http://ias-ess.org">http://ias-ess.org</a> - the unified Invasive Alien Species (IAS) sighting and monitoring website.</p>

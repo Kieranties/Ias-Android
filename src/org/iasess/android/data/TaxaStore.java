@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class TaxaStore  extends SQLiteOpenHelper {
-
+	
 	/**
 	 * Database instance name 
 	 */
@@ -63,7 +63,9 @@ public class TaxaStore  extends SQLiteOpenHelper {
      */
     public static final String COL_LARGE_IMAGE = "large_image";
     
-    
+    /**
+     * The column name for number of reported sightings
+     */
     public static final String COL_SIGHTINGS_COUNT = "sightings_count";
     
     
@@ -110,7 +112,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 		onCreate(db);
 		
 	}
-	
+			
 	/**
 	  * Updates the store with details of the given collection of {@link TaxaItem}.
 	 * <p>
@@ -119,12 +121,16 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	 * @param collection The {@link TaxaItem} collection to update.
 	 */
 	public void updateTaxa(ArrayList<TaxaItem> collection){
-		SQLiteDatabase db = this.getWritableDatabase();	
+		SQLiteDatabase db = this.getWritableDatabase();
 		db.beginTransaction();		
-		for(TaxaItem item : collection){
-			db.replace(TABLE_NAME, null, getContent(item));
+		try{
+			for(TaxaItem item : collection){
+				db.replace(TABLE_NAME, null, getContent(item));
+			}
+			db.setTransactionSuccessful();
+		} finally {
+			db.endTransaction();
 		}
-		db.endTransaction();
 		db.close();
 	}
 	

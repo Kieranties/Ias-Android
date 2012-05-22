@@ -115,11 +115,15 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	 */
 	public void updateTaxa(ArrayList<TaxaItem> collection){
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.beginTransaction();		
-		for(TaxaItem item : collection){
-			db.replace(TABLE_NAME, null, getContent(item));
+		db.beginTransaction();
+		try{
+			for(TaxaItem item : collection){
+				db.replace(TABLE_NAME, null, getContent(item));
+			}
+			db.setTransactionSuccessful();
+		} finally {
+			db.endTransaction();
 		}
-		db.endTransaction();
 		db.close();
 	}
 	

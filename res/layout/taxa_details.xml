@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"    
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/RootView" >
 
     <TextView
         android:id="@+id/textBanner"
@@ -19,7 +20,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true" >
 
         <LinearLayout
@@ -32,7 +33,7 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center_horizontal"
@@ -41,20 +42,47 @@
                 android:layout_marginBottom="5dp"	     
                 android:padding="1dp"
                 android:visibility="gone" />
-
+            
             <TextView 
+                android:id="@+id/scientific_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/details"
                 android:textColor="@color/ias_blue"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="italic"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:layout_marginTop="5dp"/>
             
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:weightSum="1">
+            	
+            <TextView 
+                android:id="@+id/rank"
+                android:layout_width="0dp"
+                android:layout_weight=".5" 
+                android:layout_height="wrap_content"
+                android:textColor="@color/ias_blue"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="left"/>
+            
+            <TextView 
+                android:id="@+id/sightings_count"
+                android:layout_width="0dp"
+                android:layout_weight=".5"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ias_blue"
+                android:gravity="right"/>
+            </LinearLayout>
             <TextView
                 android:id="@+id/textDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="15dp" />
         </LinearLayout>
     </ScrollView>

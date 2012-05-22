@@ -5,7 +5,6 @@ import org.iasess.android.R;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.api.UserCheckResponse;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -21,7 +20,7 @@ import android.widget.TextView.OnEditorActionListener;
 /**
  * Controls the 'Settings' Activity view
  */
-public class Settings extends Activity implements OnEditorActionListener {
+public class Settings extends InvadrActivityBase implements OnEditorActionListener {
 
 	/**
 	 * The {@link EditText} for the username

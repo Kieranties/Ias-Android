@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ias_main"
+        android:gravity="center"
+        android:height="35dp"
+        android:text="Set location"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp" >
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/cbxPhotoLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-36dp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:gravity="center_vertical"
+                android:paddingLeft="40dp"
+                android:text="Use image location" />
+
+            <RadioButton
+                android:id="@+id/cbxCurrentLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-36dp"
+                android:drawableRight="@android:drawable/btn_radio"
+                android:gravity="center_vertical"
+                android:paddingLeft="40dp"
+                android:text="Use current location" />
+        </RadioGroup>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/ias_blue"
+            android:padding="1dp" >
+
+            <com.google.android.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:apiKey="@string/mapsKey" />
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/buttonDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:onClick="onDoneClick"
+            android:text="@string/done"
+            android:width="120dp" />
+    </LinearLayout>
+
+</LinearLayout>

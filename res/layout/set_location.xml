@@ -16,62 +16,41 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp" >
+        android:layout_height="fill_parent" >
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <RadioButton
-                android:id="@+id/cbxPhotoLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-36dp"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:gravity="center_vertical"
-                android:paddingLeft="40dp"
-                android:text="Use image location" />
-
-            <RadioButton
-                android:id="@+id/cbxCurrentLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-36dp"
-                android:drawableRight="@android:drawable/btn_radio"
-                android:gravity="center_vertical"
-                android:paddingLeft="40dp"
-                android:text="Use current location" />
-        </RadioGroup>
-
-        <FrameLayout
+        <com.google.android.maps.MapView
+            android:id="@+id/mapView"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/ias_blue"
-            android:padding="1dp" >
-
-            <com.google.android.maps.MapView
-                android:id="@+id/mapView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:apiKey="@string/mapsKey" />
-        </FrameLayout>
+            android:layout_height="fill_parent"
+            android:apiKey="@string/mapsKey" />
 
         <Button
             android:id="@+id/buttonDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:onClick="onDoneClick"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:text="@string/done"
             android:width="120dp" />
-    </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@android:drawable/ic_menu_gallery" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/imageButton1"
+            android:src="@android:drawable/ic_menu_compass" />
+
+    </RelativeLayout>
 
 </LinearLayout>

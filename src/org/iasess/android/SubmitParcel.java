@@ -18,7 +18,7 @@ public class SubmitParcel extends TaxonParcel implements Parcelable {
 	private boolean _isExternal;
 
 	public SubmitParcel(String imgPath) {
-		super((Long) null, null);
+		super(-1, null);
 		setImagePath(imgPath);
 	}
 

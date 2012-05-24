@@ -1,13 +1,12 @@
 package org.iasess.android.activities;
 
-import org.iasess.android.IasessApp;
+import org.iasess.android.SubmitParcel;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.Logger;
 import org.iasess.android.R;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,11 +27,11 @@ public class Home extends InvadrActivityBase {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         
+        //TODO: Change this to a first run event only
         //check we have a username saved
-        if(IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME).equals("")){
-        	//if we don't, show the settings screen.
-        	displaySettings();
-        }
+        //if(IasessApp.getUsernamePreferenceString().equals("")){
+        //	//if we don't, show the settings screen.
+        //}
     }
     
     /**
@@ -55,7 +54,6 @@ public class Home extends InvadrActivityBase {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = null;
-		
 		// Handle item selection
 		switch (item.getItemId()) {
 			case R.id.menu_about:
@@ -108,23 +106,16 @@ public class Home extends InvadrActivityBase {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK){
 			//we're expecting the intent to be an image intent initiated by this app
-			Uri selected = ImageHandler.getImageUriFromIntentResult(resultCode, requestCode, data);
+			String selected = ImageHandler.getImagePathFromIntentResult(resultCode, requestCode, data);
 			if(selected != null){
 				//pass data to next activity
 				Intent intent = new Intent(this, AddPhoto.class);
-				intent.setData(selected);
+				intent.putExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA, new SubmitParcel(selected));
 				startActivity(intent);
-			}
+			} 
 			else{
 				Logger.warn("Could not get a selected image");
 			}
 		}		
 	}
-    
-    /**
-     * Creates and starts a new Settings Activity
-     */
-    private void displaySettings(){
-    	
-    }
 }

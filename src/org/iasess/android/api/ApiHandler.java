@@ -2,11 +2,11 @@ package org.iasess.android.api;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.iasess.android.IasessApp;
+import org.iasess.android.SubmitParcel;
 import org.iasess.android.Logger;
 import org.iasess.android.R;
 
@@ -75,15 +75,10 @@ public class ApiHandler {
 	 * @param user The user performing the submission
 	 * @return a {@link SubmissionResponse} of the submission results
 	 */
-	public static SubmissionResponse submitSighting(String img, long taxa, double lat, double lon, String user){
+	public static SubmissionResponse submitSighting(SubmitParcel submitPackage){
 		try {			
-			String url = composeApiUrl(API_SIGHTING);
-			//compose field map
-			HashMap<String, String> fields = new HashMap<String, String>();
-			fields.put("email", user);
-			fields.put("location", "POINT(" + lon +" " + lat +")");			
-			fields.put("taxon", Long.toString(taxa));			
-			String resp = HttpHandler.executeMultipartPost(url, img, fields);
+			String url = composeApiUrl(API_SIGHTING);			
+			String resp = HttpHandler.executeMultipartPost(url, submitPackage.getSubmitContent());
 			Gson gson = new Gson();
 			return gson.fromJson(resp, SubmissionResponse.class);
 		} catch (Exception e) {

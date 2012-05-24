@@ -21,25 +21,10 @@ public class IasessApp extends Application {
 	 */
 	private static ContextWrapper _context;
 	
-	
 	/**
 	 * The key used to reference a stored username 
 	 */
 	public static final String PREFS_USERNAME = "username";
-	
-	
-	/**
-	 * The key used to reference the selected taxa pk when passing
-	 * between activities 
-	 */
-	public static final String SELECTED_TAXA = "selectedTaxa";
-	
-	
-	/**
-	 * The key used t reference the selected taxa name when passing
-	 * between activities
-	 */
-	public static final String SELECTED_TAXA_NAME = "selectedTaxaName";
 	
 	/**
 	 * @return the Application context as a ContextWrapper
@@ -49,7 +34,6 @@ public class IasessApp extends Application {
 		return _context;
 	}
 	
-
 	/**
 	 * @return The SharedPreferences for the Application Context
 	 * @see SharedPreferences
@@ -104,6 +88,22 @@ public class IasessApp extends Application {
 	}
 	
 	/**
+	 * Sets the username preference string to the given value
+	 * @param value
+	 */
+	public static final void setUsernamePreferenceString(String value){
+		setPreferenceString(PREFS_USERNAME, value);
+	}
+	
+	/**
+	 * Gets the username preference string
+	 * @return - The value set as the username
+	 */
+	public static final String getUsernamePreferenceString(){
+		return getPreferenceString(PREFS_USERNAME);
+	}
+	
+	/**
 	 * Helper method to display {@link Toast} messages
 	 * 
 	 * @param context The ContextWrapper to show the message within
@@ -113,8 +113,7 @@ public class IasessApp extends Application {
 	public static void makeToast(ContextWrapper context, String message){
 		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
-	
-	
+		
 	/**
 	 * Helper method to display {@link Toast} messages
 	 * <p>
@@ -127,6 +126,11 @@ public class IasessApp extends Application {
 		makeToast(_context, message);
 	}
 	
+	/**
+	 * Goes through all views and unbinds drawable objects.
+	 * Provides better performance when pausing/disposing of activities
+	 * @param view
+	 */
 	public static void unbindDrawables(View view){
 		if(view == null || view instanceof AdapterView){
 			return;
@@ -143,6 +147,7 @@ public class IasessApp extends Application {
 	        ((ViewGroup) view).removeAllViews();
 	    }
 	}
+	
 	/**
 	 * @see android.app.Application#onCreate()
 	 */

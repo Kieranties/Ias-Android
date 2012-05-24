@@ -2,6 +2,8 @@ package org.iasess.android.activities;
 
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
+import org.iasess.android.SubmitParcel;
+import org.iasess.android.TaxonParcel;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
 
@@ -12,7 +14,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -115,17 +116,14 @@ public class TaxaListing extends InvadrActivityBase {
 			
 			// set the selected image
 			Intent orig = getIntent();
-			Uri selected = orig.getData();
-			intent.setData(selected);
-			intent.putExtras(orig.getExtras());
+			SubmitParcel submitPackage = orig.getParcelableExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA);
 			
 			// set the selected taxa
 			Cursor cursor = (Cursor) adapter.getItemAtPosition(position);
 			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
 			
-			intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
-			intent.putExtra(IasessApp.SELECTED_TAXA_NAME, name);
-
+			submitPackage.setTaxon(rowId, name);
+			intent.putExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA, submitPackage);
 			startActivityForResult(intent, 0);				
 		}		
 	}
@@ -142,9 +140,9 @@ public class TaxaListing extends InvadrActivityBase {
 		 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
 		 */
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long rowId) {				
-			Intent intent = new Intent(IasessApp.getContext(), TaxaDetails.class);			
-			intent.putExtra(IasessApp.SELECTED_TAXA, rowId);
-
+			Intent intent = new Intent(IasessApp.getContext(), TaxaDetails.class);		
+			TaxonParcel parcel = new TaxonParcel(rowId, null);
+			intent.putExtra(TaxonParcel.TAXON_PARCEL_EXTRA, parcel);
 			startActivity(intent);				
 		}		
 	}

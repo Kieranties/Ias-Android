@@ -1,6 +1,5 @@
 package org.iasess.android.api;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -35,7 +33,7 @@ public class HttpHandler {
 	 * @return A String of JSON data
 	 * @throws Exception
 	 */
-	public static String executeMultipartPost(String url, String imgPath, HashMap<String, String> fields) throws Exception {
+	public static String executeMultipartPost(String url, HashMap<String, ContentBody> fields) throws Exception {
 		try {
 			//init client
 			HttpClient httpclient = new DefaultHttpClient();
@@ -43,13 +41,9 @@ public class HttpHandler {
 			
 			//populate submission content from field map
 			MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			for (HashMap.Entry<String, String> entry : fields.entrySet()) {
-				multipartEntity.addPart(entry.getKey(), new StringBody(entry.getValue()));
+			for (HashMap.Entry<String, ContentBody> entry : fields.entrySet()) {
+				multipartEntity.addPart(entry.getKey(), entry.getValue());
 			}
-			
-			//populate submission content with file
-			File image = new File(imgPath);
-			multipartEntity.addPart("photo", new FileBody(image));
 			poster.setEntity(multipartEntity);
 
 			//perform the actual post

@@ -2,6 +2,7 @@ package org.iasess.android.activities;
 
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
+import org.iasess.android.TaxonParcel;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.data.TaxaStore;
 
@@ -32,10 +33,11 @@ public class TaxaDetails extends InvadrActivityBase {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.taxa_details);
 		
-		long taxaPk = getIntent().getLongExtra(IasessApp.SELECTED_TAXA, -1);
-		if(taxaPk != -1){
+		TaxonParcel parcel = getIntent().getParcelableExtra(TaxonParcel.TAXON_PARCEL_EXTRA);
+		long taxonId = parcel.getTaxonId();
+		if(taxonId != -1){
 			TaxaStore store = new TaxaStore(this);
-			Cursor cursor = store.getByPk(taxaPk);
+			Cursor cursor = store.getByPk(taxonId);
 			
 			cursor.moveToFirst();
 			String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));

@@ -62,7 +62,6 @@ public class AddPhoto extends InvadrActivityBase {
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		
 		outState.putParcelable(SubmitParcel.SUBMIT_PARCEL_EXTRA, _package);
@@ -75,7 +74,7 @@ public class AddPhoto extends InvadrActivityBase {
      * @param v The {@link View} which fired the event handler
      */
     public void onNextClick(View v){
-    	Intent intent = new Intent(this, TaxaListing.class);
+    	Intent intent = new Intent(this, SetLocation.class);
     	intent.putExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA, _package);
     	startActivityForResult(intent, 0);
     }

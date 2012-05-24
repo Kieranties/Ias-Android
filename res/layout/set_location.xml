@@ -36,20 +36,22 @@
             android:width="120dp" />
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/btnImageLocation"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@android:drawable/ic_menu_gallery" />
+            android:src="@android:drawable/ic_menu_gallery"
+            android:onClick="onImageLocationClick" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/btnCurrentLocation"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/imageButton1"
-            android:src="@android:drawable/ic_menu_compass" />
+            android:layout_toRightOf="@+id/btnImageLocation"
+            android:src="@android:drawable/ic_menu_compass"
+            android:onClick="onCurrentLocationClick" />
 
     </RelativeLayout>
 

@@ -35,18 +35,19 @@ public class SetLocation extends MapActivity {
 
 		// init mapview
 		_mapView = (MapView) findViewById(R.id.mapView);
-		_mapView.setBuiltInZoomControls(true);
 		_mapView.setSatellite(true);
+		
 		// init controller
 		_mapController = _mapView.getController();
 		_mapController.setZoom(18);
+		
 		// add overlay to map view
 		List<Overlay> overlays = _mapView.getOverlays();
 
 		// attempt to set location based on image data
 		GeoPoint imagePoint = getImageLocation();
 		if (imagePoint != null) {
-			MapOverlay imageOverlay = MapOverlay.getImageOverlay();
+			MapOverlay imageOverlay = MapOverlay.getImageOverlay(this);
 			OverlayItem imageItem = new OverlayItem(imagePoint,
 					"Image location",
 					"The image contains data for this locations");

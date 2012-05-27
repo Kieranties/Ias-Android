@@ -24,16 +24,8 @@
             android:id="@+id/mapView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:clickable="true"
             android:apiKey="@string/mapsKey" />
-
-        <Button
-            android:id="@+id/buttonDone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/done"
-            android:width="120dp" />
 
         <ImageButton
             android:id="@+id/btnImageLocation"

@@ -3,6 +3,7 @@ package org.iasess.android.maps;
 import java.util.ArrayList;
 
 import org.iasess.android.IasessApp;
+import org.iasess.android.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,7 +16,7 @@ import com.google.android.maps.OverlayItem;
 
 public class MapOverlay extends ItemizedOverlay<OverlayItem> {
 
-	private static Drawable _imageMarker = IasessApp.getContext().getResources().getDrawable(android.R.drawable.ic_menu_gallery);
+	private static Drawable _imageMarker = IasessApp.getContext().getResources().getDrawable(R.drawable.da_marker_attractions);
 	private ArrayList<OverlayItem> _overlays = new ArrayList<OverlayItem>();
 	private Context _context;
 	

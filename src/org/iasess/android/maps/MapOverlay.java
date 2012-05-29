@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
@@ -17,17 +19,24 @@ import com.google.android.maps.OverlayItem;
 public class MapOverlay extends ItemizedOverlay<OverlayItem> {
 
 	private static Drawable _imageMarker = IasessApp.getContext().getResources().getDrawable(R.drawable.da_marker_attractions);
+	private static Drawable _customMarker = IasessApp.getContext().getResources().getDrawable(R.drawable.da_marker_yellow);
 	private ArrayList<OverlayItem> _overlays = new ArrayList<OverlayItem>();
+	private GestureDetector _gestureDetector;
 	private Context _context;
 	
 	public MapOverlay(Drawable marker, Context context) {
 		super(boundCenterBottom(marker));
 		
+		_gestureDetector = new GestureDetector(context, (OnGestureListener)context);
 		_context = context;
 	}
 	
 	public static MapOverlay getImageOverlay(Context context){
 		return new MapOverlay(_imageMarker, context);
+	}
+	
+	public static MapOverlay getCustomOverlay(Context context){
+		return new MapOverlay(_customMarker, context);
 	}
 	
 	@Override
@@ -40,8 +49,9 @@ public class MapOverlay extends ItemizedOverlay<OverlayItem> {
 		return _overlays.size();
 	}
 
-	@Override
+	@Override	
 	protected boolean onTap(int index) {
+		
 	  OverlayItem item = _overlays.get(index);
 	  AlertDialog.Builder dialog = new AlertDialog.Builder(_context);
 	  dialog.setTitle(item.getTitle());

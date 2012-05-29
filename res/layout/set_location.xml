@@ -20,7 +20,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <com.google.android.maps.MapView
+        <org.iasess.android.maps.IasessMapView
             android:id="@+id/mapView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

@@ -1,5 +1,7 @@
 package org.iasess.android.activities;
 
+import java.util.List;
+
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 import org.iasess.android.SubmitParcel;
@@ -7,6 +9,7 @@ import org.iasess.android.maps.MapOverlay;
 
 import android.os.Bundle;
 import android.view.GestureDetector.OnDoubleTapListener;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,14 +18,17 @@ import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class SetLocation extends MapActivity implements OnDoubleTapListener {
+public class SetLocation extends MapActivity implements OnDoubleTapListener,
+		OnGestureListener {
 
 	private SubmitParcel _parcel;
 	private MapView _mapView;
 	private MapController _mapController;
 	private MyLocationOverlay _locationOverlay;
+	private MapOverlay _customOverlay;
 	private GeoPoint _imgLocation;
 
 	@Override
@@ -30,31 +36,31 @@ public class SetLocation extends MapActivity implements OnDoubleTapListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.set_location);
 
-		_parcel = getIntent().getParcelableExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA);
+		_parcel = getIntent().getParcelableExtra(
+				SubmitParcel.SUBMIT_PARCEL_EXTRA);
 
 		// init mapview
 		_mapView = (MapView) findViewById(R.id.mapView);
 		_mapView.setSatellite(true);
-				
+
 		// init controller
 		_mapController = _mapView.getController();
 		_mapController.setZoom(18);
-		
+
 		// attempt to set location based on image data
-		_imgLocation = getImageLocation();		
+		_imgLocation = getImageLocation();
 		if (_imgLocation != null) {
 			setImageLocationOverlay();
 		} else {
 			findViewById(R.id.btnImageLocation).setEnabled(false);
 		}
 
-		//set my location tracker
+		// set my location tracker
 		setMyLocationOverlay();
 
 		// if no gps, set to last known location
 	}
 
-	
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
@@ -77,24 +83,23 @@ public class SetLocation extends MapActivity implements OnDoubleTapListener {
 		return new GeoPoint((int) (locationData[0] * 1E6),
 				(int) (locationData[1] * 1E6));
 	}
-	
-	private void setImageLocationOverlay(){
+
+	private void setImageLocationOverlay() {
 		MapOverlay imageOverlay = MapOverlay.getImageOverlay(this);
-		OverlayItem imageItem = new OverlayItem(_imgLocation,
-				"Image location",
+		OverlayItem imageItem = new OverlayItem(_imgLocation, "Image location",
 				"The image contains data for this locations");
 		imageOverlay.addOverlay(imageItem);
 		_mapView.getOverlays().add(imageOverlay);
 		navigateToImageLocation();
 	}
-	
-	private void navigateToImageLocation(){
-		if(_imgLocation != null){			
+
+	private void navigateToImageLocation() {
+		if (_imgLocation != null) {
 			_mapController.animateTo(_imgLocation);
 		}
 	}
-	
-	private void setMyLocationOverlay(){
+
+	private void setMyLocationOverlay() {
 		// init the my location overlay
 		_locationOverlay = new MyLocationOverlay(this, _mapView);
 		_locationOverlay.enableMyLocation();
@@ -107,26 +112,59 @@ public class SetLocation extends MapActivity implements OnDoubleTapListener {
 		}
 		_mapView.getOverlays().add(_locationOverlay);
 	}
-	
-	private void navigateToMyLocation(){
+
+	private void navigateToMyLocation() {
 		_mapController.animateTo(_locationOverlay.getMyLocation());
 	}
 
+	public boolean onDoubleTap(MotionEvent ev) {
+		// lazily, rebuild overlay...
+		List<Overlay> overlays = _mapView.getOverlays();
+		if (_customOverlay != null)
+			overlays.remove(_customOverlay);
 
-	public boolean onDoubleTap(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-		return false;
+		_customOverlay = MapOverlay.getCustomOverlay(this);
+		int X = (int) (ev.getX() * ev.getXPrecision());
+		int Y = (int) (ev.getY() * ev.getYPrecision());
+		GeoPoint point = _mapView.getProjection().fromPixels(X, Y);
+
+		OverlayItem customMarker = new OverlayItem(point, "Custom location",
+				"The custom location");
+		_customOverlay.addOverlay(customMarker);
+		overlays.add(_customOverlay);
+
+		return true;
 	}
 
-
-	public boolean onDoubleTapEvent(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean onDoubleTapEvent(MotionEvent ev) {
+		return false; 
 	}
-
 
 	public boolean onSingleTapConfirmed(MotionEvent arg0) {
-		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		return false;
+	}
+
+	public void onLongPress(MotionEvent e) {
+	}
+
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		return false;
+	}
+
+	public void onShowPress(MotionEvent e) {
+	}
+
+	public boolean onSingleTapUp(MotionEvent e) {
 		return false;
 	}
 }

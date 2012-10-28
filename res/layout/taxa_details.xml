@@ -51,7 +51,7 @@
                 android:layout_marginBottom="5dp"	     
                 android:padding="1dp"
                 android:visibility="gone"
-                android:onClick="onImageClick" />      
+                android:onClick="onSingleImageClick" />      
             
             <TextView 
                 android:id="@+id/rank"

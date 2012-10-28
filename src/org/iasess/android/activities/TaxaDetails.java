@@ -91,12 +91,15 @@ public class TaxaDetails extends InvadrActivityBase {
 	}
 	
 	public void startImageGalleryActivity(int position) {
-		Intent intent = new Intent(this, IasGallery.class);
+		Intent intent = new Intent(this, ImagePager.class);
 	    intent.putExtra("images", images);
 	    intent.putExtra("position", position);
 	   	startActivity(intent);
 	}
 	 
+	public void onSingleImageClick(View v){
+		startImageGalleryActivity(0);
+	}
 	
 	private Gallery getGallery(){
 		return (Gallery) findViewById(R.id.gallery);

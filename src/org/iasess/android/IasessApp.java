@@ -171,6 +171,7 @@ public class IasessApp extends Application {
 		
 		// Configure loader with display options and other settings
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+				.memoryCacheExtraOptions(1280, 800)
 				.denyCacheImageMultipleSizesInMemory()
 				.offOutOfMemoryHandling()
 				.defaultDisplayImageOptions(displayOptions)

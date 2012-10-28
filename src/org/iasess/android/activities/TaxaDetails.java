@@ -1,27 +1,41 @@
 package org.iasess.android.activities;
 
+import java.util.ArrayList;
+
 import org.iasess.android.IasessApp;
 import org.iasess.android.R;
 import org.iasess.android.TaxonParcel;
-import org.iasess.android.api.ApiHandler;
+import org.iasess.android.data.ImageStore;
 import org.iasess.android.data.TaxaStore;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.Gallery;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Controls the 'TaxaDetails' Activity view
  */
 public class TaxaDetails extends InvadrActivityBase {
+	
+	private ImageStore imgStore = new ImageStore(this);
+	private ArrayList<String> images = new ArrayList<String>();
 	
 	/**
 	 * Initialises the content of this Activity
@@ -40,7 +54,6 @@ public class TaxaDetails extends InvadrActivityBase {
 			Cursor cursor = store.getByPk(taxonId);
 			
 			cursor.moveToFirst();
-			//String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
 			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
 			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
 			String scientific = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_SCIENTIFIC_NAME));
@@ -59,20 +72,43 @@ public class TaxaDetails extends InvadrActivityBase {
 						
 			TextView tvRank = (TextView)findViewById(R.id.rank);
 			String rankStub = getResources().getString(R.string.rank);
-			tvRank.setText(rankStub + " " + rank);
-			
-//			if(imgUrl != null && imgUrl != ""){
-//				new PopulateDetails().execute(imgUrl);
-//			}
+			tvRank.setText(rankStub + " " + rank);					
+		
+			new PopulateImages().execute(taxonId);
 		}
 	}
 	
-	
-	
 	/**
-	 * Class to handle the population of taxa details in a separate thread
+	 * Clean up the resources of this Activity when destroyed
+	 * 
+	 * @see android.app.Activity#onDestroy()
 	 */
-	private class PopulateDetails extends AsyncTask<String, Void, byte[]> {
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		
+		imgStore.close();
+	}
+	
+	public void startImageGalleryActivity(int position) {
+		Intent intent = new Intent(this, IasGallery.class);
+	    intent.putExtra("images", images);
+	    intent.putExtra("position", position);
+	   	startActivity(intent);
+	}
+	 
+	
+	private Gallery getGallery(){
+		return (Gallery) findViewById(R.id.gallery);
+	}
+		
+	private ImageView getImageView(){
+		return (ImageView) findViewById(R.id.imageView);
+	}
+	/**
+	 * Class to handle the population of image details in a separate thread
+	 */
+	private class PopulateImages extends AsyncTask<Long, Void, ArrayList<String>> {
 		
 		/**
 		 * The progress dialog to display while processing
@@ -86,9 +122,9 @@ public class TaxaDetails extends InvadrActivityBase {
 		 */
 		protected void onPreExecute() {
 			// display the dialog to the user
-			_dlg = ProgressDialog.show(TaxaDetails.this, "", "Fetching image...", true,true, new OnCancelListener() {
+			_dlg = ProgressDialog.show(TaxaDetails.this, "", "Fetching images...", true,true, new OnCancelListener() {
 				public void onCancel(DialogInterface dialog) {
-					PopulateDetails.this.cancel(true);	
+					PopulateImages.this.cancel(true);	
 					finish();
 				}
 			});
@@ -99,8 +135,8 @@ public class TaxaDetails extends InvadrActivityBase {
 		 * 
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
-		protected byte[] doInBackground(String... params) {
-			return ApiHandler.getByteArray(params[0], false);
+		protected ArrayList<String> doInBackground(Long... params) {
+			return imgStore.getLargeImages(params[0]);
 		}
 
 		/**
@@ -108,16 +144,71 @@ public class TaxaDetails extends InvadrActivityBase {
 		 * 
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
-		protected void onPostExecute(byte[] result) {
-			ImageView imgView = (ImageView) findViewById(R.id.imageView);
-			if(result == null){
-				IasessApp.makeToast("No image found...");
+		protected void onPostExecute(ArrayList<String> results) {
+			images = results;			
+			if(results.isEmpty()){
+				IasessApp.makeToast("No images found...");
+			} else if (images.size() == 1) {
+				ImageView iv = getImageView();
+				ImageLoader.getInstance().displayImage(images.get(0), iv);
+				getGallery().setVisibility(View.INVISIBLE);
+				iv.setVisibility(View.VISIBLE);
+				
 			} else {
-				Bitmap bm = BitmapFactory.decodeByteArray(result, 0, result.length);
-				imgView.setImageBitmap(bm);
-				imgView.setVisibility(View.VISIBLE);
+				BuildGridView();		
 			}
 			_dlg.dismiss();
+		}
+			
+		private void BuildGridView(){
+			Gallery gallery = getGallery();
+			
+			gallery.setAdapter(new ImageAdapter());
+			gallery.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					startImageGalleryActivity(position);
+				}
+			});							
+			
+			gallery.setVisibility(View.VISIBLE);
+			getImageView().setVisibility(View.INVISIBLE);
+			
+		}
+	}
+	
+	public class ImageAdapter extends BaseAdapter {
+		DisplayImageOptions options;
+		
+		public ImageAdapter() {
+			options = new DisplayImageOptions.Builder()
+			.cacheInMemory()
+			.cacheOnDisc()
+			.build();
+		}
+		
+		public int getCount() {
+			return images.size();
+		}
+
+		public Object getItem(int position) {
+			return null;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			final ImageView imageView;
+			if (convertView == null) {
+				imageView = (ImageView) getLayoutInflater().inflate(R.layout.grid_image, parent, false);
+			} else {
+				imageView = (ImageView) convertView;
+			}
+
+			ImageLoader.getInstance().displayImage(images.get(position), imageView, options);
+
+			return imageView;
 		}
 	}
 }

@@ -40,6 +40,7 @@
         <activity android:name=".activities.Settings" android:configChanges="orientation|keyboardHidden"/>
         <activity android:name=".activities.Summary" android:configChanges="orientation|keyboardHidden" />
         <activity android:name=".activities.About" android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".activities.IasGallery" android:configChanges="orientation|keyboardHidden"/>
     </application>
 
 </manifest>

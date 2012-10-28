@@ -16,7 +16,7 @@
         android:textColor="@color/white"
         android:ellipsize="end"
         android:layout_marginBottom="15dp" />
-
+    
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="fill_parent"
@@ -30,7 +30,16 @@
             android:orientation="vertical"
             android:paddingLeft="15dp"
 	        android:paddingRight="15dp" >
-
+            
+            <Gallery
+			    android:id="@+id/gallery"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="5dp"
+			    android:layout_marginRight="5dp"
+			    android:spacing="10dp"
+			    android:visibility="gone" />
+            
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
@@ -41,7 +50,8 @@
                 android:background="@color/ias_blue"                
                 android:layout_marginBottom="5dp"	     
                 android:padding="1dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:onClick="onImageClick" />      
             
             <TextView 
                 android:id="@+id/rank"
@@ -70,7 +80,7 @@
                 android:autoLink="web"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="15dp" />
+                   
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -161,9 +162,25 @@ public class IasessApp extends Application {
 		prepareImageLoader();
 	}
 	
-	private void prepareImageLoader(){
-		ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(getApplicationContext());
-		ImageLoader.getInstance().init(config);
-	
+	private void prepareImageLoader(){		
+		// Enable caching for images
+		DisplayImageOptions displayOptions = new DisplayImageOptions.Builder()
+			.cacheInMemory()
+			.cacheOnDisc()
+			.build();
+		
+		// Configure loader with display options and other settings
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+				.denyCacheImageMultipleSizesInMemory()
+				.offOutOfMemoryHandling()
+				.defaultDisplayImageOptions(displayOptions)
+				//.memoryCache(new UsingFreqLimitedMemoryCache(2 * 1024 * 1024))
+				//.discCache(new UnlimitedDiscCache(cacheDir))
+				//.discCacheFileNameGenerator(new HashCodeFileNameGenerator())
+				//.imageDownloader(new URLConnectionImageDownloader(5 * 1000, 20 * 1000))				
+				.build();
+		
+		// Init instance
+		ImageLoader.getInstance().init(config);	
 	}
 }

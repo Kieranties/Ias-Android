@@ -1,5 +1,6 @@
 package org.iasess.android.data;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -137,5 +138,15 @@ public class ImageStore  extends IasDatabase {
 		} 
 		results.close();
 		return uri;
+	}
+	
+	public ArrayList<String> getLargeImages(long taxaId){
+		Cursor results = getByTaxaId(taxaId, "800");
+		ArrayList<String> uris = new ArrayList<String>();
+		while(results.moveToNext()){
+			uris.add(results.getString(results.getColumnIndex(COL_URI)));
+		}
+		results.close();
+		return uris;
 	}
 }

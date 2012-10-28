@@ -178,7 +178,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    values.put(COL_COMMON_NAME, item.getCommonName());
 	    values.put(COL_SCIENTIFIC_NAME, item.getScientificName());
 	    values.put(COL_RANK, item.getRank());
-	    values.put(COL_SIGHTINGS_COUNT, item.getSightings().length);
+	    values.put(COL_SIGHTINGS_COUNT, item.getSightingsCount());	    
 	    values.put(COL_KEY_TEXT, item.getKeyTxt());
 	    values.put(COL_LARGE_IMAGE, item.getLargeImagePath());
 	    

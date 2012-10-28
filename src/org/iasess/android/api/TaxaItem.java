@@ -110,6 +110,17 @@ public class TaxaItem {
 	}
 	
 	/**
+	 * Gets the number of sightings for the current item
+	 * @return
+	 */
+	public int getSightingsCount(){
+		if(_sightings != null)
+			return _sightings.length;
+		else
+			return 0;
+	}
+	
+	/**
 	 * Helper method to return the image path from a given subset
 	 * in the items key images
 	 */

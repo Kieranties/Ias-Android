@@ -44,7 +44,6 @@ public class TaxaDetails extends InvadrActivityBase {
 			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
 			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
 			String scientific = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_SCIENTIFIC_NAME));
-			String sightings = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_SIGHTINGS_COUNT));
 			String rank = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_RANK));
 			cursor.close();
 			store.close();
@@ -57,11 +56,7 @@ public class TaxaDetails extends InvadrActivityBase {
 			
 			TextView tvScientific = (TextView)findViewById(R.id.scientific_name);
 			tvScientific.setText(scientific);
-			
-			TextView tvSightings = (TextView)findViewById(R.id.sightings_count);
-			String sightingsStub = getResources().getString(R.string.sightings);
-			tvSightings.setText(sightingsStub + " " + sightings);
-			
+						
 			TextView tvRank = (TextView)findViewById(R.id.rank);
 			String rankStub = getResources().getString(R.string.rank);
 			tvRank.setText(rankStub + " " + rank);

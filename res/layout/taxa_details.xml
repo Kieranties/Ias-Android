@@ -44,6 +44,15 @@
                 android:visibility="gone" />
             
             <TextView 
+                android:id="@+id/rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/ias_blue"               
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="5dp"/>
+            
+            <TextView 
                 android:id="@+id/scientific_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,29 +63,6 @@
                 android:gravity="center_horizontal"
                 android:layout_marginTop="5dp"/>
             
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-            	android:layout_height="wrap_content"
-            	android:weightSum="1">
-            	
-            <TextView 
-                android:id="@+id/rank"
-                android:layout_width="0dp"
-                android:layout_weight=".5" 
-                android:layout_height="wrap_content"
-                android:textColor="@color/ias_blue"
-                android:layout_marginTop="5dp"
-                android:layout_gravity="left"/>
-            
-            <TextView 
-                android:id="@+id/sightings_count"
-                android:layout_width="0dp"
-                android:layout_weight=".5"
-                android:layout_height="wrap_content"
-                android:textColor="@color/ias_blue"
-                android:gravity="right"/>
-            </LinearLayout>
             <TextView
                 android:id="@+id/textDescription"
                 android:layout_width="match_parent"

@@ -62,12 +62,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
      * The column name for the large image for a taxa
      */
     public static final String COL_LARGE_IMAGE = "large_image";
-    
-    /**
-     * The column name for number of reported sightings
-     */
-    public static final String COL_SIGHTINGS_COUNT = "sightings_count";
-    
+        
     
     /**
      * The table create scripts 
@@ -80,7 +75,6 @@ public class TaxaStore  extends SQLiteOpenHelper {
     		+ COL_SCIENTIFIC_NAME + " text, "
     		+ COL_RANK + " text, "
     		+ COL_KEY_TEXT + " text, "
-    		+ COL_SIGHTINGS_COUNT + " integer, "
             + COL_LISTING_IMAGE + " blob,"
             + COL_LARGE_IMAGE + " text );";
 
@@ -177,8 +171,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    values.put(COL_PK, item.getPk());
 	    values.put(COL_COMMON_NAME, item.getCommonName());
 	    values.put(COL_SCIENTIFIC_NAME, item.getScientificName());
-	    values.put(COL_RANK, item.getRank());
-	    values.put(COL_SIGHTINGS_COUNT, item.getSightingsCount());	    
+	    values.put(COL_RANK, item.getRank());	    
 	    values.put(COL_KEY_TEXT, item.getKeyTxt());
 	    values.put(COL_LARGE_IMAGE, item.getLargeImagePath());
 	    

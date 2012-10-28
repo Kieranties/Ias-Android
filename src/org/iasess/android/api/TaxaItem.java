@@ -22,12 +22,6 @@ public class TaxaItem {
 	private String _scientificName;
 	
 	/**
-	 * The collection of sightings associated with the item
-	 */
-	@SerializedName("sightings")
-	private int[] _sightings;
-	
-	/**
 	 * The rank of the item
 	 */
 	@SerializedName("rank")
@@ -62,12 +56,6 @@ public class TaxaItem {
 	 * @return
 	 */
 	public String getScientificName(){ return _scientificName; }
-
-	/**
-	 * Gets the collection of sightings for the item
-	 * @return
-	 */
-	public int[] getSightings(){ return _sightings; }
 	
 	/**
 	 * Gets the rank of the item
@@ -107,17 +95,6 @@ public class TaxaItem {
 	 */
 	public String getLargeImagePath(){
 		return getImagePath("800");
-	}
-	
-	/**
-	 * Gets the number of sightings for the current item
-	 * @return
-	 */
-	public int getSightingsCount(){
-		if(_sightings != null)
-			return _sightings.length;
-		else
-			return 0;
 	}
 	
 	/**

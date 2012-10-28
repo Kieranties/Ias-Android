@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+
 /**
  * Extends the base Application with static accessors
  * and globally useful methods *
@@ -154,6 +157,13 @@ public class IasessApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		_context = (ContextWrapper) getApplicationContext();		
+		_context = (ContextWrapper) getApplicationContext();
+		prepareImageLoader();
+	}
+	
+	private void prepareImageLoader(){
+		ImageLoaderConfiguration config = ImageLoaderConfiguration.createDefault(getApplicationContext());
+		ImageLoader.getInstance().init(config);
+	
 	}
 }

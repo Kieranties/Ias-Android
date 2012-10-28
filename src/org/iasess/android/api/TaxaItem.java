@@ -49,7 +49,7 @@ public class TaxaItem {
 	 * Gets the key text for the item
 	 * @return
 	 */
-	public String getKeyTxt(){ return _keyText; }
+	public String getKeyText(){ return _keyText; }
 	
 	/**
 	 * Gets the scientific name for the item

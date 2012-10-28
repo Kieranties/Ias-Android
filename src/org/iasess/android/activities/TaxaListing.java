@@ -5,6 +5,7 @@ import org.iasess.android.R;
 import org.iasess.android.SubmitParcel;
 import org.iasess.android.TaxonParcel;
 import org.iasess.android.api.ApiHandler;
+import org.iasess.android.data.ImageStore;
 import org.iasess.android.data.TaxaStore;
 
 import android.app.ProgressDialog;
@@ -12,8 +13,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,16 +21,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.SimpleCursorAdapter.ViewBinder;
+
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Controls the 'TaxaListing' Activity view
  */
 public class TaxaListing extends InvadrActivityBase {
 
+	private TaxaStore taxaStore = new TaxaStore(TaxaListing.this);
+	private ImageStore imgStore = new ImageStore(TaxaListing.this);
+	
 	/**
 	 * Initialises the content of this Activity
 	 * 
@@ -44,6 +47,7 @@ public class TaxaListing extends InvadrActivityBase {
 		new PopulateList().execute(""); // <- TODO: ugly!
 		
 		ListView lv = (ListView) findViewById(R.id.listTaxa);
+		
 		//check to see if we are display in a gallery view
 		Bundle extras = getIntent().getExtras();
 		if(extras != null && extras.containsKey("gallery") && extras.getBoolean("gallery")){
@@ -91,13 +95,8 @@ public class TaxaListing extends InvadrActivityBase {
 	protected void onDestroy() {
 		super.onDestroy();
 		
-		ListView listView = (ListView) findViewById(R.id.listTaxa);
-		if(listView == null) return;
-		
-		ListAdapter currentAdapter = listView.getAdapter();
-		if ( currentAdapter != null) {
-			((SimpleCursorAdapter)currentAdapter).getCursor().close();
-		}
+		taxaStore.close();
+		imgStore.close();
 	}
 		
 	/**
@@ -181,19 +180,19 @@ public class TaxaListing extends InvadrActivityBase {
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		protected Cursor doInBackground(String... params) {
-			TaxaStore store = new TaxaStore(TaxaListing.this);
 			if (params.length > 0 && params[0].equals("refresh")) {
-				store.updateTaxa(ApiHandler.getTaxa());
-				return store.getAllItems();
+				taxaStore.update(ApiHandler.getTaxa());
+				return taxaStore.getAll();
 			} else {
-				Cursor taxaCursor = store.getAllItems();
+				Cursor taxaCursor = taxaStore.getAll();
 				if (!taxaCursor.moveToFirst()) { // is an empty set
 					taxaCursor.close();
+					
 					// get from the api as not initialised
-					store.updateTaxa(ApiHandler.getTaxa());
+					taxaStore.update(ApiHandler.getTaxa());
 
 					// re-fetch cursor data
-					taxaCursor = store.getAllItems();
+					taxaCursor = taxaStore.getAll();
 				}
 
 				return taxaCursor;
@@ -206,41 +205,29 @@ public class TaxaListing extends InvadrActivityBase {
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		protected void onPostExecute(Cursor result) {
-			// populate list
-			startManagingCursor(result);
+			// Bind the adapter to the list view
 			ListView listView = (ListView) findViewById(R.id.listTaxa);
-			ListAdapter currentAdapter = listView.getAdapter();
-			if ( currentAdapter != null) {
-				((SimpleCursorAdapter)currentAdapter).changeCursor(result);
-			} else {
-				String[] columns = new String[] { TaxaStore.COL_COMMON_NAME, TaxaStore.COL_SCIENTIFIC_NAME,	TaxaStore.COL_LISTING_IMAGE, TaxaStore.COL_PK };
-				int[] to = new int[] { R.id.textPrimary, R.id.textSecondary, R.id.icon };
+			String[] columns = new String[] { TaxaStore.COL_COMMON_NAME, TaxaStore.COL_SCIENTIFIC_NAME, TaxaStore.COL_PK };
+			int[] to = new int[] { R.id.textPrimary, R.id.textSecondary, R.id.icon };
 
-				SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-						TaxaListing.this, R.layout.image_list_item, result,
-						columns, to);
-				adapter.setViewBinder(new ViewBinder() {
-					public boolean setViewValue(View view, Cursor cursor,
-							int columnIndex) {
-						if (view.getId() == R.id.icon) {
-							ImageView imageSpot = (ImageView) view;
-							Bitmap bm = null;
-							byte[] bytes = cursor.getBlob(columnIndex);
-							if (bytes == null) {
-								bm = BitmapFactory.decodeResource(view.getResources(), R.drawable.launcher);
-							} else {
-								bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-							}
-							imageSpot.setImageBitmap(bm);
-							
-							// return true to say we handled to binding
-							return true;
-						}
-						return false;
+			SimpleCursorAdapter adapter = new SimpleCursorAdapter(TaxaListing.this, R.layout.image_list_item, result, columns, to);
+			adapter.setViewBinder(new ViewBinder() {
+				public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+					if (view.getId() == R.id.icon) {
+						
+						// Use UIL to handle caching/image binding
+						ImageView imageSpot = (ImageView) view;							
+						String uri = imgStore.getListingImage(cursor.getInt(columnIndex));
+						ImageLoader.getInstance().displayImage(uri, imageSpot);		
+						
+						// return true to say we handled to binding
+						return true;
 					}
-				});
-				listView.setAdapter(adapter);
-			}
+					return false;
+				}
+			});
+			listView.setAdapter(adapter);
+			
 			_dlg.dismiss();
 		}
 	}

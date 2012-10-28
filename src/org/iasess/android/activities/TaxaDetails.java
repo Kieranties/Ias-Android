@@ -40,7 +40,7 @@ public class TaxaDetails extends InvadrActivityBase {
 			Cursor cursor = store.getByPk(taxonId);
 			
 			cursor.moveToFirst();
-			String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
+			//String imgUrl = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_LARGE_IMAGE));
 			String description = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_KEY_TEXT));	
 			String name = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_COMMON_NAME));
 			String scientific = cursor.getString(cursor.getColumnIndex(TaxaStore.COL_SCIENTIFIC_NAME));
@@ -61,9 +61,9 @@ public class TaxaDetails extends InvadrActivityBase {
 			String rankStub = getResources().getString(R.string.rank);
 			tvRank.setText(rankStub + " " + rank);
 			
-			if(imgUrl != null && imgUrl != ""){
-				new PopulateDetails().execute(imgUrl);
-			}
+//			if(imgUrl != null && imgUrl != ""){
+//				new PopulateDetails().execute(imgUrl);
+//			}
 		}
 	}
 	

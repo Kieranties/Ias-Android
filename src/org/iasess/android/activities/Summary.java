@@ -1,13 +1,11 @@
 package org.iasess.android.activities;
 
-import java.net.URI;
-
 import org.iasess.android.IasessApp;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
+import org.iasess.android.SubmitParcel;
 import org.iasess.android.api.ApiHandler;
 import org.iasess.android.api.SubmissionResponse;
-import org.iasess.android.api.TaxaItem;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -41,15 +39,7 @@ public class Summary extends MapActivity{
 	 */
 	private static final int GPS_INTENT = 948484;
 	
-	/**
-	 * The {@link URI} for the user selected image
-	 */
-	private Uri _selectedImage;
-	
-	/**
-	 * The primary key identifier for the user selected {@link TaxaItem}
-	 */
-	private long _selectedTaxa;
+	private SubmitParcel _submitParcel;
 	
 	/**
 	 * The {@link MapController} used to manage the users location
@@ -71,7 +61,6 @@ public class Summary extends MapActivity{
 	 */
 	private MapView _mapView;
 	
-	private boolean _isExternal = false;
 
     /**
      * Initialises the content of the Activity
@@ -82,7 +71,7 @@ public class Summary extends MapActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.summary);
-        _isExternal = getIntent().getBooleanExtra("isExternal", false);
+        _submitParcel = getIntent().getParcelableExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA);
         		
         initMapComponents();
         setTaxa();
@@ -206,22 +195,17 @@ public class Summary extends MapActivity{
 	/**
 	 * Sets the details for the selected Taxa on the page
 	 */
-	private void setTaxa(){
-		Bundle extras = getIntent().getExtras();
-		_selectedTaxa = extras.getLong(IasessApp.SELECTED_TAXA);
-		String taxaName = extras.getString(IasessApp.SELECTED_TAXA_NAME);
-		
+	private void setTaxa(){		
 		TextView tv = (TextView)findViewById(R.id.textSelectedTaxa);
-		tv.setText(taxaName);
+		tv.setText(_submitParcel.getTaxonName());
 	}
     
     /**
      * Sets the details for the selected image on the page
      */
     private void setImageView(){
-    	_selectedImage = getIntent().getData();
     	ImageView iv = (ImageView)findViewById(R.id.imageView);
-    	Bitmap bm = ImageHandler.getBitmap(_selectedImage);
+    	Bitmap bm = ImageHandler.getBitmap(_submitParcel.getImagePath());
     	
     	iv.setImageBitmap(bm);   
     }
@@ -258,10 +242,10 @@ public class Summary extends MapActivity{
 	     * @see android.os.AsyncTask#doInBackground(Params[])
 	     */
 	    protected SubmissionResponse doInBackground(String... params) {
-	    	//don't need params
-	    	String imgPath = ImageHandler.getPath(_selectedImage);    
-	    	Location fix = _locationOverlay.getLastFix(); 
-        	return ApiHandler.submitSighting(imgPath, _selectedTaxa, fix.getLatitude(), fix.getLongitude(), IasessApp.getPreferenceString(IasessApp.PREFS_USERNAME));
+	    	//don't need params    
+	    	Location fix = _locationOverlay.getLastFix();
+	    	_submitParcel.setLocation(fix.getLatitude(), fix.getLongitude());
+        	return ApiHandler.submitSighting(_submitParcel);
 	    }
 	    	    
 	    /**
@@ -280,7 +264,7 @@ public class Summary extends MapActivity{
 	            Builder uriBuilder = uri.buildUpon().appendQueryParameter("device", "android");
 	            Intent browse = new Intent(Intent.ACTION_VIEW, uriBuilder.build());
 	            
-	    		if(_isExternal){
+	    		if(_submitParcel.getIsExternal()){
 	    			startActivityForResult(Intent.createChooser(browse,"Select Browser"), InvadrActivityBase.CLOSE_ALL);
 	    			setResult(InvadrActivityBase.CLOSE_ALL);
 	    			finish();

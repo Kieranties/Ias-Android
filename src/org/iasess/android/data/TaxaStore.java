@@ -9,22 +9,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-public class TaxaStore  extends SQLiteOpenHelper {
+public class TaxaStore extends IasDatabase {
 	
 	/**
-	 * Database instance name 
-	 */
-	private static final String DATABASE_NAME = "IAS.db";
-	
-    /**
-     * Current database version
-     */
-    private static final int DATABASE_VERSION = 2;
-    
-    /**
-     * Database table for this store
+     * Database table for taxa store
      */
     private static final String TABLE_NAME = "taxa";
     
@@ -52,22 +41,7 @@ public class TaxaStore  extends SQLiteOpenHelper {
      * The column name for the key text of a taxa
      */
     public static final String COL_KEY_TEXT = "key_text"; 
-    
-    /**
-     * The column name for the listing image for a taxa
-     */
-    public static final String COL_LISTING_IMAGE = "listing_image";
-    
-    /**
-     * The column name for the large image for a taxa
-     */
-    public static final String COL_LARGE_IMAGE = "large_image";
-    
-    /**
-     * The column name for number of reported sightings
-     */
-    public static final String COL_SIGHTINGS_COUNT = "sightings_count";
-    
+        
     
     /**
      * The table create scripts 
@@ -79,38 +53,20 @@ public class TaxaStore  extends SQLiteOpenHelper {
             + COL_COMMON_NAME + " text, " 
     		+ COL_SCIENTIFIC_NAME + " text, "
     		+ COL_RANK + " text, "
-    		+ COL_KEY_TEXT + " text, "
-    		+ COL_SIGHTINGS_COUNT + " integer, "
-            + COL_LISTING_IMAGE + " blob,"
-            + COL_LARGE_IMAGE + " text );";
+    		+ COL_KEY_TEXT + " text );";
 
-    /**
-     * Constructor method
-     * @param context The context to create this instance against
-     */
     public TaxaStore(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    /**
-     * Executes the script to create the table for this datastore
-     * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
-     */
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+		super(context);
+	}
+    
+    public static void create(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
     }
 
-	/**
-	 * Executes the script to update the table for this data store
-	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
-	 */
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	public static void upgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		//drop and recreate db
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-		onCreate(db);
-		
+		create(db);		
 	}
 			
 	/**
@@ -120,12 +76,14 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	 * 
 	 * @param collection The {@link TaxaItem} collection to update.
 	 */
-	public void updateTaxa(ArrayList<TaxaItem> collection){
+	public void update(ArrayList<TaxaItem> collection){
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.beginTransaction();		
+		db.beginTransaction();
+		ImageStore imgStore = new ImageStore(_context);
 		try{
 			for(TaxaItem item : collection){
 				db.replace(TABLE_NAME, null, getContent(item));
+				imgStore.update(item.getKeyImages(), item.getPk(), db);
 			}
 			db.setTransactionSuccessful();
 		} finally {
@@ -141,7 +99,8 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	 * 
 	 * @return a {@link Cursor} of the items from the store
 	 */
-	public Cursor getAllItems() {	 
+	public Cursor getAll() { 
+		
 	    return executeStringQuery("SELECT * FROM " + TABLE_NAME + " ORDER BY " + COL_COMMON_NAME + " ASC");
 	}
 	
@@ -156,17 +115,6 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * Executes the given query against the database
-	 * 
-	 * @param q the query to execute
-	 * @return a {@link Cursor} of the results
-	 */
-	private Cursor executeStringQuery(String q){
-		SQLiteDatabase db = this.getReadableDatabase();
-	    return db.rawQuery(q, null);
-	}
-	
-	/**
 	 * Gets the {@link ContentValues} to be stored for a given {@link TaxaItem}
 	 * 
 	 * @param item The {@link TaxaItem} to process
@@ -177,31 +125,8 @@ public class TaxaStore  extends SQLiteOpenHelper {
 	    values.put(COL_PK, item.getPk());
 	    values.put(COL_COMMON_NAME, item.getCommonName());
 	    values.put(COL_SCIENTIFIC_NAME, item.getScientificName());
-	    values.put(COL_RANK, item.getRank());
-	    values.put(COL_SIGHTINGS_COUNT, item.getSightings().length);
-	    values.put(COL_KEY_TEXT, item.getKeyTxt());
-	    values.put(COL_LARGE_IMAGE, item.getLargeImagePath());
-	    
-	    //fetch the listing image bytes to be saved
-	    byte[] imageData = getListingImage(item);
-	    if(imageData != null){
-	    	values.put(COL_LISTING_IMAGE, imageData);
-	    }
-	    
+	    values.put(COL_RANK, item.getRank());	    
+	    values.put(COL_KEY_TEXT, item.getKeyText());	    
 	    return values;
-	}
-	
-	/**
-	 * Fetches the details of a {@link TaxaItem} listing image
-	 * 
-	 * @param item The {@link TaxaItem to fetch the image for
-	 * @return A byte[] representing the image, or null
-	 */
-	private byte[] getListingImage(TaxaItem item){
-		String imagePath = item.getListingImagePath();
-	    if(imagePath != null){
-	    	return ApiHandler.getByteArray(imagePath, false);
-	    }
-		return null;
 	}
 }

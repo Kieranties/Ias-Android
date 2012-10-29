@@ -2,6 +2,7 @@ package org.iasess.android.activities;
 
 import java.net.URI;
 
+import org.iasess.android.SubmitParcel;
 import org.iasess.android.ImageHandler;
 import org.iasess.android.R;
 
@@ -18,11 +19,7 @@ import android.widget.ImageView;
  */
 public class AddPhoto extends InvadrActivityBase {
     
-	/**
-	 * The {@link URI} selected by the user
-	 */
-	private Uri _selectedUri = null;
-	private boolean _isExternal = false;
+	private SubmitParcel _package = null;
 	
 	/**
 	 * Initialises the content of the Activity
@@ -32,31 +29,30 @@ public class AddPhoto extends InvadrActivityBase {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_photo);
-        
-        Uri selected = null;
 		
 		//check for data from state change
-        if(savedInstanceState != null && savedInstanceState.containsKey("selectedUri")){
-        	selected = savedInstanceState.getParcelable("selectedUri");
+        if(savedInstanceState != null && savedInstanceState.containsKey(SubmitParcel.SUBMIT_PARCEL_EXTRA)){
+        	_package = savedInstanceState.getParcelable(SubmitParcel.SUBMIT_PARCEL_EXTRA);
 	    }
         
         //if still null check for data from intent
-        if(selected == null){
-        	selected = getIntent().getData();
+        if(_package == null){
+        	_package = getIntent().getParcelableExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA);
         }
         
         //if still null check if we have come from a share/send to action
-        if(selected == null){
+        if(_package == null){
         	Bundle extras = getIntent().getExtras();
         	if(extras != null && extras.containsKey(Intent.EXTRA_STREAM)){
+        		Uri uri = extras.getParcelable(Intent.EXTRA_STREAM);
+        		_package = new SubmitParcel(ImageHandler.getPath(uri));
         		//need to set a flag to track that we have come in from external source
-        		_isExternal = true;
-        		selected = extras.getParcelable(Intent.EXTRA_STREAM);
+        		_package.setIsExternal(true);
         	}
         }                    
         
         //if we have a selected image, set it
-        if(selected != null) setImageView(selected);
+        if(_package != null) setImageView();
     }    
 	
     /**
@@ -69,7 +65,7 @@ public class AddPhoto extends InvadrActivityBase {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		
-		outState.putParcelable("selectedUri", _selectedUri);
+		outState.putParcelable(SubmitParcel.SUBMIT_PARCEL_EXTRA, _package);
 	}
 		
     /**
@@ -80,8 +76,7 @@ public class AddPhoto extends InvadrActivityBase {
      */
     public void onNextClick(View v){
     	Intent intent = new Intent(this, TaxaListing.class);
-    	intent.setData(_selectedUri);
-    	intent.putExtra("isExternal", _isExternal);
+    	intent.putExtra(SubmitParcel.SUBMIT_PARCEL_EXTRA, _package);
     	startActivityForResult(intent, 0);
     }
     
@@ -105,8 +100,9 @@ public class AddPhoto extends InvadrActivityBase {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode == Activity.RESULT_OK){
 			//we're expecting the intent to have been an image type initiated by this app
-			Uri uri = ImageHandler.getImageUriFromIntentResult(resultCode, requestCode, data);
-			setImageView(uri);
+			String path = ImageHandler.getImagePathFromIntentResult(resultCode, requestCode, data);
+			_package.setImagePath(path);
+			setImageView();
 		}			
 	}
    
@@ -116,11 +112,11 @@ public class AddPhoto extends InvadrActivityBase {
      * 
      * @param uri The {@link URI} to be displayed
      */
-    private void setImageView(Uri uri){
-    	ImageView iv = (ImageView)findViewById(R.id.imageView);
-    	Bitmap bm = ImageHandler.getBitmap(uri);    	
-    	iv.setImageBitmap(bm);
-    	//cache for sending to later activities/intents
-    	_selectedUri = uri;
+    private void setImageView(){
+    	if(_package != null){
+	    	ImageView iv = (ImageView)findViewById(R.id.imageView);
+	    	Bitmap bm = ImageHandler.getBitmap(_package.getImagePath());    	
+	    	iv.setImageBitmap(bm);
+    	}
     }
 }

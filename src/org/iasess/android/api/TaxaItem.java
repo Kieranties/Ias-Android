@@ -22,12 +22,6 @@ public class TaxaItem {
 	private String _scientificName;
 	
 	/**
-	 * The collection of sightings associated with the item
-	 */
-	@SerializedName("sightings")
-	private int[] _sightings;
-	
-	/**
 	 * The rank of the item
 	 */
 	@SerializedName("rank")
@@ -55,19 +49,13 @@ public class TaxaItem {
 	 * Gets the key text for the item
 	 * @return
 	 */
-	public String getKeyTxt(){ return _keyText; }
+	public String getKeyText(){ return _keyText; }
 	
 	/**
 	 * Gets the scientific name for the item
 	 * @return
 	 */
 	public String getScientificName(){ return _scientificName; }
-
-	/**
-	 * Gets the collection of sightings for the item
-	 * @return
-	 */
-	public int[] getSightings(){ return _sightings; }
 	
 	/**
 	 * Gets the rank of the item
